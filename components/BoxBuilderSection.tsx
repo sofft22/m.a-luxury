@@ -1,0 +1,69 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+export function BoxBuilderSection() {
+  // State to hold the current image index
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // Array of images to shuffle between
+  const images = [
+    "/box-builder-home.png", 
+    "/box-builder-home-2.png" // <-- Add your second image here
+  ];
+
+  // Effect to change the image every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % images.length);
+    }, 3000);
+
+    // Clean up the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, [images.length]);
+
+  const handleBulkOrder = () => {
+    const message = `Hi Mocktopia! I'd like to request a bulk order for an upcoming event.%0A%0A*Event Type:* %0A*Number of Guests:* %0A*Date Needed:* %0A%0APlease let me know the pricing and availability.`;
+    // UPDATED PHONE NUMBER HERE
+    window.open(`https://wa.me/447393157901?text=${message}`, '_blank');
+  };
+
+  return (
+    <section className="relative w-full py-24 md:py-32 px-6 md:px-12 border-y border-[#2C1A1D]/10 overflow-hidden flex items-center justify-center bg-[#2C1A1D]">
+      
+      {/* BACKGROUND IMAGES - SHUFFLING */}
+      <div className="absolute inset-0 z-0 bg-[#2C1A1D]">
+        {images.map((src, index) => (
+          <img 
+            key={src}
+            src={src} 
+            alt="Bulk Orders" 
+            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ease-in-out ${
+              index === currentImage ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* SUBTLE DARK OVERLAY (Makes the text readable) */}
+      <div className="absolute inset-0 z-10 bg-black/60" />
+
+      {/* CONTENT */}
+      <div className="relative z-20 mx-auto max-w-[800px] flex flex-col items-center text-center">
+        
+        <h2 className="text-[40px] md:text-[64px] text-[#FBF9F5] leading-[1.1] mb-10" style={{ fontFamily: "var(--font-dm-serif), serif" }}>
+          Planning an event?<br />Let's cater for you.
+        </h2>
+        
+        <button 
+          onClick={handleBulkOrder}
+          className="w-full max-w-[280px] rounded-md bg-[#FBF9F5] px-8 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-[#2C1A1D] transition-all hover:bg-[#EBE0D3] shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+          style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+        >
+          Request Bulk Quote
+        </button>
+      </div>
+
+    </section>
+  );
+}
