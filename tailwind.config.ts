@@ -12,12 +12,12 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         brand: {
-          50: "#FAF7FE",
-          100: "#EDE9FE",
-          500: "#8B5CF6",
-          700: "#6D28D9",
-          900: "#3B0764",
-        },
+  50: "#FDF4FF",  // very light pink-purple background
+  100: "#FAE8FF", // soft pink-purple for borders
+  500: "#D946EF", // bright magenta accent
+  700: "#C026D3", // VIBRANT MAGENTA PURPLE (for buttons & text)
+  900: "#86198F", // deep magenta for footers/shadows
+},
         gold: "#C9A24A",
         ink: "#1F1235",
         muted: "#6B6480",
