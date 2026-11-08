@@ -73,55 +73,46 @@ export function Hero() {
           />
         ))}
         
-        {/* PREMIUM EDITORIAL OVERLAY */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/85 via-black/50 to-transparent md:via-black/30" />
+        {/* DARK OVERLAY FOR READABILITY */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/80 via-black/40 to-transparent md:via-black/20" />
       </div>
 
-      {/* EDITORIAL TEXT LAYOUT */}
+      {/* MINIMAL TEXT LAYOUT */}
       <div className="relative z-30 flex h-full items-center">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
           <div className="max-w-lg md:max-w-xl">
             
-            {/* PLYMOUTH TEXT REMOVED HERE */}
-
             <h1
-              className="text-white font-normal leading-[0.95] tracking-tight text-[48px] sm:text-[60px] md:text-[76px]"
+              className="text-white font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               Your crown,
               <br />
-              <span className="italic text-gold">elevated.</span>
+              <span className="italic text-white">elevated.</span>
             </h1>
 
-            <p
-              className="mt-4 max-w-[280px] md:max-w-sm text-[13px] md:text-[15px] leading-relaxed text-white/90"
-              style={{ fontFamily: "var(--font-inter), sans-serif" }}
-            >
-              Signature braids, locs & premium extensions. 
-              Booked in seconds on WhatsApp.
-            </p>
-
-            {/* SIDE BY SIDE CTAs */}
-            <div className="mt-6 flex flex-row gap-2 sm:gap-3">
+            {/* SIDE BY SIDE CTAs - WHITE PRIMARY BUTTON */}
+            <div className="mt-8 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-1 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-3 py-3 sm:px-6 sm:py-3.5 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-brand-900"
+                className="group flex flex-1 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                Book Appointment
+                Book Now
               </a>
 
               <Link
                 href="/shop"
-                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-3 py-3 sm:px-6 sm:py-3.5 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
+                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                Shop Extensions
+                Shop Hair
               </Link>
             </div>
+            
           </div>
 
         </div>
