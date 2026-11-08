@@ -53,6 +53,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // 1. Try cache first
     const cached = localStorage.getItem("ma_products_cache");
     if (cached) {
       try {
@@ -65,6 +66,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
       } catch (e) {}
     }
 
+    // 2. Fetch fresh from API
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
@@ -84,18 +86,19 @@ export function FeaturedProducts({ onProductClick }: Props) {
   }, []);
 
   if (loading) return null; 
+  
   const displayItems = featuredItems.length > 0 ? featuredItems : FALLBACK_PRODUCTS;
 
   return (
     <section className="w-full bg-[#FAF7FE] py-20 px-4 md:py-28 md:px-6">
       <div className="mx-auto max-w-[1400px]">
         
-        {/* HEADER - No gold text, clean sans-serif */}
+        {/* HEADER - Normal font, no uppercase, no bold */}
         <div className="mb-12 flex flex-col md:flex-row items-end justify-between gap-6 border-b border-brand-100 pb-6">
           <div className="text-center md:text-left">
             <h2 
-              className="text-[28px] md:text-[36px] font-bold text-ink uppercase tracking-tight" 
-              style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+              className="text-[28px] md:text-[36px] text-ink leading-tight" 
+              style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
               The Hair Edit
             </h2>
