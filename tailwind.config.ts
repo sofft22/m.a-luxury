@@ -12,10 +12,20 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         brand: {
-          pink: "#EC2982",
-          chocolate: "#2C1A1D",
-          cream: "#FBF9F5",
-        }
+          50: "#FAF7FE",
+          100: "#EDE9FE",
+          500: "#8B5CF6",
+          700: "#6D28D9",
+          900: "#3B0764",
+        },
+        gold: "#C9A24A",
+        ink: "#1F1235",
+        muted: "#6B6480",
+        whatsapp: "#25D366",
+        // legacy aliases kept so nothing that still references them breaks
+        pink: "#6D28D9",
+        chocolate: "#1F1235",
+        cream: "#FAF7FE",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
