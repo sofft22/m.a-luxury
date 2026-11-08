@@ -45,7 +45,6 @@ const SERVICES = [
 ];
 
 export function ServicesPreview() {
-  // Track which index is open (null means all closed)
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleService = (index: number) => {
@@ -80,15 +79,13 @@ export function ServicesPreview() {
           </Link>
         </div>
 
-        {/* THE LIST / ACCORDION */}
+        {/* LIST ACCORDION */}
         <div className="flex flex-col border-t border-brand-100">
           {SERVICES.map((service, idx) => {
             const isOpen = openIndex === idx;
 
             return (
               <div key={idx} className="border-b border-brand-100">
-                
-                {/* CLICKABLE ROW */}
                 <button 
                   onClick={() => toggleService(idx)}
                   className="w-full flex items-center justify-between py-6 group text-left transition-colors hover:bg-brand-50/50 px-2 md:px-4"
@@ -102,7 +99,6 @@ export function ServicesPreview() {
                     {service.title}
                   </h3>
                   
-                  {/* Plus/Minus Icon */}
                   <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
                     isOpen ? "bg-brand-700 border-brand-700 text-white rotate-45" : "border-brand-200 text-brand-700 group-hover:border-brand-700"
                   }`}>
@@ -112,33 +108,19 @@ export function ServicesPreview() {
                   </div>
                 </button>
 
-                {/* EXPANDED DETAILS (Image + Text + CTA) */}
                 <div 
                   className={`overflow-hidden transition-all duration-500 ease-in-out ${
                     isOpen ? "max-h-[800px] opacity-100 mb-8" : "max-h-0 opacity-0"
                   }`}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 p-2 md:p-4 items-center">
-                    
-                    {/* Image */}
                     <div className="relative w-full aspect-[4/3] md:aspect-square rounded-xl overflow-hidden shadow-lg">
-                      <Image
-                        src={service.image}
-                        alt={service.title}
-                        fill
-                        className="object-cover object-top"
-                      />
+                      <Image src={service.image} alt={service.title} fill className="object-cover object-top" />
                     </div>
-
-                    {/* Text & CTA */}
                     <div className="flex flex-col items-start justify-center">
-                      <p 
-                        className="text-[15px] leading-relaxed text-muted mb-8"
-                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                      >
+                      <p className="text-[15px] leading-relaxed text-muted mb-8" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
                         {service.desc}
                       </p>
-                      
                       <a 
                         href={bookLink(service.title)}
                         target="_blank"
@@ -149,26 +131,12 @@ export function ServicesPreview() {
                         Book via WhatsApp
                       </a>
                     </div>
-
                   </div>
                 </div>
-
               </div>
             );
           })}
         </div>
-
-        {/* Mobile View All Button */}
-        <div className="mt-8 flex justify-center sm:hidden">
-          <Link 
-            href="/services" 
-            className="rounded-full border border-brand-700 text-brand-700 px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.1em] transition-all hover:bg-brand-50"
-            style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-          >
-            View All Services
-          </Link>
-        </div>
-
       </div>
     </section>
   );
