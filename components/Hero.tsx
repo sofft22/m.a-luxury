@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "440000000000"; // Replace later
 
-// ADD YOUR IMAGE PATHS HERE
+// FIXED PATHS: Directly inside public, exact names from your screenshot
 const HERO_IMAGES = [
   "/hero-1.jpg",
   "/hero-2.jpg",
@@ -50,21 +50,20 @@ export function Hero() {
           <div className="order-1 lg:order-1">
             <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50">
               
-              {/* Map through images and fade them in/out */}
               {HERO_IMAGES.map((src, index) => (
                 <Image
                   key={src}
                   src={src}
                   alt={`M.a Luxury Hair ${index + 1}`}
                   fill
-                  priority={index === 0} // Load first image fast
+                  priority={index === 0} // Load first image immediately
                   className={`object-cover object-center transition-opacity duration-1000 ease-in-out ${
                     index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
                   }`}
                 />
               ))}
 
-              {/* Optional: Little dots at the bottom to show which image is active */}
+              {/* Little dots at the bottom */}
               <div className="absolute bottom-5 left-0 right-0 z-20 flex justify-center gap-2">
                 {HERO_IMAGES.map((_, idx) => (
                   <button
