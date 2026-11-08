@@ -56,9 +56,9 @@ export function Hero() {
   return (
     <section className="relative w-full bg-white pt-[80px] md:pt-[100px]">
       
-      {/* FULL-WIDTH IMAGE CAROUSEL (Edge to Edge) */}
+      {/* FULL-WIDTH IMAGE CAROUSEL (Increased Desktop Height to 75vh) */}
       <div 
-        className="relative w-full h-[50vh] md:h-[65vh] min-h-[400px] overflow-hidden"
+        className="relative w-full h-[60vh] md:h-[75vh] min-h-[450px] overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -83,12 +83,7 @@ export function Hero() {
       {/* TEXT SECTION (Smart & Underneath) */}
       <div className="relative z-30 mx-auto max-w-4xl px-5 md:px-8 -mt-16 md:-mt-24 flex flex-col items-center text-center">
         
-        <p
-          className="text-brand-700 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.3em] mb-4 bg-white px-4 py-2 rounded-full shadow-sm ring-1 ring-brand-100"
-          style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-        >
-          Plymouth's Luxury Hair Destination
-        </p>
+        {/* REMOVED THE PLYMOUTH PILL TEXT HERE */}
 
         <h1
           className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
