@@ -16,13 +16,13 @@ export function Hero() {
       id="0"
       className="relative w-full overflow-hidden bg-brand-50 pt-[88px] pb-16 md:pt-[104px] md:pb-24"
     >
-      {/* soft purple radial glow */}
+      {/* DEEPER & RICHER RADIAL GLOW */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(ellipse at 30% 30%, rgba(139, 92, 246, 0.14) 0%, transparent 55%), radial-gradient(ellipse at 80% 70%, rgba(201, 162, 74, 0.08) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 30% 30%, rgba(76, 29, 149, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(201, 162, 74, 0.12) 0%, transparent 50%)",
         }}
       />
 
@@ -31,7 +31,7 @@ export function Hero() {
 
           {/* LEFT — IMAGE CARD */}
           <div className="order-1 lg:order-1">
-            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-[0_40px_100px_-40px_rgba(59,7,100,0.5)] ring-1 ring-brand-700/10">
+            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-[0_40px_100px_-40px_rgba(46,16,101,0.7)] ring-1 ring-brand-700/20">
               <Image
                 src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80"
                 alt="M.a Luxury — Hair & Beauty"
@@ -44,9 +44,9 @@ export function Hero() {
               {/* bottom gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 via-brand-900/5 to-transparent" />
 
-              {/* location pill ONLY */}
+              {/* location pill */}
               <span
-                className="absolute top-5 left-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-700 shadow-sm"
+                className="absolute top-5 left-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-sm"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
@@ -58,15 +58,16 @@ export function Hero() {
           {/* RIGHT — TEXT */}
           <div className="order-2 lg:order-2 text-center lg:text-left">
             
-            {/* REMOVED TOP GOLD TEXT HERE */}
-
             <h1
               className="text-ink font-normal leading-[0.9] tracking-tight text-[56px] sm:text-[72px] md:text-[88px] lg:text-[96px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               Your crown,
               <br />
-              <span className="italic text-brand-700">elevated.</span>
+              {/* Premium Shiny Purple Text Effect */}
+              <span className="italic bg-gradient-to-br from-brand-500 via-brand-700 to-brand-900 bg-clip-text text-transparent drop-shadow-sm pb-2">
+                elevated.
+              </span>
             </h1>
 
             <p
@@ -79,15 +80,16 @@ export function Hero() {
 
             {/* DUAL PATH CTAs */}
             <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto lg:mx-0">
-              {/* Book a service */}
+              
+              {/* Book a service - SHINY DEEP PURPLE GRADIENT */}
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-start gap-1 rounded-2xl bg-brand-700 px-5 py-4 text-left text-white shadow-[0_15px_35px_-15px_rgba(109,40,217,0.7)] transition-all hover:bg-brand-900 hover:-translate-y-0.5"
+                className="group flex flex-col items-start gap-1 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 px-5 py-4 text-left text-white shadow-[0_15px_35px_-15px_rgba(76,29,149,0.8)] transition-all hover:from-brand-900 hover:to-black hover:-translate-y-0.5 border border-brand-700"
               >
                 <span
-                  className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/60"
+                  className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70"
                   style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                 >
                   Book a service
@@ -106,7 +108,7 @@ export function Hero() {
               {/* Shop extensions */}
               <Link
                 href="/shop"
-                className="group flex flex-col items-start gap-1 rounded-2xl border border-brand-700/25 bg-white/60 backdrop-blur px-5 py-4 text-left text-brand-700 transition-all hover:border-brand-700 hover:bg-white hover:-translate-y-0.5"
+                className="group flex flex-col items-start gap-1 rounded-2xl border border-brand-700/30 bg-white/60 backdrop-blur px-5 py-4 text-left text-brand-900 transition-all hover:border-brand-900 hover:bg-white hover:-translate-y-0.5"
               >
                 <span
                   className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-700/60"
