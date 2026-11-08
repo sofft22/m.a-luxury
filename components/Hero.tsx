@@ -51,7 +51,7 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative w-full h-[80vh] md:h-[95vh] min-h-[600px] bg-ink">
+    <section id="hero" className="relative w-full h-[70vh] md:h-[85vh] min-h-[500px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -73,58 +73,53 @@ export function Hero() {
           />
         ))}
         
-        {/* PREMIUM EDITORIAL OVERLAY (No Glassmorphism) */}
+        {/* PREMIUM EDITORIAL OVERLAY */}
         <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/85 via-black/50 to-transparent md:via-black/30" />
       </div>
 
-      {/* EDITORIAL TEXT LAYOUT (Clean, no box) */}
+      {/* EDITORIAL TEXT LAYOUT */}
       <div className="relative z-30 flex h-full items-center">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
           <div className="max-w-lg md:max-w-xl">
             
-            <p
-              className="text-gold text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] mb-4"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-            >
-              M.a Luxury · Plymouth
-            </p>
+            {/* PLYMOUTH TEXT REMOVED HERE */}
 
             <h1
-              className="text-white font-light leading-[0.95] tracking-tight text-[52px] sm:text-[72px] md:text-[88px]"
+              className="text-white font-normal leading-[0.95] tracking-tight text-[48px] sm:text-[60px] md:text-[76px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              The art of
+              Your crown,
               <br />
-              <span className="italic font-normal text-white">elevation.</span>
+              <span className="italic text-gold">elevated.</span>
             </h1>
 
             <p
-              className="mt-5 max-w-[280px] md:max-w-sm text-[11px] md:text-[13px] leading-relaxed md:leading-loose text-white/80 uppercase tracking-[0.1em]"
+              className="mt-4 max-w-[280px] md:max-w-sm text-[13px] md:text-[15px] leading-relaxed text-white/90"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
-              Signature braids, luxury locs & premium extensions.
+              Signature braids, locs & premium extensions. 
+              Booked in seconds on WhatsApp.
             </p>
 
             {/* SIDE BY SIDE CTAs */}
-            <div className="mt-8 flex flex-row gap-2 sm:gap-4">
+            <div className="mt-6 flex flex-row gap-2 sm:gap-3">
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-1 items-center justify-center gap-1.5 rounded-full bg-white px-3 py-3.5 sm:px-8 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-brand-700 hover:text-white"
+                className="group flex flex-1 items-center justify-center gap-1.5 rounded-full bg-brand-700 px-3 py-3 sm:px-6 sm:py-3.5 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-brand-900"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                Book Now
-                <span className="transition-transform group-hover:translate-x-1 hidden sm:inline">→</span>
+                Book Appointment
               </a>
 
               <Link
                 href="/shop"
-                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-3 py-3.5 sm:px-8 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
+                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-3 py-3 sm:px-6 sm:py-3.5 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                Shop Hair
+                Shop Extensions
               </Link>
             </div>
           </div>
