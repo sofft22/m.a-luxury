@@ -12,7 +12,7 @@ function bookLink() {
 
 export function Hero() {
   return (
-    <section className="relative w-full overflow-hidden bg-white pt-[100px] pb-16 md:pt-[120px] md:pb-24">
+    <section className="relative w-full overflow-hidden bg-white pt-[120px] pb-16 md:pt-[160px] md:pb-24">
       
       {/* Soft bright background glow */}
       <div
@@ -45,28 +45,29 @@ export function Hero() {
           <div className="order-2 lg:order-2 text-center lg:text-left">
             
             <p
-              className="text-brand-700 text-[11px] font-bold uppercase tracking-[0.2em] mb-4"
+              className="text-brand-700 text-[10px] font-bold uppercase tracking-[0.25em] mb-4"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               Plymouth's Luxury Hair Destination
             </p>
 
+            {/* RESTORED PREMIUM FONT & REDUCED TEXT */}
             <h1
-              className="text-ink font-normal leading-[1.1] tracking-tight text-[50px] sm:text-[64px] md:text-[80px]"
-              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
+              style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              Flawless Installs.
+              Your crown,
               <br />
-              <span className="font-bold text-brand-700">Unmatched Quality.</span>
+              <span className="italic text-brand-700">elevated.</span>
             </h1>
 
+            {/* REDUCED PARAGRAPH */}
             <p
-              className="mt-6 mx-auto lg:mx-0 max-w-md text-[15px] md:text-[16px] leading-relaxed text-muted"
+              className="mt-6 mx-auto lg:mx-0 max-w-[340px] text-[14px] md:text-[15px] leading-relaxed text-muted"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
-              From flawless knotless braids to premium raw hair extensions, 
-              we provide the ultimate VIP experience. Elevate your everyday look 
-              with expert styling and top-tier products.
+              Signature braids, locs & premium extensions. 
+              Booked in seconds on WhatsApp.
             </p>
 
             {/* CTAs */}
