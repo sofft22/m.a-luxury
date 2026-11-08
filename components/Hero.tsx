@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -20,6 +20,10 @@ function bookLink() {
 
 export function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
+  
+  // Swipe states
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   // Auto-swap every 3 seconds
   useEffect(() => {
@@ -29,8 +33,36 @@ export function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  // Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    
+    const distance = touchStartX.current - touchEndX.current;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
+    } else if (isRightSwipe) {
+      setCurrentImage((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+    }
+
+    // Reset
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
-    <section className="relative w-full overflow-hidden bg-white pt-[110px] pb-12 md:pt-[140px] md:pb-20">
+    // REDUCED TOP PADDING HERE
+    <section className="relative w-full overflow-hidden bg-white pt-[100px] pb-12 md:pt-[120px] md:pb-20">
       
       {/* Soft bright background glow */}
       <div
@@ -47,8 +79,12 @@ export function Hero() {
 
           {/* LEFT — CAROUSEL */}
           <div className="order-1 lg:order-1">
-            {/* Changed aspect ratio on desktop from 5/6 to 4/5 so it's shorter */}
-            <div className="relative w-full aspect-[4/5] lg:aspect-[4/5] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50">
+            <div 
+              className="relative w-full aspect-[4/5] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
               
               {HERO_IMAGES.map((src, index) => (
                 <Image
@@ -63,19 +99,7 @@ export function Hero() {
                 />
               ))}
 
-              {/* Little dots at the bottom */}
-              <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
-                {HERO_IMAGES.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImage(idx)}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      idx === currentImage ? "w-6 bg-white" : "w-1.5 bg-white/50"
-                    }`}
-                    aria-label={`Go to slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
+              {/* DOT INDICATORS REMOVED */}
 
             </div>
           </div>
