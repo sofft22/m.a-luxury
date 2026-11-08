@@ -51,13 +51,14 @@ export function Hero() {
   };
 
   return (
-    // RESTORED id="hero" SO THE HEADER KNOWS TO TURN TRANSPARENT
-    // REMOVED TOP PADDING SO THE IMAGE GOES BEHIND THE HEADER
     <section id="hero" className="relative w-full bg-white pt-0">
       
-      {/* FULL-WIDTH IMAGE CAROUSEL (Now starts from the very top) */}
+      {/* 
+        MOBILE: Shorter height (55vh) 
+        DESKTOP: Longer height (85vh) 
+      */}
       <div 
-        className="relative w-full h-[85vh] md:h-[90vh] min-h-[500px] overflow-hidden"
+        className="relative w-full h-[55vh] md:h-[85vh] min-h-[400px] md:min-h-[600px] overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -69,7 +70,8 @@ export function Hero() {
             alt={`M.a Luxury Hair ${index + 1}`}
             fill
             priority={index === 0}
-            className={`object-cover object-center absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            // CHANGED TO object-top TO CROP FROM THE TOP
+            className={`object-cover object-top absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
           />
@@ -80,7 +82,6 @@ export function Hero() {
       </div>
 
       {/* TEXT SECTION (Smart & Underneath) */}
-      {/* ADDED pt-12 HERE TO PUSH THE TEXT DOWN FROM THE HEADER */}
       <div className="relative z-30 mx-auto max-w-4xl px-5 md:px-8 -mt-16 md:-mt-24 pt-12 flex flex-col items-center text-center">
         
         <h1
