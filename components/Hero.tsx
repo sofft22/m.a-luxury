@@ -1,9 +1,18 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 const WHATSAPP_NUMBER = "440000000000"; // Replace later
+
+// ADD YOUR IMAGE PATHS HERE
+const HERO_IMAGES = [
+  "/hero-1.jpg",
+  "/hero-2.jpg",
+  "/hero-3.jpg",
+  "/hero-4.jpg",
+];
 
 function bookLink() {
   const text = "Hi M.a Luxury! I'd like to book an appointment 💜";
@@ -11,6 +20,16 @@ function bookLink() {
 }
 
 export function Hero() {
+  const [currentImage, setCurrentImage] = useState(0);
+
+  // Auto-swap every 3 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative w-full overflow-hidden bg-white pt-[120px] pb-16 md:pt-[160px] md:pb-24">
       
@@ -27,17 +46,38 @@ export function Hero() {
       <div className="relative z-10 mx-auto max-w-7xl px-5 md:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
-          {/* LEFT — IMAGE */}
+          {/* LEFT — CAROUSEL */}
           <div className="order-1 lg:order-1">
-            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100">
-              <Image
-                src="https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=1400&q=80" 
-                alt="M.a Luxury Hair"
-                fill
-                priority
-                unoptimized
-                className="object-cover object-center"
-              />
+            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50">
+              
+              {/* Map through images and fade them in/out */}
+              {HERO_IMAGES.map((src, index) => (
+                <Image
+                  key={src}
+                  src={src}
+                  alt={`M.a Luxury Hair ${index + 1}`}
+                  fill
+                  priority={index === 0} // Load first image fast
+                  className={`object-cover object-center transition-opacity duration-1000 ease-in-out ${
+                    index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
+                  }`}
+                />
+              ))}
+
+              {/* Optional: Little dots at the bottom to show which image is active */}
+              <div className="absolute bottom-5 left-0 right-0 z-20 flex justify-center gap-2">
+                {HERO_IMAGES.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentImage(idx)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      idx === currentImage ? "w-6 bg-white" : "w-1.5 bg-white/50"
+                    }`}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
             </div>
           </div>
 
@@ -51,7 +91,6 @@ export function Hero() {
               Plymouth's Luxury Hair Destination
             </p>
 
-            {/* RESTORED PREMIUM FONT & REDUCED TEXT */}
             <h1
               className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
@@ -61,7 +100,6 @@ export function Hero() {
               <span className="italic text-brand-700">elevated.</span>
             </h1>
 
-            {/* REDUCED PARAGRAPH */}
             <p
               className="mt-6 mx-auto lg:mx-0 max-w-[340px] text-[14px] md:text-[15px] leading-relaxed text-muted"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
