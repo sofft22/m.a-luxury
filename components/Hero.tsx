@@ -51,7 +51,6 @@ export function Hero() {
   };
 
   return (
-    // INCREASED HEIGHT: 80vh on mobile, 95vh on desktop
     <section id="hero" className="relative w-full h-[80vh] md:h-[95vh] min-h-[600px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
@@ -74,15 +73,15 @@ export function Hero() {
           />
         ))}
         
-        {/* PREMIUM EDITORIAL OVERLAY: Dark on the left, clear on the right */}
+        {/* PREMIUM EDITORIAL OVERLAY (No Glassmorphism) */}
         <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/85 via-black/50 to-transparent md:via-black/30" />
       </div>
 
-      {/* EDITORIAL TEXT LAYOUT (Left Aligned + Glass Panel) */}
+      {/* EDITORIAL TEXT LAYOUT (Clean, no box) */}
       <div className="relative z-30 flex h-full items-center">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
-          <div className="max-w-lg md:max-w-xl backdrop-blur-md bg-white/5 border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl rounded-2xl md:rounded-none">
+          <div className="max-w-lg md:max-w-xl">
             
             <p
               className="text-gold text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] mb-4"
@@ -107,7 +106,7 @@ export function Hero() {
               Signature braids, luxury locs & premium extensions.
             </p>
 
-            {/* REFINED CTAs - SIDE BY SIDE ON MOBILE */}
+            {/* SIDE BY SIDE CTAs */}
             <div className="mt-8 flex flex-row gap-2 sm:gap-4">
               <a
                 href={bookLink()}
