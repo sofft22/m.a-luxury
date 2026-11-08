@@ -20,11 +20,9 @@ function bookLink() {
 
 export function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
-  
   const touchStartX = useRef<number | null>(null);
   const touchEndX = useRef<number | null>(null);
 
-  // Auto-swap every 3.5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
@@ -32,7 +30,6 @@ export function Hero() {
     return () => clearInterval(interval);
   }, []);
 
-  // Swipe logic
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.targetTouches[0].clientX;
   };
@@ -54,11 +51,13 @@ export function Hero() {
   };
 
   return (
-    <section className="relative w-full bg-white pt-[80px] md:pt-[100px]">
+    // RESTORED id="hero" SO THE HEADER KNOWS TO TURN TRANSPARENT
+    // REMOVED TOP PADDING SO THE IMAGE GOES BEHIND THE HEADER
+    <section id="hero" className="relative w-full bg-white pt-0">
       
-      {/* FULL-WIDTH IMAGE CAROUSEL (Increased Desktop Height to 75vh) */}
+      {/* FULL-WIDTH IMAGE CAROUSEL (Now starts from the very top) */}
       <div 
-        className="relative w-full h-[60vh] md:h-[75vh] min-h-[450px] overflow-hidden"
+        className="relative w-full h-[85vh] md:h-[90vh] min-h-[500px] overflow-hidden"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -81,10 +80,9 @@ export function Hero() {
       </div>
 
       {/* TEXT SECTION (Smart & Underneath) */}
-      <div className="relative z-30 mx-auto max-w-4xl px-5 md:px-8 -mt-16 md:-mt-24 flex flex-col items-center text-center">
+      {/* ADDED pt-12 HERE TO PUSH THE TEXT DOWN FROM THE HEADER */}
+      <div className="relative z-30 mx-auto max-w-4xl px-5 md:px-8 -mt-16 md:-mt-24 pt-12 flex flex-col items-center text-center">
         
-        {/* REMOVED THE PLYMOUTH PILL TEXT HERE */}
-
         <h1
           className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
           style={{ fontFamily: "var(--font-cormorant), serif" }}
@@ -102,7 +100,6 @@ export function Hero() {
           Booked in seconds on WhatsApp.
         </p>
 
-        {/* CTAs */}
         <div className="mt-8 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <a
             href={bookLink()}
@@ -124,7 +121,6 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Bottom spacing */}
       <div className="h-16 md:h-24" />
 
     </section>
