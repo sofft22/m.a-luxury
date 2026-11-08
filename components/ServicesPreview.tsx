@@ -38,6 +38,16 @@ const FEATURED_SERVICES = [
     title: "Beauty & Brows",
     desc: "Lashes, Lamination, SPMU",
     image: "/hero-2.jpg",
+  },
+  {
+    title: "Feed-in Braids",
+    desc: "Fulani, Lemonade, Ponytails",
+    image: "/hero-3.jpg",
+  },
+  {
+    title: "Piercing",
+    desc: "Ear & Body Piercing",
+    image: "/hero-4.jpg",
   }
 ];
 
@@ -52,11 +62,12 @@ export function ServicesPreview() {
             <p className="text-brand-700 text-[10px] font-bold uppercase tracking-[0.25em] mb-2" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
               ✦ Expert Styling
             </p>
+            {/* ADDED PINK TO HEADING */}
             <h2 
-              className="text-[26px] sm:text-[36px] text-ink leading-tight whitespace-nowrap" 
+              className="text-[26px] sm:text-[36px] text-brand-700 leading-tight whitespace-nowrap" 
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
-              Services
+              Our Services
             </h2>
           </div>
           
@@ -70,13 +81,13 @@ export function ServicesPreview() {
           </Link>
         </div>
 
-        {/* GRID (3 Columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {/* 4-COLUMN GRID */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
           {FEATURED_SERVICES.map((service, idx) => (
             <div key={idx} className="group flex flex-col">
               
               {/* Image Card */}
-              <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm ring-1 ring-brand-100">
+              <div className="relative w-full aspect-[3/4] rounded-xl overflow-hidden shadow-sm ring-1 ring-brand-100">
                 <Image
                   src={service.image}
                   alt={service.title}
@@ -90,7 +101,7 @@ export function ServicesPreview() {
                     href={bookLink(service.title)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="rounded-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-xl hover:scale-105 transition-transform"
+                    className="rounded-full bg-white px-5 py-2.5 text-[9px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-xl hover:scale-105 transition-transform"
                     style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                   >
                     Book on WhatsApp
@@ -99,15 +110,16 @@ export function ServicesPreview() {
               </div>
 
               {/* Text Under Image */}
-              <div className="mt-4 flex flex-col">
+              <div className="mt-3 flex flex-col">
+                {/* ADDED PINK TO SERVICE TITLES */}
                 <h3 
-                  className="text-[22px] text-ink leading-tight"
+                  className="text-[18px] md:text-[20px] text-brand-700 leading-tight truncate"
                   style={{ fontFamily: 'var(--font-cormorant), serif' }}
                 >
                   {service.title}
                 </h3>
                 <p 
-                  className="text-[12px] text-muted mt-1"
+                  className="text-[11px] md:text-[12px] text-muted mt-0.5 truncate"
                   style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                 >
                   {service.desc}
