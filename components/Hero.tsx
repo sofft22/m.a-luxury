@@ -51,8 +51,8 @@ export function Hero() {
   };
 
   return (
-    // INCREASED HEIGHT BY 5 (75vh mobile, 90vh desktop)
-    <section id="hero" className="relative w-full h-[75vh] md:h-[90vh] min-h-[550px] bg-ink">
+    // Mobile reduced by 3 (72vh), Desktop increased by 3 (93vh)
+    <section id="hero" className="relative w-full h-[72vh] md:h-[93vh] min-h-[500px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -68,17 +68,18 @@ export function Hero() {
             alt={`M.a Luxury Hair ${index + 1}`}
             fill
             priority={index === 0}
-            className={`object-cover object-top absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            // CROPPED FROM THE TOP: Pushed the image down so it shows the hair, not the blank space
+            className={`object-cover object-[center_20%] absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
           />
         ))}
         
-        {/* DARK OVERLAY - Darkened slightly at the bottom so the dropped-down text pops */}
+        {/* DARK OVERLAY */}
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/30 to-black/40" />
       </div>
 
-      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
+      {/* TEXT LAYOUT */}
       <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
@@ -90,11 +91,10 @@ export function Hero() {
             >
               Your crown,
               <br />
-              {/* GOLD RESTORED */}
               <span className="italic text-gold">elevated.</span>
             </h1>
 
-            {/* WHITE PRIMARY CTA */}
+            {/* SIDE BY SIDE CTAs */}
             <div className="mt-8 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
