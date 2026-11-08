@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
-import { TrustStrip } from "@/components/TrustStrip"; // <-- ADDED IMPORT
+import { TrustStrip } from "@/components/TrustStrip";
 import { HomeClient } from "@/components/HomeClient";
+import { ServicesPreview } from "@/components/ServicesPreview"; // <-- IMPORT
 import { BoxBuilderSection } from "@/components/BoxBuilderSection";
 import { ProductLines } from "@/components/ProductLines";
 import { OurStory } from "@/components/OurStory";
@@ -13,22 +14,19 @@ export default function HomePage() {
     <main style={{ margin: 0, padding: 0, width: '100%', overflowX: 'hidden', backgroundColor: '#FAF7FE' }}>
       
       <Hero />
-      
-      {/* TRUST STRIP ADDED HERE */}
       <TrustStrip />
 
-      {/* FLEX CONTAINER FOR BREATHING ROOM */}
+      {/* FLEX CONTAINER */}
       <div className="flex flex-col gap-12 md:gap-20 mt-12 md:mt-20">
-        <HomeClient />
+        
+        <HomeClient /> {/* <-- This is the Hair Edit */}
+        
+        <ServicesPreview /> {/* <-- NEW SERVICES SECTION */}
         
         <BoxBuilderSection />
-        
         <ProductLines /> 
-        
         <OurStory />
-
         <RecentReviews />
-        
         <TrustBanner />
       </div>
 
