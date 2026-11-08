@@ -13,7 +13,7 @@ function bookLink() {
 export function Hero() {
   return (
     <section
-      id="hero"
+      id="0"
       className="relative w-full overflow-hidden bg-brand-50 pt-[88px] pb-16 md:pt-[104px] md:pb-24"
     >
       {/* soft purple radial glow */}
@@ -53,13 +53,12 @@ export function Hero() {
                 Plymouth
               </span>
 
-              {/* rating pill */}
+              {/* STARS ONLY PILL */}
               <span
-                className="absolute bottom-5 right-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-ink shadow-sm"
+                className="absolute bottom-5 right-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.15em] text-ink shadow-sm"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                <span className="text-gold">★★★★★</span>
-                4.9
+                <span className="text-gold tracking-widest">★★★★★</span>
               </span>
             </div>
           </div>
@@ -137,23 +136,20 @@ export function Hero() {
               </Link>
             </div>
 
-            {/* trust line */}
-            <div className="mt-8 flex items-center justify-center lg:justify-start gap-3">
-              <div className="flex -space-x-2">
-                {[0, 1, 2].map((i) => (
-                  <div
-                    key={i}
-                    className="h-7 w-7 rounded-full border-2 border-brand-50 bg-brand-100 ring-1 ring-brand-700/10"
-                  />
-                ))}
+            {/* VIP REPLACEMENT FOR HAPPY CUSTOMERS */}
+            <div className="mt-8 flex items-center justify-center lg:justify-start">
+              <div className="flex items-center gap-3">
+                <span className="h-[1px] w-8 bg-gold/50 hidden lg:block"></span>
+                <p
+                  className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold"
+                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                >
+                  VIP Experience
+                </p>
+                <span className="h-[1px] w-8 bg-gold/50 hidden lg:block"></span>
               </div>
-              <p
-                className="text-[10px] uppercase tracking-[0.2em] text-muted/80"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                500+ happy clients · Plymouth
-              </p>
             </div>
+
           </div>
 
         </div>
