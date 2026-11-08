@@ -56,9 +56,9 @@ export function ProductCard({ product, priority }: Props) {
       </div>
 
       {/* TEXT CONTAINER */}
-      <div className="mt-3 flex flex-col gap-1">
+      <div className="mt-3 flex flex-col">
         
-        {/* HAIRLISH FONT (Cormorant Serif) */}
+        {/* Product Title */}
         <h3 
           className="text-[18px] md:text-[20px] font-medium truncate leading-tight tracking-wide text-ink"
           style={{ fontFamily: 'var(--font-cormorant), serif' }}
@@ -66,16 +66,17 @@ export function ProductCard({ product, priority }: Props) {
           {formattedTitle}
         </h3>
         
-        <div className="flex items-baseline gap-1 mt-0.5">
+        {/* Price Row - Clean and aligned */}
+        <div className="flex items-baseline gap-1.5 mt-0.5">
           <span 
-            className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-700/60"
+            className="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-700/60"
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
             From
           </span>
           <p 
-            className="text-[14px] font-semibold text-ink tracking-tight"
-            style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+            className="text-[15px] md:text-[16px] font-medium text-ink"
+            style={{ fontFamily: 'var(--font-cormorant), serif' }}
           >
             £{numericPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
