@@ -51,7 +51,8 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative w-full h-[70vh] md:h-[90vh] min-h-[550px] bg-ink">
+    // INCREASED HEIGHT: 80vh on mobile, 95vh on desktop
+    <section id="hero" className="relative w-full h-[80vh] md:h-[95vh] min-h-[600px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -74,24 +75,24 @@ export function Hero() {
         ))}
         
         {/* PREMIUM EDITORIAL OVERLAY: Dark on the left, clear on the right */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+        <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/85 via-black/50 to-transparent md:via-black/30" />
       </div>
 
       {/* EDITORIAL TEXT LAYOUT (Left Aligned + Glass Panel) */}
       <div className="relative z-30 flex h-full items-center">
-        <div className="mx-auto w-full max-w-7xl px-6 md:px-12">
+        <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
-          <div className="max-w-lg md:max-w-xl backdrop-blur-sm bg-white/5 border border-white/10 p-8 md:p-12 shadow-2xl">
+          <div className="max-w-lg md:max-w-xl backdrop-blur-md bg-white/5 border border-white/10 p-6 sm:p-8 md:p-12 shadow-2xl rounded-2xl md:rounded-none">
             
             <p
-              className="text-gold text-[10px] font-bold uppercase tracking-[0.3em] mb-4"
+              className="text-gold text-[9px] md:text-[10px] font-bold uppercase tracking-[0.3em] mb-4"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               M.a Luxury · Plymouth
             </p>
 
             <h1
-              className="text-white font-light leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
+              className="text-white font-light leading-[0.95] tracking-tight text-[52px] sm:text-[72px] md:text-[88px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               The art of
@@ -100,28 +101,28 @@ export function Hero() {
             </h1>
 
             <p
-              className="mt-6 max-w-sm text-[13px] md:text-[14px] leading-loose text-white/70 uppercase tracking-[0.1em]"
+              className="mt-5 max-w-[280px] md:max-w-sm text-[11px] md:text-[13px] leading-relaxed md:leading-loose text-white/80 uppercase tracking-[0.1em]"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
               Signature braids, luxury locs & premium extensions.
             </p>
 
-            {/* REFINED CTAs */}
-            <div className="mt-10 flex flex-col sm:flex-row gap-4">
+            {/* REFINED CTAs - SIDE BY SIDE ON MOBILE */}
+            <div className="mt-8 flex flex-row gap-2 sm:gap-4">
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-8 py-4 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-ink transition-all hover:bg-brand-700 hover:text-white"
+                className="group flex flex-1 items-center justify-center gap-1.5 rounded-full bg-white px-3 py-3.5 sm:px-8 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-brand-700 hover:text-white"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                Book Appointment
-                <span className="transition-transform group-hover:translate-x-1">→</span>
+                Book Now
+                <span className="transition-transform group-hover:translate-x-1 hidden sm:inline">→</span>
               </a>
 
               <Link
                 href="/shop"
-                className="flex items-center justify-center rounded-full border border-white/40 px-8 py-4 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-white/10"
+                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-3 py-3.5 sm:px-8 sm:py-4 text-center text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 Shop Hair
