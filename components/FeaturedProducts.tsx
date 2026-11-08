@@ -9,7 +9,6 @@ interface Props {
   onProductClick: (product: any) => void;
 }
 
-// USING YOUR 4 HERO IMAGES FOR THE DEMO
 const FALLBACK_PRODUCTS = [
   {
     id: "p-1",
@@ -54,7 +53,6 @@ export function FeaturedProducts({ onProductClick }: Props) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Try cache first
     const cached = localStorage.getItem("ma_products_cache");
     if (cached) {
       try {
@@ -67,7 +65,6 @@ export function FeaturedProducts({ onProductClick }: Props) {
       } catch (e) {}
     }
 
-    // 2. Fetch fresh from API
     fetch("/api/products")
       .then((res) => res.json())
       .then((data) => {
@@ -87,27 +84,20 @@ export function FeaturedProducts({ onProductClick }: Props) {
   }, []);
 
   if (loading) return null; 
-  
   const displayItems = featuredItems.length > 0 ? featuredItems : FALLBACK_PRODUCTS;
 
   return (
-    <section className="w-full bg-white py-20 px-4 md:py-28 md:px-6">
+    <section className="w-full bg-[#FAF7FE] py-20 px-4 md:py-28 md:px-6">
       <div className="mx-auto max-w-[1400px]">
         
-        {/* HEADER */}
-        <div className="mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* HEADER - No gold text, clean sans-serif */}
+        <div className="mb-12 flex flex-col md:flex-row items-end justify-between gap-6 border-b border-brand-100 pb-6">
           <div className="text-center md:text-left">
-            <p
-              className="text-gold text-[10px] font-bold uppercase tracking-[0.3em] mb-3"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-            >
-              ✦ Premium Extensions
-            </p>
             <h2 
-              className="text-[36px] md:text-[48px] font-normal text-ink leading-tight" 
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
+              className="text-[28px] md:text-[36px] font-bold text-ink uppercase tracking-tight" 
+              style={{ fontFamily: 'var(--font-inter), sans-serif' }}
             >
-              Shop the Collection
+              The Hair Edit
             </h2>
           </div>
           
@@ -116,7 +106,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
             className="group flex shrink-0 items-center gap-2 pb-1 text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
-            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">View All Hair</span>
+            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">Shop All</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
