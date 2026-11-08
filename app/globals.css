@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=DM+Serif+Display&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Montserrat:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,8 +8,10 @@
   :root {
     --font-inter: 'Inter', sans-serif;
     --font-montserrat: 'Montserrat', sans-serif;
-    --font-dm-serif: 'DM Serif Display', serif;
+    --font-cormorant: 'Cormorant Garamond', serif;
     --font-bricolage: 'Bricolage Grotesque', sans-serif;
+    /* keep old var alive so nothing breaks if some file still uses it */
+    --font-dm-serif: 'Cormorant Garamond', serif;
   }
 
   * {
