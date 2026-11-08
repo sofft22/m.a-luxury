@@ -73,12 +73,12 @@ export function Hero() {
           />
         ))}
         
-        {/* DARK OVERLAY FOR READABILITY */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-r from-black/80 via-black/40 to-transparent md:via-black/20" />
+        {/* DARK OVERLAY - Darkened slightly at the bottom so the dropped-down text pops */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/30 to-black/40" />
       </div>
 
-      {/* MINIMAL TEXT LAYOUT */}
-      <div className="relative z-30 flex h-full items-center">
+      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
+      <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
           <div className="max-w-lg md:max-w-xl">
@@ -89,10 +89,11 @@ export function Hero() {
             >
               Your crown,
               <br />
-              <span className="italic text-white">elevated.</span>
+              {/* GOLD RESTORED */}
+              <span className="italic text-gold">elevated.</span>
             </h1>
 
-            {/* SIDE BY SIDE CTAs - WHITE PRIMARY BUTTON */}
+            {/* WHITE PRIMARY CTA */}
             <div className="mt-8 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
