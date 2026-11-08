@@ -14,15 +14,15 @@ export function Hero() {
   return (
     <section
       id="0"
-      className="relative w-full overflow-hidden bg-brand-50 pt-[88px] pb-16 md:pt-[104px] md:pb-24"
+      className="relative w-full overflow-hidden bg-white pt-[88px] pb-16 md:pt-[104px] md:pb-24"
     >
-      {/* DEEPER & RICHER RADIAL GLOW */}
+      {/* Very soft, bright glow in the background */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(ellipse at 30% 30%, rgba(76, 29, 149, 0.15) 0%, transparent 60%), radial-gradient(ellipse at 80% 70%, rgba(201, 162, 74, 0.12) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 70% 30%, rgba(217, 70, 239, 0.08) 0%, transparent 60%)",
         }}
       />
 
@@ -31,113 +31,79 @@ export function Hero() {
 
           {/* LEFT — IMAGE CARD */}
           <div className="order-1 lg:order-1">
-            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-[0_40px_100px_-40px_rgba(46,16,101,0.7)] ring-1 ring-brand-700/20">
+            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100">
+              {/* Using a placeholder image that mimics the bright pink vibe */}
               <Image
-                src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1400&q=80"
+                src="https://images.unsplash.com/photo-1595959183082-7b570b7e08e2?w=1400&q=80"
                 alt="M.a Luxury — Hair & Beauty"
                 fill
                 priority
                 unoptimized
                 className="object-cover object-center"
               />
-
-              {/* bottom gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 via-brand-900/5 to-transparent" />
-
-              {/* location pill */}
-              <span
-                className="absolute top-5 left-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-sm"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                Plymouth
-              </span>
             </div>
           </div>
 
           {/* RIGHT — TEXT */}
           <div className="order-2 lg:order-2 text-center lg:text-left">
             
-            <h1
-              className="text-ink font-normal leading-[0.9] tracking-tight text-[56px] sm:text-[72px] md:text-[88px] lg:text-[96px]"
-              style={{ fontFamily: "var(--font-cormorant), serif" }}
+            <p
+              className="text-brand-700 text-[11px] font-bold uppercase tracking-[0.2em] mb-4"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
-              Your crown,
+              Premium Hair Studio
+            </p>
+
+            <h1
+              className="text-ink font-normal leading-[1.1] tracking-tight text-[50px] sm:text-[64px] md:text-[80px]"
+              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+            >
+              Precision. Artistry.
               <br />
-              {/* Premium Shiny Purple Text Effect */}
-              <span className="italic bg-gradient-to-br from-brand-500 via-brand-700 to-brand-900 bg-clip-text text-transparent drop-shadow-sm pb-2">
-                elevated.
-              </span>
+              <span className="font-bold text-brand-700">Confidence.</span>
             </h1>
 
             <p
-              className="mt-6 mx-auto lg:mx-0 max-w-md text-[14px] md:text-[15px] leading-relaxed text-muted"
+              className="mt-6 mx-auto lg:mx-0 max-w-md text-[15px] md:text-[16px] leading-relaxed text-muted"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
-              Signature braids, locs & beauty — plus premium hair extensions
-              curated for your next install. Booked in seconds on WhatsApp.
+              Welcome to M.a Luxury, your destination for luxury braids and 
+              trend-focused styling. We combine expert technique with premium 
+              extensions to transform your look and elevate your story.
             </p>
 
             {/* DUAL PATH CTAs */}
-            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-md mx-auto lg:mx-0">
+            <div className="mt-8 flex flex-col sm:flex-row gap-4 max-w-md mx-auto lg:mx-0">
               
-              {/* Book a service - SHINY DEEP PURPLE GRADIENT */}
+              {/* Book a service - Bright Magenta */}
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col items-start gap-1 rounded-2xl bg-gradient-to-br from-brand-700 to-brand-900 px-5 py-4 text-left text-white shadow-[0_15px_35px_-15px_rgba(76,29,149,0.8)] transition-all hover:from-brand-900 hover:to-black hover:-translate-y-0.5 border border-brand-700"
+                className="flex-1 rounded-full bg-brand-700 px-8 py-4 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 hover:-translate-y-0.5"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                <span
-                  className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/70"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  Book a service
-                </span>
-                <span
-                  className="flex w-full items-center justify-between gap-2 text-[13px] font-bold uppercase tracking-[0.1em]"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  On WhatsApp
-                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4 opacity-80 group-hover:opacity-100" aria-hidden>
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
-                  </svg>
-                </span>
+                Book Now
               </a>
 
-              {/* Shop extensions */}
+              {/* Shop extensions - Outline */}
               <Link
                 href="/shop"
-                className="group flex flex-col items-start gap-1 rounded-2xl border border-brand-700/30 bg-white/60 backdrop-blur px-5 py-4 text-left text-brand-900 transition-all hover:border-brand-900 hover:bg-white hover:-translate-y-0.5"
+                className="flex-1 rounded-full border-2 border-brand-700/20 px-8 py-4 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-brand-700 transition-all hover:border-brand-700 hover:bg-brand-50"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
-                <span
-                  className="text-[9px] font-bold uppercase tracking-[0.2em] text-brand-700/60"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  Shop extensions
-                </span>
-                <span
-                  className="flex w-full items-center justify-between gap-2 text-[13px] font-bold uppercase tracking-[0.1em]"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  Bonestraight & more
-                  <span className="transition-transform group-hover:translate-x-1">→</span>
-                </span>
+                Shop Hair
               </Link>
             </div>
 
             {/* VIP REPLACEMENT */}
-            <div className="mt-8 flex items-center justify-center lg:justify-start">
-              <div className="flex items-center gap-3">
-                <span className="h-[1px] w-8 bg-gold/50 hidden lg:block"></span>
-                <p
-                  className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  VIP Experience
-                </p>
-                <span className="h-[1px] w-8 bg-gold/50 hidden lg:block"></span>
-              </div>
+            <div className="mt-10 flex items-center justify-center lg:justify-start">
+              <p
+                className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                ✦ VIP Experience
+              </p>
             </div>
 
           </div>
