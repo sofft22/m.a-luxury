@@ -44,7 +44,7 @@ export function Hero() {
               {/* bottom gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-brand-900/60 via-brand-900/5 to-transparent" />
 
-              {/* location pill */}
+              {/* location pill ONLY */}
               <span
                 className="absolute top-5 left-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-700 shadow-sm"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
@@ -52,28 +52,16 @@ export function Hero() {
                 <span className="h-1.5 w-1.5 rounded-full bg-gold" />
                 Plymouth
               </span>
-
-              {/* STARS ONLY PILL */}
-              <span
-                className="absolute bottom-5 right-5 inline-flex items-center gap-1.5 rounded-full bg-white/95 backdrop-blur px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.15em] text-ink shadow-sm"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                <span className="text-gold tracking-widest">★★★★★</span>
-              </span>
             </div>
           </div>
 
           {/* RIGHT — TEXT */}
           <div className="order-2 lg:order-2 text-center lg:text-left">
-            <p
-              className="text-gold text-[10px] font-bold uppercase tracking-[0.35em]"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-            >
-              ✦ Hair · Locs · Brows · Beauty
-            </p>
+            
+            {/* REMOVED TOP GOLD TEXT HERE */}
 
             <h1
-              className="mt-5 text-ink font-normal leading-[0.9] tracking-tight text-[56px] sm:text-[72px] md:text-[88px] lg:text-[96px]"
+              className="text-ink font-normal leading-[0.9] tracking-tight text-[56px] sm:text-[72px] md:text-[88px] lg:text-[96px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               Your crown,
@@ -136,7 +124,7 @@ export function Hero() {
               </Link>
             </div>
 
-            {/* VIP REPLACEMENT FOR HAPPY CUSTOMERS */}
+            {/* VIP REPLACEMENT */}
             <div className="mt-8 flex items-center justify-center lg:justify-start">
               <div className="flex items-center gap-3">
                 <span className="h-[1px] w-8 bg-gold/50 hidden lg:block"></span>
