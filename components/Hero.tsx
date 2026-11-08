@@ -51,7 +51,8 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative w-full h-[70vh] md:h-[85vh] min-h-[500px] bg-ink">
+    // INCREASED HEIGHT BY 5 (75vh mobile, 90vh desktop)
+    <section id="hero" className="relative w-full h-[75vh] md:h-[90vh] min-h-[550px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
