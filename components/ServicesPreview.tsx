@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,34 +11,50 @@ function bookLink(service: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
-// ONLY 4 SERVICES NOW
-const FEATURED_SERVICES = [
+const SERVICES = [
   {
     title: "Knotless Braids",
-    desc: "Small, Medium, Large, Jumbo",
+    desc: "Small, Medium, Large, Jumbo. Available in shoulder, mid-back, and waist lengths.",
     image: "/hero-1.jpg", 
   },
   {
     title: "Boho Braids",
-    desc: "Shoulder, Mid-back, Waist",
+    desc: "Small, Medium, Large, Jumbo. Available in shoulder, mid-back, and waist lengths.",
     image: "/hero-2.jpg",
   },
   {
     title: "Locs & Relocs",
-    desc: "Interlocking, Retwist, Styling",
+    desc: "Interlocking, Retwist, Styling. Whether you're starting fresh or maintaining your crown.",
     image: "/hero-3.jpg",
   },
   {
     title: "Twists",
-    desc: "Passion, Kinky, Marley",
+    desc: "Passion twists, Kinky twists, and Marley twists. With or without expression.",
     image: "/hero-4.jpg",
+  },
+  {
+    title: "Sew-ins & Styling",
+    desc: "Custom installs, retouch & washing, and hair straightening services.",
+    image: "/hero-1.jpg",
+  },
+  {
+    title: "Beauty & Brows",
+    desc: "Lash extensions (classic, hybrid, volume), brow lamination, tinting, and SPMU.",
+    image: "/hero-2.jpg",
   }
 ];
 
 export function ServicesPreview() {
+  // Track which index is open (null means all closed)
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
+
+  const toggleService = (index: number) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
-    <section className="w-full bg-white py-20 px-4 md:py-28 md:px-6">
-      <div className="mx-auto max-w-[1400px]">
+    <section className="w-full bg-white py-20 px-5 md:py-28 md:px-8">
+      <div className="mx-auto max-w-5xl">
         
         {/* HEADER */}
         <div className="mb-12 flex flex-row items-end justify-between gap-2 sm:gap-6 border-b border-brand-100 pb-6">
@@ -44,7 +63,7 @@ export function ServicesPreview() {
               ✦ Expert Styling
             </p>
             <h2 
-              className="text-[26px] sm:text-[36px] text-brand-700 leading-tight whitespace-nowrap" 
+              className="text-[32px] sm:text-[44px] text-brand-700 leading-tight whitespace-nowrap" 
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
               Our Services
@@ -53,60 +72,101 @@ export function ServicesPreview() {
           
           <Link 
             href="/services" 
-            className="group flex shrink-0 items-center gap-1 sm:gap-2 pb-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
+            className="group hidden sm:flex shrink-0 items-center gap-2 pb-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
-            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">View All Services</span>
+            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">View All</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
 
-        {/* GRID: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6">
-          {FEATURED_SERVICES.map((service, idx) => (
-            <div key={idx} className="group flex flex-col">
-              
-              {/* Image Card */}
-              <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm ring-1 ring-brand-100">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+        {/* THE LIST / ACCORDION */}
+        <div className="flex flex-col border-t border-brand-100">
+          {SERVICES.map((service, idx) => {
+            const isOpen = openIndex === idx;
+
+            return (
+              <div key={idx} className="border-b border-brand-100">
                 
-                {/* Hover Overlay with Book Button */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <a 
-                    href={bookLink(service.title)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-xl hover:scale-105 transition-transform"
-                    style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                {/* CLICKABLE ROW */}
+                <button 
+                  onClick={() => toggleService(idx)}
+                  className="w-full flex items-center justify-between py-6 group text-left transition-colors hover:bg-brand-50/50 px-2 md:px-4"
+                >
+                  <h3 
+                    className={`text-[28px] md:text-[36px] transition-colors ${
+                      isOpen ? "text-brand-700 italic" : "text-ink group-hover:text-brand-700"
+                    }`}
+                    style={{ fontFamily: 'var(--font-cormorant), serif' }}
                   >
-                    Book on WhatsApp
-                  </a>
+                    {service.title}
+                  </h3>
+                  
+                  {/* Plus/Minus Icon */}
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border transition-all duration-300 ${
+                    isOpen ? "bg-brand-700 border-brand-700 text-white rotate-45" : "border-brand-200 text-brand-700 group-hover:border-brand-700"
+                  }`}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                  </div>
+                </button>
+
+                {/* EXPANDED DETAILS (Image + Text + CTA) */}
+                <div 
+                  className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                    isOpen ? "max-h-[800px] opacity-100 mb-8" : "max-h-0 opacity-0"
+                  }`}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 p-2 md:p-4 items-center">
+                    
+                    {/* Image */}
+                    <div className="relative w-full aspect-[4/3] md:aspect-square rounded-xl overflow-hidden shadow-lg">
+                      <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover object-top"
+                      />
+                    </div>
+
+                    {/* Text & CTA */}
+                    <div className="flex flex-col items-start justify-center">
+                      <p 
+                        className="text-[15px] leading-relaxed text-muted mb-8"
+                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                      >
+                        {service.desc}
+                      </p>
+                      
+                      <a 
+                        href={bookLink(service.title)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded-full bg-brand-700 px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.1em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 hover:-translate-y-0.5"
+                        style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                      >
+                        Book via WhatsApp
+                      </a>
+                    </div>
+
+                  </div>
                 </div>
-              </div>
 
-              {/* Text Under Image */}
-              <div className="mt-4 flex flex-col">
-                <h3 
-                  className="text-[22px] text-brand-700 leading-tight truncate"
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {service.title}
-                </h3>
-                <p 
-                  className="text-[12px] text-muted mt-1"
-                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                >
-                  {service.desc}
-                </p>
               </div>
+            );
+          })}
+        </div>
 
-            </div>
-          ))}
+        {/* Mobile View All Button */}
+        <div className="mt-8 flex justify-center sm:hidden">
+          <Link 
+            href="/services" 
+            className="rounded-full border border-brand-700 text-brand-700 px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.1em] transition-all hover:bg-brand-50"
+            style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+          >
+            View All Services
+          </Link>
         </div>
 
       </div>
