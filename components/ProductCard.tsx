@@ -19,8 +19,6 @@ interface Props {
 export function ProductCard({ product, priority }: Props) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  // FIXED: Removed the division by 100. 
-  // If the database says 12, it shows 12.
   const numericPrice = typeof product.price === "number" 
     ? product.price 
     : parseFloat(String(product.price).replace(/[^0-9.]/g, ""));
@@ -31,9 +29,10 @@ export function ProductCard({ product, priority }: Props) {
   return (
     <div className="group flex flex-col cursor-pointer w-full">
       
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-[#EBE0D3]">
+      {/* IMAGE CONTAINER */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-brand-100">
         {!imgLoaded && (
-          <div className="absolute inset-0 animate-pulse bg-[#EBE0D3]" />
+          <div className="absolute inset-0 animate-pulse bg-brand-100" />
         )}
 
         <Image
@@ -49,35 +48,39 @@ export function ProductCard({ product, priority }: Props) {
 
         {isSoldOut && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-            <span className="bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-[#2C1A1D]">
+            <span className="bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-ink">
               Sold Out
             </span>
           </div>
         )}
       </div>
 
+      {/* TEXT CONTAINER */}
       <div className="mt-3 flex flex-col gap-1">
+        
+        {/* HAIRLISH FONT (Cormorant Serif) */}
         <h3 
-          className="text-[12px] md:text-[13px] font-semibold truncate leading-[1.3] tracking-[0.01em] text-[#2C1A1D]"
-          style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+          className="text-[18px] md:text-[20px] font-medium truncate leading-tight tracking-wide text-ink"
+          style={{ fontFamily: 'var(--font-cormorant), serif' }}
         >
           {formattedTitle}
         </h3>
         
-        <div className="flex items-baseline gap-1">
+        <div className="flex items-baseline gap-1 mt-0.5">
           <span 
-            className="text-[11px] font-medium text-[#2C1A1D]/70"
+            className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-700/60"
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
             From
           </span>
           <p 
-            className="text-[14px] font-extrabold text-[#2C1A1D] tracking-tight"
+            className="text-[14px] font-semibold text-ink tracking-tight"
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
             £{numericPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
+        
       </div>
 
     </div>
