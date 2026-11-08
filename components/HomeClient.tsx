@@ -68,10 +68,7 @@ export function HomeClient() {
         <ProductDeepLink onSelect={setSelectedProduct} />
       </Suspense>
 
-      <FeaturedProducts 
-        onProductClick={(product) => setSelectedProduct(product)} 
-        onBoxClick={() => setIsBoxModalOpen(true)} // PASSED THE CLICK
-      />
+            <FeaturedProducts />
       
       {selectedProduct && (
         <ProductModal 
