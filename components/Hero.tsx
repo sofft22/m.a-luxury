@@ -6,7 +6,6 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "440000000000"; // Replace later
 
-// FIXED PATHS: Directly inside public, exact names from your screenshot
 const HERO_IMAGES = [
   "/hero-1.jpg",
   "/hero-2.jpg",
@@ -31,7 +30,7 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full overflow-hidden bg-white pt-[120px] pb-16 md:pt-[160px] md:pb-24">
+    <section className="relative w-full overflow-hidden bg-white pt-[110px] pb-12 md:pt-[140px] md:pb-20">
       
       {/* Soft bright background glow */}
       <div
@@ -44,11 +43,12 @@ export function Hero() {
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 md:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
           {/* LEFT — CAROUSEL */}
           <div className="order-1 lg:order-1">
-            <div className="relative w-full aspect-[4/5] lg:aspect-[5/6] rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50">
+            {/* Changed aspect ratio on desktop from 5/6 to 4/5 so it's shorter */}
+            <div className="relative w-full aspect-[4/5] lg:aspect-[4/5] rounded-[24px] md:rounded-[32px] overflow-hidden shadow-2xl ring-1 ring-brand-100 bg-brand-50">
               
               {HERO_IMAGES.map((src, index) => (
                 <Image
@@ -56,7 +56,7 @@ export function Hero() {
                   src={src}
                   alt={`M.a Luxury Hair ${index + 1}`}
                   fill
-                  priority={index === 0} // Load first image immediately
+                  priority={index === 0}
                   className={`object-cover object-center transition-opacity duration-1000 ease-in-out ${
                     index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
                   }`}
@@ -64,7 +64,7 @@ export function Hero() {
               ))}
 
               {/* Little dots at the bottom */}
-              <div className="absolute bottom-5 left-0 right-0 z-20 flex justify-center gap-2">
+              <div className="absolute bottom-4 left-0 right-0 z-20 flex justify-center gap-2">
                 {HERO_IMAGES.map((_, idx) => (
                   <button
                     key={idx}
@@ -91,7 +91,7 @@ export function Hero() {
             </p>
 
             <h1
-              className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
+              className="text-ink font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[80px] lg:text-[88px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               Your crown,
@@ -100,7 +100,7 @@ export function Hero() {
             </h1>
 
             <p
-              className="mt-6 mx-auto lg:mx-0 max-w-[340px] text-[14px] md:text-[15px] leading-relaxed text-muted"
+              className="mt-5 mx-auto lg:mx-0 max-w-[340px] text-[14px] md:text-[15px] leading-relaxed text-muted"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
               Signature braids, locs & premium extensions. 
@@ -108,12 +108,12 @@ export function Hero() {
             </p>
 
             {/* CTAs */}
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 max-w-md mx-auto lg:mx-0">
+            <div className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto lg:mx-0">
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 rounded-full bg-brand-700 px-8 py-4 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 hover:-translate-y-0.5"
+                className="flex-1 rounded-full bg-brand-700 px-6 py-3.5 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 hover:-translate-y-0.5"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 Book Appointment
@@ -121,7 +121,7 @@ export function Hero() {
 
               <Link
                 href="/shop"
-                className="flex-1 rounded-full border-2 border-brand-700/20 px-8 py-4 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-brand-700 transition-all hover:border-brand-700 hover:bg-brand-50"
+                className="flex-1 rounded-full border-2 border-brand-700/20 px-6 py-3.5 text-center text-[11px] font-bold uppercase tracking-[0.1em] text-brand-700 transition-all hover:border-brand-700 hover:bg-brand-50"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 Shop Extensions
