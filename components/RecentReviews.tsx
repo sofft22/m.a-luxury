@@ -5,19 +5,16 @@ const REVIEWS = [
     id: 1,
     text: "Thank you very much for my beautiful hair too. I love love it!!!!",
     time: "19:37",
-    service: "Knotless Braids",
   },
   {
     id: 2,
     text: "Got many compliments 🥰 Thank you",
     time: "13:22",
-    service: "Boho Braids",
   },
   {
     id: 3,
     text: "I am fine. The lashes is okay, i am still maintaining it..thank you",
     time: "15:02",
-    service: "Lash Extensions",
   }
 ];
 
@@ -51,17 +48,20 @@ export function RecentReviews() {
           {REVIEWS.map((review) => (
             <div 
               key={review.id} 
-              className="min-w-[85vw] sm:min-w-[350px] md:min-w-0 snap-center flex flex-col justify-end gap-2"
+              // ADDED h-full and min-h to make all bubbles the same size
+              className="min-w-[85vw] sm:min-w-[350px] md:min-w-0 snap-center flex flex-col h-full"
             >
               {/* Chat Bubble Container */}
-              <div className="bg-[#F0F2F5] rounded-2xl rounded-tl-sm p-5 relative shadow-sm border border-gray-200/50">
+              <div className="flex flex-col justify-between bg-[#F0F2F5] rounded-2xl rounded-tl-sm p-6 relative shadow-sm border border-gray-200/50 w-full h-full min-h-[160px] md:min-h-[180px]">
+                
                 <p 
                   className="text-[15px] leading-relaxed text-[#111] font-medium"
                   style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
                 >
                   {review.text}
                 </p>
-                <div className="mt-2 flex justify-end">
+                
+                <div className="mt-4 flex justify-end">
                   <span className="text-[11px] text-[#667781] font-medium flex items-center gap-1">
                     {review.time}
                     <svg viewBox="0 0 16 15" width="16" height="15" className="text-[#53BDEB]">
@@ -69,18 +69,8 @@ export function RecentReviews() {
                     </svg>
                   </span>
                 </div>
-              </div>
-              
-              {/* Service Tag (Below Bubble) */}
-              <div className="px-1">
-                <span 
-                  className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-700/60"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  {review.service}
-                </span>
-              </div>
 
+              </div>
             </div>
           ))}
         </div>
