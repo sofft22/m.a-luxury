@@ -48,21 +48,14 @@ export function ServicesPreview() {
     <section className="w-full bg-white py-16 px-5 md:py-24 md:px-8 border-t border-brand-100">
       <div className="mx-auto max-w-6xl">
         
-        {/* HEADER */}
+        {/* CLEAN HEADER */}
         <div className="mb-12 flex flex-col items-center text-center">
-          <p 
-            className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold mb-3"
-            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-          >
-            ✦ The M.a Experience
-          </p>
           <h2 
             className="text-[32px] sm:text-[44px] text-ink leading-tight" 
             style={{ fontFamily: 'var(--font-cormorant), serif' }}
           >
-            What We Offer
+            Services We Offer
           </h2>
-          <div className="w-8 h-[1px] bg-ink/20 mt-6" />
         </div>
 
         {/* EDITORIAL MENU LAYOUT */}
@@ -98,11 +91,11 @@ export function ServicesPreview() {
                 ))}
               </ul>
 
-              {/* SEE MORE DETAILS LINK UNDER EACH GROUP */}
+              {/* SEE MORE DETAILS LINK - GOLD */}
               <div className="mt-6 pt-4 border-t border-brand-100">
                 <Link 
                   href={`/services#${category.slug}`}
-                  className="group/link inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.1em] text-brand-700 transition-colors hover:text-ink"
+                  className="group/link inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.1em] text-gold transition-colors hover:text-brand-700"
                   style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                 >
                   See More Details
