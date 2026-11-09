@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "440000000000"; // Replace later
+const WHATSAPP_NUMBER = "447393157901"; // Updated number
 
 const HERO_IMAGES = [
   "/hero-1.jpg",
@@ -83,18 +83,16 @@ export function Hero() {
           
           <div className="max-w-xl md:max-w-2xl">
             
+            {/* UPDATED HEADLINE */}
             <h1
-              className="text-white font-normal leading-[1.05] tracking-tight text-[42px] sm:text-[60px] md:text-[76px]"
+              className="text-white font-normal leading-[1.05] tracking-tight text-[52px] sm:text-[68px] md:text-[84px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              Hair & Beauty
-              <br />
-              {/* REVERTED TO GOLD */}
-              <span className="italic text-gold">Premium Extensions.</span>
+              Hair & <span className="italic text-gold">Beauty.</span>
             </h1>
 
             {/* SIDE BY SIDE CTAs */}
-            <div className="mt-6 md:mt-8 flex flex-row gap-3 sm:gap-4">
+            <div className="mt-8 md:mt-10 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
                 target="_blank"
