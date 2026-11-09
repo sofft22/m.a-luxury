@@ -51,8 +51,8 @@ export function Hero() {
   };
 
   return (
-    // MOBILE HEIGHT REDUCED BY 3VH (72vh)
-    <section id="hero" className="relative w-full h-[72vh] md:h-[93vh] min-h-[550px] bg-ink">
+    // REDUCED MOBILE HEIGHT TO 68VH
+    <section id="hero" className="relative w-full h-[68vh] md:h-[93vh] min-h-[500px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -79,13 +79,13 @@ export function Hero() {
       </div>
 
       {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
-      <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
+      <div className="relative z-30 flex h-full items-end pb-12 md:pb-24">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
           <div className="max-w-xl md:max-w-2xl">
             
             <h1
-              className="text-white font-normal leading-[1.05] tracking-tight text-[46px] sm:text-[60px] md:text-[76px]"
+              className="text-white font-normal leading-[1.05] tracking-tight text-[42px] sm:text-[60px] md:text-[76px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
               Luxury Braids & 
@@ -94,7 +94,7 @@ export function Hero() {
             </h1>
 
             {/* SIDE BY SIDE CTAs */}
-            <div className="mt-8 flex flex-row gap-3 sm:gap-4">
+            <div className="mt-6 md:mt-8 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
                 target="_blank"
