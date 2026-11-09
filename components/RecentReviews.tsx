@@ -1,124 +1,99 @@
-"use client";
+import { Star } from "lucide-react";
 
-import { useEffect, useState } from "react";
-import { ProductModal } from "./ProductModal";
+const REVIEWS = [
+  {
+    id: 1,
+    text: "Thank you very much for my beautiful hair too. I love love it!!!!",
+    time: "19:37",
+    service: "Knotless Braids",
+  },
+  {
+    id: 2,
+    text: "Got many compliments 🥰 Thank you",
+    time: "13:22",
+    service: "Boho Braids",
+  },
+  {
+    id: 3,
+    text: "I am fine. The lashes is okay, i am still maintaining it..thank you",
+    time: "15:02",
+    service: "Lash Extensions",
+  }
+];
 
 export function RecentReviews() {
-  const [reviews, setReviews] = useState<any[]>([]);
-  const [products, setProducts] = useState<Record<string, any>>({});
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/reviews").then(res => res.json()),
-      fetch("/api/products").then(res => res.json())
-    ]).then(([reviewsData, productsData]) => {
-      
-      const productMap: Record<string, any> = {};
-      productsData.forEach((p: any) => {
-        productMap[p.id] = p;
-      });
-      setProducts(productMap);
-
-      const approved = reviewsData
-        .filter((r: any) => r.approved === 1 && productMap[r.productId])
-        .slice(0, 3);
-
-      setReviews(approved);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading || reviews.length === 0) return null;
-
   return (
-    <>
-      <section className="w-full bg-[#FBF9F5] py-20 px-6 md:py-28 md:px-12 border-t border-[#2C1A1D]/10">
-        <div className="mx-auto max-w-[1200px]">
-          
-          <div className="mb-16 text-center">
-            <p 
-              className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#2C1A1D]/50 mb-4"
-              style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-            >
-          
-            </p>
-            <h2 
-              className="text-[36px] md:text-[56px] text-[#2C1A1D] leading-tight"
-              style={{ fontFamily: 'var(--font-dm-serif), serif' }}
-            >
-             Most recent reviews
-            </h2>
+    <section className="w-full bg-white py-20 px-4 md:py-28 md:px-8 border-t border-brand-100 overflow-hidden">
+      <div className="mx-auto max-w-7xl">
+        
+        {/* HEADER */}
+        <div className="mb-12 text-center flex flex-col items-center">
+          <h2 
+            className="text-[32px] sm:text-[44px] text-ink leading-tight" 
+            style={{ fontFamily: 'var(--font-cormorant), serif' }}
+          >
+            Client Love
+          </h2>
+          <div className="mt-4 flex gap-1 text-gold">
+            <Star className="w-4 h-4 fill-current" />
+            <Star className="w-4 h-4 fill-current" />
+            <Star className="w-4 h-4 fill-current" />
+            <Star className="w-4 h-4 fill-current" />
+            <Star className="w-4 h-4 fill-current" />
           </div>
-
-          {/* Slim, Rectangular Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-            {reviews.map((review) => {
-              const product = products[review.productId];
-              return (
-                <div 
-                  key={review.id} 
-                  className="flex flex-col justify-between rounded-xl bg-white px-6 py-5 border border-[#2C1A1D]/10 shadow-sm"
-                >
-                  <div>
-                    {/* Stars & Date */}
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="text-[13px] text-[#2C1A1D]">
-                        {"★".repeat(review.rating)}
-                        <span className="text-[#2C1A1D]/20">{"★".repeat(5 - review.rating)}</span>
-                      </div>
-                      <p className="text-[10px] text-[#2C1A1D]/40" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                        {new Date(review.date).toLocaleDateString("en-NG", { day: "numeric", month: "short" })}
-                      </p>
-                    </div>
-
-                    {/* Comment */}
-                    <p 
-                      className="text-[14px] leading-[1.6] text-[#2C1A1D]/80 mb-6"
-                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                    >
-                      "{review.comment}"
-                    </p>
-                  </div>
-
-                  {/* Footer: Name & Product Link */}
-                  <div className="border-t border-[#2C1A1D]/5 pt-4 flex items-center justify-between gap-4">
-                    <div className="min-w-0">
-                      <p 
-                        className="text-[10px] font-bold uppercase tracking-wider text-[#2C1A1D] truncate"
-                        style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-                      >
-                        {review.customerName}
-                      </p>
-                      <p 
-                        className="text-[10px] text-[#2C1A1D]/40 mt-0.5 truncate"
-                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                      >
-                        {product.title}
-                      </p>
-                    </div>
-                    
-                    <button 
-                      onClick={() => setSelectedProduct(product)}
-                      className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#2C1A1D] hover:underline shrink-0"
-                      style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-                    >
-                      See Product →
-                    </button>
-                  </div>
-
-                </div>
-              );
-            })}
-          </div>
-
         </div>
-      </section>
 
-      {selectedProduct && (
-        <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-      )}
-    </>
+        {/* 
+          MOBILE: Horizontal Scroll 
+          DESKTOP: 3-Column Grid
+        */}
+        <div className="flex overflow-x-auto snap-x snap-mandatory gap-4 md:grid md:grid-cols-3 md:gap-6 pb-6 md:pb-0 no-scrollbar">
+          {REVIEWS.map((review) => (
+            <div 
+              key={review.id} 
+              className="min-w-[85vw] sm:min-w-[350px] md:min-w-0 snap-center flex flex-col justify-end gap-2"
+            >
+              {/* Chat Bubble Container */}
+              <div className="bg-[#F0F2F5] rounded-2xl rounded-tl-sm p-5 relative shadow-sm border border-gray-200/50">
+                <p 
+                  className="text-[15px] leading-relaxed text-[#111] font-medium"
+                  style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}
+                >
+                  {review.text}
+                </p>
+                <div className="mt-2 flex justify-end">
+                  <span className="text-[11px] text-[#667781] font-medium flex items-center gap-1">
+                    {review.time}
+                    <svg viewBox="0 0 16 15" width="16" height="15" className="text-[#53BDEB]">
+                      <path fill="currentColor" d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.319.319 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"></path>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              
+              {/* Service Tag (Below Bubble) */}
+              <div className="px-1">
+                <span 
+                  className="text-[10px] font-bold uppercase tracking-[0.1em] text-brand-700/60"
+                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                >
+                  {review.service}
+                </span>
+              </div>
+
+            </div>
+          ))}
+        </div>
+
+        {/* MOBILE SWIPE INDICATOR */}
+        <div className="mt-4 flex justify-center items-center gap-2 md:hidden">
+          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted">
+            Swipe to read
+          </span>
+          <span className="text-muted">→</span>
+        </div>
+
+      </div>
+    </section>
   );
 }
