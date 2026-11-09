@@ -1,181 +1,238 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { LegalModal } from "./LegalModal";
 
-export function LegalModal({ 
-  isOpen, 
-  onClose, 
-  type 
-}: { 
-  isOpen: boolean; 
-  onClose: () => void; 
-  type: "policies" | "privacy" | null 
-}) {
-  const [activeTab, setActiveTab] = useState<"appointments" | "products" | "general">("appointments");
+const WHATSAPP_NUMBER = "447393157901"; // CORRECTED NUMBER
+const INSTAGRAM_HANDLE = "ma.luxury"; // Replace if different
+const TIKTOK_HANDLE = "ma.luxury"; // Replace if different
+const EMAIL = "hello@maluxury.com"; // Replace if different
+const CITY = "Plymouth";
 
-  if (!isOpen || !type) return null;
+export function Footer() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [legalModalOpen, setLegalModalOpen] = useState(false);
+  const [legalType, setLegalType] = useState<"policies" | "privacy" | null>(null);
+
+  const openLegal = (type: "policies" | "privacy") => {
+    setLegalType(type);
+    setLegalModalOpen(true);
+  };
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: any) => {
+    if (item.href) return;
+    e.preventDefault();
+    const scrollToTarget = () => {
+      const el = document.getElementById(item.targetId);
+      if (el) {
+        const yOffset = -80;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: "smooth" });
+      }
+    };
+    if (pathname === "/") {
+      scrollToTarget();
+    } else {
+      router.push("/");
+      setTimeout(scrollToTarget, 500);
+    }
+  };
+
+  const SHOP_LINKS = [
+    { label: "Bonestraight", href: "/shop?line=bonestraight" },
+    { label: "French Curls", href: "/shop?line=french-curls" },
+    { label: "Kinky", href: "/shop?line=kinky" },
+    { label: "Passion Twist", href: "/shop?line=passion-twist" },
+    { label: "Expression", href: "/shop?line=expression" },
+    { label: "Crochet", href: "/shop?line=crochet" },
+    { label: "Sew-in Extensions", href: "/shop?line=sew-in" },
+    { label: "Locs Extensions", href: "/shop?line=locs" },
+    { label: "Shop all →", href: "/shop" },
+  ];
+
+  const SERVICE_LINKS = [
+    { label: "Knotless Braids", href: "/services/knotless-braids" },
+    { label: "Boho Braids", href: "/services/boho-braids" },
+    { label: "Locs & Retwist", href: "/services/locs-retwist" },
+    { label: "Twists", href: "/services/twists" },
+    { label: "Sew-ins", href: "/services/sew-ins" },
+    { label: "Lash Extensions", href: "/services/lash-extensions" },
+    { label: "Brows & SPMU", href: "/services/brows" },
+    { label: "Retouch & Wash", href: "/services/retouch" },
+    { label: "View all services →", href: "/services" },
+  ];
+
+  const INFO_LINKS = [
+    { label: "Book on WhatsApp", href: "/book" },
+    { label: "Gallery", targetId: "gallery" },
+    { label: "Reviews", targetId: "reviews" },
+    { label: "About", targetId: "about" },
+    { label: "FAQs", targetId: "faq" },
+  ];
 
   return (
-    <div className="fixed inset-0 z-[150] flex bg-black/60 backdrop-blur-sm sm:p-6 sm:items-center justify-center" onClick={onClose}>
-      <div 
-        onClick={(e) => e.stopPropagation()} 
-        className="relative flex flex-col bg-white shadow-2xl w-full h-full sm:h-auto sm:max-h-[85vh] sm:max-w-[800px] sm:rounded-xl overflow-hidden animate-in slide-in-from-bottom-full sm:zoom-in-95 duration-200"
-      >
-        
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-gray-100 bg-white px-6 py-5 shrink-0">
-          <h2 className="text-[22px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>
-            {type === "privacy" ? "Privacy Policy" : "Terms & Policies"}
-          </h2>
-          <button onClick={onClose} className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-50 text-gray-500 hover:text-ink transition-colors">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    <footer id="footer" className="w-full bg-brand-900 pt-20 pb-10 px-6 md:pt-24 md:px-12">
+      <div className="mx-auto max-w-[1200px]">
+        {/* TOP ROW: 4 columns */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 pb-16 border-b border-white/10">
+          {/* Column 1: Brand + tagline + socials */}
+          <div className="col-span-2 md:col-span-1 flex flex-col items-start">
+            <Link href="/" className="flex items-baseline mb-3">
+              <span
+                className="text-[22px] md:text-[24px] uppercase leading-none tracking-[0.2em] text-white"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
+              >
+                M.a Luxury
+              </span>
+            </Link>
+            <p
+              className="text-[10px] md:text-[11px] uppercase tracking-[0.15em] mt-2 text-white/50"
+              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+            >
+              Hair & Beauty · {CITY}
+            </p>
+
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-gold hover:bg-gold hover:text-brand-900 transition-colors"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Book on WhatsApp
+            </a>
+          </div>
+
+          {/* Column 2: Shop */}
+          <div className="flex flex-col gap-3">
+            <h4
+              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Shop
+            </h4>
+            {SHOP_LINKS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Column 3: Services */}
+          <div className="flex flex-col gap-3">
+            <h4
+              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Services
+            </h4>
+            {SERVICE_LINKS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href}
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Column 4: Info + contact */}
+          <div className="flex flex-col gap-3">
+            <h4
+              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Info
+            </h4>
+            {INFO_LINKS.map((item) => (
+              <Link
+                key={item.label}
+                href={item.href || `/#${item.targetId}`}
+                onClick={(e) => handleNavClick(e, item)}
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                {item.label}
+              </Link>
+            ))}
+
+            <div className="mt-3 border-t border-white/10 pt-3 flex flex-col gap-2">
+              <a
+                href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                Instagram
+              </a>
+              <a
+                href={`https://tiktok.com/@${TIKTOK_HANDLE}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                TikTok
+              </a>
+              <a
+                href={`mailto:${EMAIL}`}
+                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                {EMAIL}
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* MIDDLE: policies row */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-8 pb-6 border-b border-white/10">
+          <button
+            onClick={() => openLegal("policies")}
+            className="text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            Terms & Policies
+          </button>
+          <button
+            onClick={() => openLegal("privacy")}
+            className="text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            Privacy
           </button>
         </div>
 
-        {/* PRIVACY CONTENT */}
-        {type === "privacy" && (
-          <div className="flex-1 overflow-y-auto p-6 md:p-8 text-[13px] leading-[1.8] text-muted space-y-6" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-            <p>Personal information collected during bookings and purchases will be used to process orders, manage appointments and communicate with customers.</p>
-            <p>Customer information will be handled securely and in accordance with applicable UK data protection legislation. Personal information will only be shared with third parties where necessary for legitimate business operations (such as payment processing and delivery), or where legally required.</p>
-            <p>Photographs and videos of clients will only be used for promotional purposes with their permission. We will not sell customers’ personal information to third parties.</p>
-          </div>
-        )}
-
-        {/* POLICIES CONTENT */}
-        {type === "policies" && (
-          <>
-            {/* TABS */}
-            <div className="flex border-b border-gray-100 overflow-x-auto no-scrollbar shrink-0">
-              {[
-                { id: "appointments", label: "Appointment Policies" },
-                { id: "products", label: "Product Policies" },
-                { id: "general", label: "General & Privacy" }
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-6 py-4 text-[11px] font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
-                    activeTab === tab.id ? "text-brand-700 border-b-2 border-brand-700" : "text-gray-400 hover:text-ink"
-                  }`}
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* SCROLLABLE CONTENT */}
-            <div className="flex-1 overflow-y-auto p-6 md:p-8 text-[13px] leading-[1.8] text-muted space-y-6" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-              
-              {activeTab === "appointments" && (
-                <>
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">1. Booking & Deposits</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>All appointments must be booked in advance and are only confirmed once the required deposit has been received.</li>
-                      <li>A fixed <strong>£10 booking deposit</strong> is required to secure every appointment.</li>
-                      <li>The deposit will be deducted from the total cost of your service.</li>
-                      <li>Deposits cannot be transferred to another person, but may be transferred once to a new appointment if at least 48 hours' notice is provided.</li>
-                      <li>Deposits may be retained for late cancellations and no-shows where the charge is fair and proportionate.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">2. Lateness Policy</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>A 15-minute grace period is allowed. Please contact us as soon as possible if you anticipate being late.</li>
-                      <li>A <strong>£15 lateness fee</strong> will apply to appointments where we are able to accommodate a client arriving more than 15 minutes late.</li>
-                      <li>Clients arriving more than 15 minutes late may have their appointment shortened, rescheduled, or cancelled.</li>
-                      <li>If your appointment is cancelled due to lateness, your deposit may be forfeited where this is fair and proportionate.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">3. Cancellations & Rescheduling</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>We require at least <strong>48 hours’ notice</strong> for cancellations or appointment changes.</li>
-                      <li>Cancellations made less than 48 hours before the appointment may result in the loss of the deposit.</li>
-                      <li>Failure to attend an appointment without prior notice may result in the loss of the deposit.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">4. Hair, Loc, Beauty & Piercing Services</h3>
-                    <p className="mb-2">Clients must select the correct service when booking, disclose previous chemical treatments or scalp conditions, and arrive with hair in the specified condition (washed and blow-dried).</p>
-                    <p className="mb-2">For piercing, clients must meet legal age/consent requirements. We reserve the right to decline or postpone any service where there is a reasonable health, safety, or hygiene concern.</p>
-                    <p>Clients supplying their own hair extensions or accessories are responsible for ensuring they are suitable for the selected style.</p>
-                  </div>
-                </>
-              )}
-
-              {activeTab === "products" && (
-                <>
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">5. Orders & Payment</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Customers are responsible for selecting the correct product, length, texture, and quantity.</li>
-                      <li>Full payment is required when placing an order unless otherwise agreed. Orders will not be processed until payment has been received.</li>
-                      <li>If a product becomes unavailable after an order has been placed, the customer will be contacted to discuss an appropriate solution, including a refund where applicable.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">6. Collection & Delivery</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li><strong>Delivery:</strong> Estimated timeframe is 1–3 days. Timeframes begin once an order has been confirmed and processed. Any applicable delivery charges will be communicated before payment.</li>
-                      <li><strong>Collection:</strong> Arrangements, including the agreed collection time and location, will be communicated after order confirmation.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">7. Returns & Refunds</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Any incorrect, damaged, or faulty product should be reported as soon as possible. Photographs may be requested.</li>
-                      <li>Customers purchasing online may have a statutory 14-day cancellation right, subject to applicable exceptions.</li>
-                      <li>Certain sealed hygiene-sensitive products may be exempt from change-of-mind returns once unsealed.</li>
-                    </ul>
-                  </div>
-                </>
-              )}
-
-              {activeTab === "general" && (
-                <>
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">8. Health, Safety & Conduct</h3>
-                    <ul className="list-disc pl-5 space-y-1">
-                      <li>Relevant tools and equipment will be cleaned, disinfected, or sterilised as appropriate.</li>
-                      <li>Mutual respect and courtesy are expected at all times. Abusive or inappropriate behaviour will not be tolerated.</li>
-                      <li>Children attending appointments must be supervised by a responsible adult.</li>
-                    </ul>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">9. Complaints</h3>
-                    <p>If you have a concern about a service received, please contact us within 48 hours of your appointment. We will review every complaint fairly and aim to respond within a reasonable timeframe.</p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">10. Privacy Notice</h3>
-                    <p>Personal information collected will be used to process orders, manage appointments, and communicate with customers. We will not sell your data. Full details are available in our Privacy Policy.</p>
-                  </div>
-
-                  <div>
-                    <h3 className="font-bold text-ink mb-2">11. Business Cancellations</h3>
-                    <p>If M.A Luxury needs to cancel or reschedule an appointment, affected clients will be informed as soon as reasonably possible and any payment for the service will be refunded as appropriate.</p>
-                  </div>
-                </>
-              )}
-
-            </div>
-            
-            {/* FOOTER */}
-            <div className="p-6 bg-gray-50 border-t border-gray-100 text-[11px] text-gray-500 shrink-0 text-center">
-              By booking a service or placing an order with M.A Luxury, you agree to the applicable terms outlined above. Nothing in these policies affects your statutory consumer rights.
-            </div>
-          </>
-        )}
-
+        {/* BOTTOM BAR */}
+        <div className="flex flex-col items-center justify-between pt-6 gap-3 md:flex-row">
+          <p
+            className="text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-center md:text-left text-white/50"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            © {new Date().getFullYear()} M.a Luxury. All rights reserved.
+          </p>
+          <p
+            className="text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/40 italic"
+            style={{ fontFamily: 'var(--font-cormorant), serif' }}
+          >
+            Luxury hair for luxury girls. 💜
+          </p>
+        </div>
       </div>
-    </div>
+
+      <LegalModal isOpen={legalModalOpen} onClose={() => setLegalModalOpen(false)} type={legalType} />
+    </footer>
   );
-}
+}s
