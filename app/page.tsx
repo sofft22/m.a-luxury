@@ -5,6 +5,7 @@ import { ServicesPreview } from "@/components/ServicesPreview";
 import { Gallery } from "@/components/Gallery"; 
 import { RecentReviews } from "@/components/RecentReviews";
 import { TrustBanner } from "@/components/TrustBanner";
+import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 
 export default function HomePage() {
@@ -34,10 +35,13 @@ export default function HomePage() {
         
         {/* 7. OLD TRUST BANNER (Delivery/Policy stuff) */}
         <TrustBanner />
+
+        {/* 8. FAQ SECTION */}
+        <FAQ />
         
       </div>
 
-      {/* 8. FOOTER */}
+      {/* 9. FOOTER */}
       <Footer />
       
     </main>
