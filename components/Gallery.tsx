@@ -7,12 +7,12 @@ const GALLERY_IMAGES = [
   {
     src: "/hero-1.jpg",
     title: "Signature Knotless",
-    size: "tall", // aspect-[3/4]
+    size: "tall",
   },
   {
     src: "/hero-2.jpg",
     title: "Soft Boho Curls",
-    size: "square", // aspect-square
+    size: "square",
   },
   {
     src: "/hero-3.jpg",
@@ -48,11 +48,11 @@ const GALLERY_IMAGES = [
 
 export function Gallery() {
   return (
-    <section className="w-full bg-[#FAF7FE] py-20 px-4 md:py-28 md:px-8 border-t border-brand-100">
+    <section className="w-full bg-[#FAF7FE] py-12 px-4 md:py-16 md:px-6 border-t border-brand-100">
       <div className="mx-auto max-w-7xl">
         
         {/* HEADER */}
-        <div className="mb-12 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 text-center md:text-left">
+        <div className="mb-8 flex flex-col md:flex-row items-center md:items-end justify-between gap-4 text-center md:text-left">
           <div>
             <h2 
               className="text-[32px] sm:text-[44px] text-ink leading-tight" 
@@ -74,13 +74,13 @@ export function Gallery() {
           </Link>
         </div>
 
-        {/* MASONRY GRID */}
-        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
+        {/* MASONRY GRID - REDUCED GAPS */}
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-2 md:gap-3 space-y-2 md:space-y-3">
           {GALLERY_IMAGES.map((img, idx) => (
             <Link
               key={idx}
               href="/book"
-              className="group relative block w-full overflow-hidden rounded-xl break-inside-avoid"
+              className="group relative block w-full overflow-hidden rounded-lg break-inside-avoid"
             >
               {/* Image Container with varying aspect ratios */}
               <div 
