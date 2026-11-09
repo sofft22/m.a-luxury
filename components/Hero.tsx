@@ -51,8 +51,8 @@ export function Hero() {
   };
 
   return (
-    // Mobile reduced by 3 (72vh), Desktop increased by 3 (93vh)
-    <section id="hero" className="relative w-full h-[72vh] md:h-[93vh] min-h-[500px] bg-ink">
+    // INCREASED HEIGHT BY 3% (75% mobile, 93% desktop)
+    <section id="hero" className="relative w-full h-[75vh] md:h-[93vh] min-h-[550px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -68,39 +68,39 @@ export function Hero() {
             alt={`M.a Luxury Hair ${index + 1}`}
             fill
             priority={index === 0}
-            // CROPPED FROM THE TOP: Pushed the image down so it shows the hair, not the blank space
-            className={`object-cover object-[center_20%] absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+            className={`object-cover object-top absolute inset-0 transition-opacity duration-1000 ease-in-out ${
               index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
             }`}
           />
         ))}
         
-        {/* DARK OVERLAY */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/30 to-black/40" />
+        {/* DARK OVERLAY FOR READABILITY */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
       </div>
 
-      {/* TEXT LAYOUT */}
+      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
       <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
         <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
-          <div className="max-w-lg md:max-w-xl">
+          <div className="max-w-xl md:max-w-2xl">
             
+            {/* NEW HEADLINE */}
             <h1
-              className="text-white font-normal leading-[0.95] tracking-tight text-[56px] sm:text-[72px] md:text-[88px]"
+              className="text-white font-normal leading-[1.05] tracking-tight text-[46px] sm:text-[60px] md:text-[76px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              Your crown,
+              Luxury Braids & 
               <br />
-              <span className="italic text-gold">elevated.</span>
+              <span className="italic text-gold">Premium Extensions.</span>
             </h1>
 
-            {/* SIDE BY SIDE CTAs */}
+            {/* WHITE PRIMARY CTA */}
             <div className="mt-8 flex flex-row gap-3 sm:gap-4">
               <a
                 href={bookLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-1 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
+                className="group flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 Book Now
@@ -108,7 +108,7 @@ export function Hero() {
 
               <Link
                 href="/shop"
-                className="flex flex-1 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
+                className="flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
                 style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
               >
                 Shop Hair
