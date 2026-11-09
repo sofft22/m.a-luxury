@@ -1,116 +1,126 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 
-const CATEGORIES = [
-  {
-    title: "Braids",
-    items: [
-      "Knotless Braids",
-      "Boho Braids",
-      "Stitch Braids",
-      "Feed-in Braids"
-    ]
-  },
-  {
-    title: "Locs & Twists",
-    items: [
-      "Locs & Relocs",
-      "Twists (with expression)",
-      "Kinky Twists",
-      "Marley Twists"
-    ]
-  },
-  {
-    title: "Installs & Styling",
-    items: [
-      "Sew-ins",
-      "Retouch & Washing",
-      "Hair Straightening"
-    ]
-  },
-  {
-    title: "Beauty",
-    items: [
-      "Lash Extensions",
-      "Brow Lamination & Tint",
-      "SPMU Brows"
-    ]
-  },
-  {
-    title: "More",
-    items: [
-      "Piercing",
-      "New Client Consultation"
-    ]
-  }
+const WHATSAPP_NUMBER = "440000000000"; // Replace later
+
+const HERO_IMAGES = [
+  "/hero-1.jpg",
+  "/hero-2.jpg",
+  "/hero-3.jpg",
+  "/hero-4.jpg",
 ];
 
-export function ServicesPreview() {
+function bookLink() {
+  const text = "Hi M.a Luxury! I'd like to book an appointment 💜";
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+}
+
+// FIXED EXPORT: Removed "default", added brackets {}
+export function Hero() {
+  const [currentImage, setCurrentImage] = useState(0);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    if (distance > 50) {
+      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
+    } else if (distance < -50) {
+      setCurrentImage((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
-    <section className="w-full bg-[#FAF7FE] py-20 px-5 md:py-28 md:px-8 border-t border-brand-100">
-      <div className="mx-auto max-w-6xl">
+    // HEIGHT: 75% mobile, 93% desktop
+    <section id="hero" className="relative w-full h-[75vh] md:h-[93vh] min-h-[550px] bg-ink">
+      
+      {/* FULL BLEED IMAGES */}
+      <div 
+        className="absolute inset-0 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {HERO_IMAGES.map((src, index) => (
+          <Image
+            key={src}
+            src={src}
+            alt={`M.a Luxury Hair ${index + 1}`}
+            fill
+            priority={index === 0}
+            className={`object-cover object-[center_20%] absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+              index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
+            }`}
+          />
+        ))}
         
-        {/* HEADER */}
-        <div className="mb-16 flex flex-col items-center text-center">
-          <p 
-            className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold mb-3"
-            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-          >
-            ✦ The M.a Experience
-          </p>
-          <h2 
-            className="text-[32px] sm:text-[44px] text-ink leading-tight" 
-            style={{ fontFamily: 'var(--font-cormorant), serif' }}
-          >
-            What We Offer
-          </h2>
-          <div className="w-8 h-[1px] bg-ink/20 mt-6" />
-        </div>
-
-        {/* EDITORIAL MENU LAYOUT (Grid of Text Columns) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8">
-          {CATEGORIES.map((category, idx) => (
-            <div key={idx} className="flex flex-col">
-              {/* Category Title */}
-              <h3 
-                className="text-[20px] text-brand-700 italic mb-4 pb-2 border-b border-brand-700/20"
-                style={{ fontFamily: 'var(--font-cormorant), serif' }}
-              >
-                {category.title}
-              </h3>
-              
-              {/* Category Items */}
-              <ul className="flex flex-col gap-3">
-                {category.items.map((item, i) => (
-                  <li key={i}>
-                    <Link 
-                      href={`/services#${category.title.toLowerCase()}`}
-                      className="text-[13px] text-muted hover:text-ink transition-colors duration-300"
-                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-
-        {/* BOTTOM CTA */}
-        <div className="mt-16 flex justify-center">
-          <Link 
-            href="/services"
-            className="group flex items-center gap-2 rounded-full border border-ink/20 px-8 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-ink transition-all hover:bg-ink hover:text-white"
-            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-          >
-            View Full Service Menu & Pricing
-            <span className="transition-transform group-hover:translate-x-1">→</span>
-          </Link>
-        </div>
-
+        {/* DARK OVERLAY FOR READABILITY */}
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
       </div>
+
+      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
+      <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
+        <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
+          
+          <div className="max-w-xl md:max-w-2xl">
+            
+            {/* HEADLINE */}
+            <h1
+              className="text-white font-normal leading-[1.05] tracking-tight text-[46px] sm:text-[60px] md:text-[76px]"
+              style={{ fontFamily: "var(--font-cormorant), serif" }}
+            >
+              Luxury Braids & 
+              <br />
+              <span className="italic text-gold">Premium Extensions.</span>
+            </h1>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-row gap-3 sm:gap-4">
+              <a
+                href={bookLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                Book Now
+              </a>
+
+              <Link
+                href="/shop"
+                className="flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                Shop Hair
+              </Link>
+            </div>
+            
+          </div>
+
+        </div>
+      </div>
+
     </section>
   );
 }
