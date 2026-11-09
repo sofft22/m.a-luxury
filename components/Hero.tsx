@@ -87,10 +87,10 @@ export function Hero() {
               className="text-white font-normal leading-[1.05] tracking-tight text-[42px] sm:text-[60px] md:text-[76px]"
               style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              Luxury Braids & 
+              Hair & Beauty
               <br />
-              {/* CHANGED TO BRAND PURPLE */}
-              <span className="italic text-brand-700">Premium Extensions.</span>
+              {/* REVERTED TO GOLD */}
+              <span className="italic text-gold">Premium Extensions.</span>
             </h1>
 
             {/* SIDE BY SIDE CTAs */}
