@@ -81,7 +81,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
       // INSTANT FBT LOGIC
       let pool = allProducts;
       if (pool.length === 0) {
-        const cached = localStorage.getItem("mocktopia_products_cache");
+        const cached = localStorage.getItem("ma_products_cache");
         if (cached) {
           try { pool = JSON.parse(cached); } catch (e) {}
         }
@@ -90,7 +90,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
       if (pool.length > 0) {
         const others = pool.filter((p: any) => p.id !== product.id && p.inStock === 1);
         const shuffled = [...others].sort(() => 0.5 - Math.random());
-        setRelatedProducts(shuffled.slice(0, 4)); // Max 4
+        setRelatedProducts(shuffled.slice(0, 4));
       }
     }
   }, [product, allProducts]);
@@ -107,7 +107,6 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
   if (!product) return null;
 
   const currentSizeObj = parsedSizes.find(s => s.size === selectedSize);
-  // FIXED: Ensure the current price is a number
   const rawCurrentPrice = currentSizeObj ? currentSizeObj.price : product.price;
   const currentPrice = typeof rawCurrentPrice === "number" ? rawCurrentPrice : parseFloat(String(rawCurrentPrice).replace(/[^0-9.]/g, ""));
   const totalPrice = currentPrice * qty;
@@ -124,8 +123,8 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
   };
 
   const handleBulkQuote = () => {
-    const message = `Hi Mocktopia! I'd like to request a bulk quote for:%0A%0A*Product:* ${product.title}%0A*Size:* ${selectedSize}%0A%0APlease let me know the pricing and availability.`;
-    window.open(`https://wa.me/2348178910628?text=${message}`, '_blank');
+    const message = `Hi M.a Luxury! I'd like to request a bulk quote for:%0A%0A*Product:* ${product.title}%0A*Size:* ${selectedSize}%0A%0APlease let me know the pricing and availability.`;
+    window.open(`https://wa.me/447393157901?text=${message}`, '_blank');
   };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -154,35 +153,35 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-[#1F1315]/80 backdrop-blur-sm md:p-8" onClick={onClose}>
+      <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-ink/80 backdrop-blur-sm md:p-8" onClick={onClose}>
         
-        <div onClick={(e) => e.stopPropagation()} className="relative flex h-full w-full flex-col bg-[#FBF9F5] shadow-2xl md:h-auto md:max-h-[92vh] md:max-w-[980px] md:rounded-xl overflow-hidden">
+        <div onClick={(e) => e.stopPropagation()} className="relative flex h-full w-full flex-col bg-[#FAF7FE] shadow-2xl md:h-auto md:max-h-[92vh] md:max-w-[1000px] md:rounded-xl overflow-hidden">
           
           <div className="flex w-full flex-1 flex-col overflow-y-auto overscroll-contain scroll-smooth">
             
             <header 
-              className={`relative z-20 flex w-full flex-col border-b border-[#2C1A1D]/10 bg-[#FBF9F5] transition-transform duration-300 ${
+              className={`relative z-20 flex w-full flex-col border-b border-ink/10 bg-[#FAF7FE] transition-transform duration-300 ${
                 showHeader ? "translate-y-0" : ""
               }`}
             >
               <div className="mx-auto flex h-[60px] w-full items-center justify-between px-6">
-                <button onClick={onClose} className="text-[#2C1A1D]/50 hover:text-[#2C1A1D] transition-colors">
+                <button onClick={onClose} className="text-ink/50 hover:text-ink transition-colors">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5"><path d="M6 6l12 12M18 6L6 18" /></svg>
                 </button>
-                <span className="uppercase tracking-[0.15em] text-[#2C1A1D] text-[16px] font-semibold" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>Mocktopia</span>
-                <button onClick={() => setIsCartOpen(true)} className="relative text-[#2C1A1D] hover:scale-105 transition-transform">
+                <span className="uppercase tracking-[0.2em] text-brand-700 text-[18px] font-semibold" style={{ fontFamily: 'var(--font-cormorant), serif' }}>M.A LUXURY</span>
+                <button onClick={() => setIsCartOpen(true)} className="relative text-ink hover:scale-105 transition-transform">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-5 w-5"><path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 016 0v2" /></svg>
-                  {cartCount > 0 && <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#2C1A1D] text-[9px] text-white">{cartCount}</span>}
+                  {cartCount > 0 && <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-700 text-[9px] text-white">{cartCount}</span>}
                 </button>
               </div>
             </header>
 
-            <div className="flex w-full flex-col md:flex-row border-b border-[#2C1A1D]/10">
+            <div className="flex w-full flex-col md:flex-row border-b border-ink/10">
               
-              <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-[#EBE0D3]">
+              <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-brand-100">
                 <div className="relative w-full h-[60vh] sm:h-[650px]">
                   <div className="relative w-full h-full cursor-zoom-in group" onClick={() => setIsLightboxOpen(true)}>
-                    {!mainImgLoaded && <div className="absolute inset-0 animate-pulse bg-[#EBE0D3]" />}
+                    {!mainImgLoaded && <div className="absolute inset-0 animate-pulse bg-brand-100" />}
                     <Image 
                       src={activeImage || "/placeholder.png"} 
                       alt={product.title} 
@@ -194,16 +193,16 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                     
                     {isSoldOut && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                        <span className="bg-white/90 px-6 py-2 text-[14px] font-bold uppercase tracking-widest text-[#2C1A1D] rounded-sm shadow-sm">Sold Out</span>
+                        <span className="bg-white/90 px-6 py-2 text-[14px] font-bold uppercase tracking-widest text-ink rounded-sm shadow-sm">Sold Out</span>
                       </div>
                     )}
                   </div>
                 </div>
                 
                 {displayImages.length > 1 && (
-                  <div className="flex gap-2 p-4 bg-white border-t border-[#2C1A1D]/10 overflow-x-auto">
+                  <div className="flex gap-2 p-4 bg-white border-t border-ink/10 overflow-x-auto">
                     {displayImages.map((img: string, i: number) => (
-                      <button key={i} onClick={() => setActiveImage(img)} className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all ${activeImage === img ? 'border-[#2C1A1D] opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}>
+                      <button key={i} onClick={() => setActiveImage(img)} className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all ${activeImage === img ? 'border-brand-700 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}>
                         <Image src={img} alt="Thumbnail" fill className="object-cover" />
                       </button>
                     ))}
@@ -213,24 +212,23 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
 
               <div className="w-full md:w-1/2 flex flex-col p-6 md:p-10">
                 <div className="mb-6">
-                  <h2 className="text-[28px] leading-tight text-[#2C1A1D] md:text-[36px]" style={{ fontFamily: "var(--font-dm-serif), serif" }}>{product.title}</h2>
-                  {/* FIXED MAIN PRICE TO 2 DECIMALS */}
-                  <p className="mt-3 text-[18px] font-semibold text-[#2C1A1D]/70" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>£{currentPrice.toFixed(2)}</p>
+                  <h2 className="text-[32px] leading-tight text-ink md:text-[40px]" style={{ fontFamily: "var(--font-cormorant), serif" }}>{product.title}</h2>
+                  <p className="mt-2 text-[24px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
                 </div>
 
-                <p className="text-[14px] leading-relaxed text-[#2C1A1D]/70 mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>{product.description}</p>
+                <p className="text-[14px] leading-relaxed text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>{product.description || "Premium quality hair extensions designed for a flawless, seamless install."}</p>
                 
-                <hr className="mb-8 border-[#2C1A1D]/10" />
+                <hr className="mb-8 border-ink/10" />
 
                 {parsedSizes.length > 0 && (
                   <div className="mb-8">
-                    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.1em] text-[#2C1A1D]" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Select Size</p>
+                    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Select Length</p>
                     <div className="grid grid-cols-3 gap-2">
                       {parsedSizes.map((s: any) => (
                         <button 
                           key={s.size} 
                           onClick={() => setSelectedSize(s.size)} 
-                          className={`flex h-[44px] items-center justify-center text-[10px] font-bold uppercase tracking-wide transition-all border rounded-md ${selectedSize === s.size ? "bg-[#2C1A1D]/60 border-[#2C1A1D]/60 text-[#FBF9F5]" : "border-[#2C1A1D]/20 text-[#2C1A1D] hover:bg-[#2C1A1D]/5"}`} 
+                          className={`flex h-[44px] items-center justify-center text-[11px] font-bold uppercase tracking-wide transition-all border rounded-full ${selectedSize === s.size ? "bg-brand-700 border-brand-700 text-white" : "border-ink/20 text-ink hover:border-brand-700 hover:text-brand-700"}`} 
                           style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                         >
                           {s.size}
@@ -243,38 +241,37 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                 <div className="flex flex-col gap-4 mb-8">
                   {!isSoldOut && (
                     <div className="flex items-center gap-4">
-                      <p className="text-[10px] font-bold uppercase tracking-[0.1em] text-[#2C1A1D]" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Qty</p>
-                      <div className="inline-flex items-stretch overflow-hidden rounded-md border border-[#2C1A1D]/20 bg-white">
-                        <button onClick={() => setQty(Math.max(1, qty - 1))} className="flex h-10 w-10 items-center justify-center text-[#2C1A1D]/60 hover:bg-[#2C1A1D] hover:text-white transition-colors">−</button>
-                        <span className="flex h-10 w-12 items-center justify-center text-[13px] font-bold text-[#2C1A1D]">{qty}</span>
-                        <button onClick={() => setQty(qty + 1)} className="flex h-10 w-10 items-center justify-center text-[#2C1A1D]/60 hover:bg-[#2C1A1D] hover:text-white transition-colors">+</button>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Qty</p>
+                      <div className="inline-flex items-stretch overflow-hidden rounded-full border border-ink/20 bg-white">
+                        <button onClick={() => setQty(Math.max(1, qty - 1))} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-brand-700 hover:text-white transition-colors">−</button>
+                        <span className="flex h-10 w-12 items-center justify-center text-[13px] font-bold text-ink">{qty}</span>
+                        <button onClick={() => setQty(qty + 1)} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-brand-700 hover:text-white transition-colors">+</button>
                       </div>
                     </div>
                   )}
 
                   {isSoldOut ? (
-                    <button disabled className="w-full rounded-md py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] bg-[#2C1A1D]/10 text-[#2C1A1D]/40 cursor-not-allowed" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Sold Out</button>
+                    <button disabled className="w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] bg-ink/10 text-ink/40 cursor-not-allowed" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Sold Out</button>
                   ) : (
-                    <button onClick={handleAdd} className={`w-full rounded-md py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${addedFlash ? "bg-[#1F1315] text-[#FBF9F5] scale-[0.98]" : "bg-[#2C1A1D] text-[#FBF9F5] hover:bg-[#1F1315]"}`} style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
-                      {/* FIXED TOTAL PRICE TO 2 DECIMALS */}
+                    <button onClick={handleAdd} className={`w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${addedFlash ? "bg-brand-900 text-white scale-[0.98]" : "bg-brand-700 text-white hover:bg-brand-900"}`} style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
                       {addedFlash ? "Added to Bag ✓" : `Add to Bag — £${totalPrice.toFixed(2)}`}
                     </button>
                   )}
 
                   {isBulkAvailable && !isSoldOut && (
-                    <button onClick={handleBulkQuote} className="w-full rounded-md border border-[#2C1A1D] py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] text-[#2C1A1D] transition-all hover:bg-[#2C1A1D] hover:text-white" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Request Bulk Quote</button>
+                    <button onClick={handleBulkQuote} className="w-full rounded-full border border-brand-700 py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-all hover:bg-brand-50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Request Bulk Quote</button>
                   )}
                 </div>
 
                 <div className="flex items-center gap-3 mt-auto pt-4">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[#2C1A1D]/50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Share</p>
+                  <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-ink/50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Share</p>
                   <div className="flex gap-2">
-                    <a href={`https://wa.me/?text=Check out this product: ${shareUrl}`} target="_blank" rel="noopener noreferrer" className="text-[#2C1A1D]/50 hover:text-[#2C1A1D] transition-colors p-1">
+                    <a href={`https://wa.me/?text=Check out this product: ${shareUrl}`} target="_blank" rel="noopener noreferrer" className="text-ink/50 hover:text-brand-700 transition-colors p-1">
                       <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                       </svg>
                     </a>
-                    <button onClick={copyToClipboard} className="text-[#2C1A1D]/50 hover:text-[#2C1A1D] transition-colors p-1">
+                    <button onClick={copyToClipboard} className="text-ink/50 hover:text-brand-700 transition-colors p-1">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -285,27 +282,26 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
               </div>
             </div>
 
-            <div className="w-full bg-[#FBF9F5] p-6 md:p-10">
+            <div className="w-full bg-white p-6 md:p-10">
               
               {/* FREQUENTLY BOUGHT TOGETHER */}
               {relatedProducts.length > 0 && (
                 <div className="mb-14">
-                  <h3 className="mb-6 text-[24px] text-[#2C1A1D]" style={{ fontFamily: "var(--font-dm-serif), serif" }}>Frequently bought together</h3>
+                  <h3 className="mb-6 text-[28px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Frequently bought together</h3>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-8 md:gap-x-5 md:gap-y-12">
                     {relatedProducts.map((p) => {
-                      // FIXED: Ensure prices in FBT render correctly with decimals
                       const rawPrice = typeof p.price === "number" ? p.price : parseFloat(String(p.price).replace(/[^0-9.]/g, ""));
                       const formattedTitle = p.title.replace(/\b\w/g, (char: string) => char.toUpperCase());
                       return (
                         <div key={p.id} className="group flex flex-col cursor-pointer w-full">
-                          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-[#EBE0D3]">
+                          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-brand-100">
                             <Image src={p.image || "/placeholder.png"} alt={formattedTitle} fill className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                           </div>
                           <div className="mt-3 flex flex-col gap-1">
-                            <h3 className="text-[12px] md:text-[13px] font-semibold truncate leading-[1.3] tracking-[0.01em] text-[#2C1A1D]" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>{formattedTitle}</h3>
+                            <h3 className="text-[16px] text-ink leading-tight truncate" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{formattedTitle}</h3>
                             <div className="flex items-baseline gap-1">
-                              <span className="text-[11px] font-medium text-[#2C1A1D]/50" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>From</span>
-                              <p className="text-[14px] font-extrabold text-[#2C1A1D] tracking-tight" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>£{rawPrice.toFixed(2)}</p>
+                              <span className="text-[10px] font-bold uppercase tracking-widest text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>From</span>
+                              <p className="text-[14px] text-ink" style={{ fontFamily: 'var(--font-cormorant), serif' }}>£{rawPrice.toFixed(2)}</p>
                             </div>
                           </div>
                         </div>
@@ -317,39 +313,39 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
 
               {/* Reviews */}
               <div>
-                <h3 className="mb-6 text-[24px] font-normal text-[#2C1A1D]" style={{ fontFamily: "var(--font-dm-serif), serif" }}>Reviews</h3>
+                <h3 className="mb-6 text-[28px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Reviews</h3>
                 
                 {reviews.length === 0 ? (
-                  <p className="text-[13px] text-[#2C1A1D]/50 mb-6">No reviews yet. Be the first to review this item.</p>
+                  <p className="text-[13px] text-muted mb-6">No reviews yet. Be the first to review this item.</p>
                 ) : (
                   <div className="flex flex-col gap-5 mb-8">
                     {reviews.map(r => (
-                      <div key={r.id} className="bg-white p-5 rounded-lg border border-[#2C1A1D]/5 shadow-sm">
+                      <div key={r.id} className="bg-[#FAF7FE] p-5 rounded-lg border border-ink/5">
                         <div className="flex items-center justify-between mb-3">
-                          <p className="text-[13px] font-bold text-[#2C1A1D]">{r.customerName}</p>
-                          <span className="text-[12px] text-[#2C1A1D]">{"★".repeat(r.rating)}</span>
+                          <p className="text-[13px] font-bold text-ink">{r.customerName}</p>
+                          <span className="text-[12px] text-gold">{"★".repeat(r.rating)}</span>
                         </div>
-                        <p className="text-[14px] text-[#2C1A1D]/70 leading-relaxed">"{r.comment}"</p>
+                        <p className="text-[14px] text-muted leading-relaxed">"{r.comment}"</p>
                       </div>
                     ))}
                   </div>
                 )}
 
                 {!showReviewForm ? (
-                  <button onClick={() => setShowReviewForm(true)} className="rounded-md border border-[#2C1A1D] px-8 py-3 text-[11px] font-bold uppercase tracking-widest text-[#2C1A1D] hover:bg-[#2C1A1D] hover:text-white transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Write a Review</button>
+                  <button onClick={() => setShowReviewForm(true)} className="rounded-full border border-ink px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-ink hover:bg-ink hover:text-white transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Write a Review</button>
                 ) : (
-                  <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4 bg-white p-6 rounded-lg border border-[#2C1A1D]/10 max-w-xl shadow-sm">
-                    <input value={reviewName} onChange={e => setReviewName(e.target.value)} placeholder="Your Name" required className="w-full rounded-md border border-[#2C1A1D]/20 px-4 py-3 text-[14px] outline-none focus:border-[#2C1A1D]" />
+                  <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4 bg-[#FAF7FE] p-6 rounded-xl border border-ink/10 max-w-xl">
+                    <input value={reviewName} onChange={e => setReviewName(e.target.value)} placeholder="Your Name" required className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
                     <div className="flex items-center gap-2">
-                      <span className="text-[13px] text-[#2C1A1D]/60">Rating:</span>
+                      <span className="text-[13px] text-muted">Rating:</span>
                       {[1,2,3,4,5].map(star => (
-                        <button type="button" key={star} onClick={() => setReviewRating(star)} className={`text-[18px] transition-colors ${star <= reviewRating ? "text-[#2C1A1D]" : "text-[#2C1A1D]/20"}`}>★</button>
+                        <button type="button" key={star} onClick={() => setReviewRating(star)} className={`text-[20px] transition-colors ${star <= reviewRating ? "text-gold" : "text-ink/20"}`}>★</button>
                       ))}
                     </div>
-                    <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)} placeholder="Your review..." required rows={4} className="w-full rounded-md border border-[#2C1A1D]/20 px-4 py-3 text-[14px] outline-none focus:border-[#2C1A1D]" />
+                    <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)} placeholder="Your review..." required rows={4} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
                     <div className="flex gap-3 pt-2">
-                      <button type="submit" className="flex-1 bg-[#2C1A1D] text-white text-[12px] font-bold uppercase tracking-wider rounded-md py-3 hover:bg-[#1F1315] transition-colors">Submit</button>
-                      <button type="button" onClick={() => setShowReviewForm(false)} className="px-6 text-[12px] font-bold uppercase tracking-wider text-[#2C1A1D]/50 hover:text-[#2C1A1D] transition-colors">Cancel</button>
+                      <button type="submit" className="flex-1 bg-brand-700 text-white text-[10px] font-bold uppercase tracking-widest rounded-full py-3.5 hover:bg-brand-900 transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Submit</button>
+                      <button type="button" onClick={() => setShowReviewForm(false)} className="px-6 text-[10px] font-bold uppercase tracking-widest text-ink/50 hover:text-ink transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Cancel</button>
                     </div>
                   </form>
                 )}
