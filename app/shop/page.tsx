@@ -4,49 +4,87 @@ import { useEffect, useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductModal } from "@/components/ProductModal";
 import { ProductCard } from "@/components/ProductCard";
-import { BoxBuilderModal } from "@/components/BoxBuilderModal";
 
 const CATEGORIES = [
-  { id: "all", label: "All Treats" },
-  { id: "banana-bread", label: "Banana Bread" },
-  { id: "puff-puffs", label: "Puff Puffs" },
-  { id: "mocktails", label: "Mocktails" },
+  { id: "all", label: "All Extensions" },
+  { id: "bonestraight", label: "Bonestraight" },
+  { id: "french-curls", label: "French Curls" },
+  { id: "kinky", label: "Kinky" },
+  { id: "passion-twist", label: "Passion Twist" },
+  { id: "expression", label: "Expression" },
 ];
 
-const MINI_BOX_PRODUCT = {
-  id: "custom-mini-boxes",
-  title: "Mini Boxes",
-  price: "20",
-  image: "/box-builder-home.PNG", 
-  category: "banana-bread",
-  inStock: 1,
-  isCustomBox: true, 
-};
+// FALLBACK FAKE DATA (Using your hero images)
+const FALLBACK_PRODUCTS = [
+  {
+    id: "p-1",
+    title: "Bonestraight",
+    price: 45,
+    image: "/hero-1.jpg", 
+    category: "bonestraight",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: '16"', price: 45 }, { size: '20"', price: 55 }]),
+  },
+  {
+    id: "p-2",
+    title: "French Curls",
+    price: 50,
+    image: "/hero-2.jpg",
+    category: "french-curls",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: '18"', price: 50 }, { size: '22"', price: 60 }]),
+  },
+  {
+    id: "p-3",
+    title: "Passion Twist",
+    price: 40,
+    image: "/hero-3.jpg",
+    category: "passion-twist",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: '24"', price: 40 }]),
+  },
+  {
+    id: "p-4",
+    title: "Kinky",
+    price: 45,
+    image: "/hero-4.jpg",
+    category: "kinky",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: '18"', price: 45 }]),
+  },
+  {
+    id: "p-5",
+    title: "Expression",
+    price: 40,
+    image: "/hero-1.jpg",
+    category: "expression",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: '20"', price: 40 }]),
+  },
+  {
+    id: "p-6",
+    title: "Crochet Braids",
+    price: 35,
+    image: "/hero-2.jpg",
+    category: "all",
+    inStock: 1,
+    sizes: JSON.stringify([{ size: 'Standard', price: 35 }]),
+  }
+];
 
 function ShopContent() {
   // INSTANT CACHE INITIALIZATION
   const [products, setProducts] = useState<any[]>(() => {
     if (typeof window !== "undefined") {
-      const cached = localStorage.getItem("mocktopia_products_cache");
+      const cached = localStorage.getItem("ma_products_cache");
       if (cached) {
         try { return JSON.parse(cached); } catch (e) {}
       }
     }
-    return [];
-  });
-  
-  const [boxConfig, setBoxConfig] = useState<any>(() => {
-    if (typeof window !== "undefined") {
-      const cached = localStorage.getItem("mocktopia_box_cache");
-      if (cached) {
-        try { return JSON.parse(cached); } catch (e) {}
-      }
-    }
-    return null;
+    return FALLBACK_PRODUCTS; // Use fallback immediately if no cache
   });
 
   const [loading, setLoading] = useState(products.length === 0);
-  const [isBoxModalOpen, setIsBoxModalOpen] = useState(false);
   
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
@@ -60,85 +98,71 @@ function ShopContent() {
   }, [categoryParam]);
 
   useEffect(() => {
-    // Background fetch for fresh data
-    fetch("/api/settings").then(res => res.json()).then(data => {
-      if (data && data.boxBuilderConfig) {
-        try {
-          const parsed = JSON.parse(data.boxBuilderConfig);
-          if (parsed.isActive) {
-            setBoxConfig(parsed);
-            localStorage.setItem("mocktopia_box_cache", JSON.stringify(parsed));
-          }
-        } catch (e) {}
-      }
-    });
-
     fetch("/api/products")
       .then(res => res.json())
       .then(data => {
-        setProducts(data);
+        if (data && data.length > 0) {
+          setProducts(data);
+          localStorage.setItem("ma_products_cache", JSON.stringify(data));
+        }
         setLoading(false);
-        localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
-      });
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const filtered = useMemo(() => {
-    let list = activeCategory === "all" ? [...products] : products.filter((p) => p.category === activeCategory);
-    
-    if (boxConfig && (activeCategory === "all" || activeCategory === "banana-bread")) {
-      list = [MINI_BOX_PRODUCT, ...list];
-    }
-    return list;
-  }, [products, activeCategory, boxConfig]);
+    if (activeCategory === "all") return products;
+    return products.filter((p) => p.category === activeCategory);
+  }, [products, activeCategory]);
 
-  const currentCategoryLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label || "All Treats";
+  const currentCategoryLabel = CATEGORIES.find((c) => c.id === activeCategory)?.label || "All Extensions";
 
   return (
-    <div className="min-h-screen bg-[#FBF9F5] text-[#2C1A1D] flex flex-col">
+    <div className="min-h-screen bg-[#FAF7FE] text-ink flex flex-col">
       
-      <section id="hero" className="bg-[#2C1A1D] pt-[88px] pb-8 px-6 md:pt-[104px] md:pb-10 md:px-12 border-b border-[#FBF9F5]/10 relative z-20">
-        <div className="mx-auto max-w-[1400px]">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+      {/* HEADER SECTION */}
+      <section className="bg-ink pt-[120px] pb-10 px-6 md:pt-[160px] md:pb-16 md:px-12 border-b border-brand-100 relative z-20">
+        <div className="mx-auto max-w-7xl">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div className="relative">
-              <button onClick={() => setIsCatOpen(!isCatOpen)} className="flex items-center gap-3 group">
-                <h1 className="text-[32px] md:text-[48px] leading-none text-[#FBF9F5]" style={{ fontFamily: 'var(--font-dm-serif), serif' }}>
+              <button onClick={() => setIsCatOpen(!isCatOpen)} className="flex items-center gap-4 group">
+                <h1 className="text-[36px] md:text-[56px] leading-none text-white" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
                   {currentCategoryLabel}
                 </h1>
-                <svg className={`w-5 h-5 md:w-6 md:h-6 text-[#FBF9F5]/50 transition-transform ${isCatOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                <svg className={`w-5 h-5 md:w-6 md:h-6 text-white/50 transition-transform ${isCatOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
               </button>
+              
               {isCatOpen && (
-                <div className="absolute left-0 top-full mt-4 w-56 bg-[#FBF9F5] text-[#2C1A1D] shadow-xl z-50 border border-[#2C1A1D]/10 rounded-md overflow-hidden">
+                <div className="absolute left-0 top-full mt-4 w-56 bg-white text-ink shadow-xl z-50 border border-brand-100 rounded-xl overflow-hidden py-2">
                   {CATEGORIES.map((c) => (
-                    <button key={c.id} onClick={() => { setActiveCategory(c.id); setIsCatOpen(false); }} className={`block w-full text-left px-5 py-3 text-[12px] hover:bg-[#2C1A1D]/5 transition-colors ${activeCategory === c.id ? 'font-bold bg-[#2C1A1D]/5' : ''}`} style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                    <button key={c.id} onClick={() => { setActiveCategory(c.id); setIsCatOpen(false); }} className={`block w-full text-left px-5 py-3 text-[12px] uppercase tracking-wider hover:bg-brand-50 transition-colors ${activeCategory === c.id ? 'font-bold text-brand-700 bg-brand-50/50' : ''}`} style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
                       {c.label}
                     </button>
                   ))}
                 </div>
               )}
             </div>
-            <p className="text-[10px] font-medium text-[#FBF9F5]/50 uppercase tracking-[0.1em] pb-1">
+            <p className="text-[10px] font-bold text-white/50 uppercase tracking-[0.2em] pb-1">
               {filtered.length} Items
             </p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto w-full max-w-[1400px] flex-1 px-4 py-12 md:px-6 md:py-16">
+      {/* PRODUCT GRID */}
+      <section className="mx-auto w-full max-w-7xl flex-1 px-4 py-12 md:px-8 md:py-20">
         {loading && products.length === 0 ? (
-          <div className="flex justify-center py-20"><div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2C1A1D]/20 border-t-[#2C1A1D]" /></div>
+          <div className="flex justify-center py-20"><div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>
         ) : filtered.length === 0 ? (
-          <div className="py-20 text-center text-[14px] text-[#2C1A1D]/50" style={{ fontFamily: "var(--font-inter), sans-serif" }}>No treats available right now.</div>
+          <div className="py-20 text-center text-[14px] text-muted" style={{ fontFamily: "var(--font-inter), sans-serif" }}>No products available right now.</div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-3 gap-y-8 md:gap-x-5 lg:gap-x-5 lg:gap-y-14">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6 lg:gap-y-16">
             {filtered.map((product, idx) => (
-              <div key={product.id} className="rounded-xl overflow-hidden group" onClick={() => {
-                if (product.isCustomBox) setIsBoxModalOpen(true);
-                else setSelectedProduct(product);
-              }}>
+              <div key={product.id} className="rounded-xl overflow-hidden group" onClick={() => setSelectedProduct(product)}>
                 <ProductCard 
                   product={{
                     ...product,
-                    sizes: product.isCustomBox ? [] : JSON.parse(product.sizes || "[]")
+                    sizes: typeof product.sizes === 'string' ? JSON.parse(product.sizes || "[]") : product.sizes
                   }} 
                   priority={idx < 4}
                 />
@@ -148,18 +172,14 @@ function ShopContent() {
         )}
       </section>
 
-      <div className="w-full border-t border-[#2C1A1D]/10 pt-8 pb-12 mt-auto">
-        <p className="text-center text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-[#2C1A1D]/50" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-          © {new Date().getFullYear()} Mocktopia Treats. All rights reserved.
+      <div className="w-full border-t border-brand-100 py-8 mt-auto">
+        <p className="text-center text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+          © {new Date().getFullYear()} M.a Luxury. All rights reserved.
         </p>
       </div>
 
       {selectedProduct && (
         <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} allProducts={products} />
-      )}
-
-      {isBoxModalOpen && boxConfig && (
-        <BoxBuilderModal config={boxConfig} onClose={() => setIsBoxModalOpen(false)} />
       )}
     </div>
   );
@@ -167,7 +187,7 @@ function ShopContent() {
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#FBF9F5] flex items-center justify-center"><div className="h-6 w-6 animate-spin rounded-full border-2 border-[#2C1A1D]/20 border-t-[#2C1A1D]" /></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF7FE] flex items-center justify-center"><div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>}>
       <ShopContent />
     </Suspense>
   );
