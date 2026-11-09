@@ -36,13 +36,6 @@ const CATEGORIES = [
       { name: "Brow Lamination", price: "from £35" },
       { name: "SPMU Brows", price: "from £150" }
     ]
-  },
-  {
-    title: "More",
-    items: [
-      { name: "Piercing", price: "from £15" },
-      { name: "New Client Consult", price: "Free" }
-    ]
   }
 ];
 
@@ -68,51 +61,40 @@ export function ServicesPreview() {
           <div className="w-8 h-[1px] bg-ink/20 mt-6" />
         </div>
 
-        {/* EDITORIAL MENU LAYOUT: 2 columns mobile, 5 columns desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-x-6 gap-y-10 md:gap-8">
-          {CATEGORIES.map((category, idx) => {
-            // Check if it's the last item (index 4)
-            const isLastItem = idx === CATEGORIES.length - 1;
-
-            return (
-              <div 
-                key={idx} 
-                // If it's the last item on mobile, span 2 columns and center it. On desktop, it resets to 1 column.
-                className={`flex flex-col ${
-                  isLastItem ? "col-span-2 md:col-span-1 max-w-[200px] mx-auto md:max-w-none" : ""
-                }`}
+        {/* EDITORIAL MENU LAYOUT: 2 columns mobile, 4 columns desktop */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10 md:gap-8">
+          {CATEGORIES.map((category, idx) => (
+            <div key={idx} className="flex flex-col">
+              {/* Category Title */}
+              <h3 
+                className="text-[18px] md:text-[20px] text-brand-700 italic mb-4 pb-2 border-b border-brand-700/20"
+                style={{ fontFamily: 'var(--font-cormorant), serif' }}
               >
-                {/* Category Title */}
-                <h3 
-                  className="text-[18px] md:text-[20px] text-brand-700 italic mb-4 pb-2 border-b border-brand-700/20"
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {category.title}
-                </h3>
-                
-                {/* Category Items with Prices */}
-                <ul className="flex flex-col gap-3">
-                  {category.items.map((item, i) => (
-                    <li key={i} className="flex flex-col">
-                      <Link 
-                        href={`/services#${category.title.toLowerCase()}`}
-                        className="text-[12px] md:text-[13px] text-ink hover:text-brand-700 transition-colors duration-300"
-                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                      >
-                        {item.name}
-                      </Link>
-                      <span 
-                        className="text-[10px] md:text-[11px] text-muted mt-0.5"
-                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                      >
-                        {item.price}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
+                {category.title}
+              </h3>
+              
+              {/* Category Items with Prices */}
+              <ul className="flex flex-col gap-3">
+                {category.items.map((item, i) => (
+                  <li key={i} className="flex flex-col">
+                    <Link 
+                      href={`/services#${category.title.toLowerCase()}`}
+                      className="text-[12px] md:text-[13px] text-ink hover:text-brand-700 transition-colors duration-300"
+                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                    >
+                      {item.name}
+                    </Link>
+                    <span 
+                      className="text-[10px] md:text-[11px] text-muted mt-0.5"
+                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                    >
+                      {item.price}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* BOTTOM CTA */}
