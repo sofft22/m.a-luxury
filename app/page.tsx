@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { TrustStrip } from "@/components/TrustStrip";
+import { IntroStory } from "@/components/IntroStory"; // <-- NEW IMPORT
 import { HomeClient } from "@/components/HomeClient";
 import { ServicesPreview } from "@/components/ServicesPreview";
 import { Gallery } from "@/components/Gallery"; 
@@ -20,24 +21,27 @@ export default function HomePage() {
       {/* MAIN CONTENT SECTIONS */}
       <div className="flex flex-col">
         
-        {/* 3. SHOP TEASER (Inside HomeClient) */}
+        {/* 3. INTRO STORY */}
+        <IntroStory />
+
+        {/* 4. SHOP TEASER (Inside HomeClient) */}
         <HomeClient />
         
-        {/* 4. SERVICES PREVIEW */}
+        {/* 5. SERVICES PREVIEW */}
         <ServicesPreview />
         
-        {/* 5. GALLERY / LOOKBOOK */}
+        {/* 6. GALLERY / LOOKBOOK */}
         <Gallery />
 
-        {/* 6. REVIEWS */}
+        {/* 7. REVIEWS */}
         <RecentReviews />
         
-        {/* 7. FAQ SECTION */}
+        {/* 8. FAQ SECTION */}
         <FAQ />
         
       </div>
 
-      {/* 8. FOOTER */}
+      {/* 9. FOOTER */}
       <Footer />
       
     </main>
