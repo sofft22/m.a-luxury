@@ -6,27 +6,27 @@ import Link from "next/link";
 const FAQS = [
   {
     question: "How do I secure an appointment?",
-    answer: "All appointments are strictly by booking. You can secure your slot by messaging us directly on WhatsApp. A non-refundable deposit is required to lock in your date and time."
+    answer: "All appointments must be booked in advance via WhatsApp. Your appointment is only confirmed once the required £10 booking deposit has been received. The remaining balance is paid on the day of your appointment."
   },
   {
-    question: "Are deposits required?",
-    answer: "Yes, a deposit is mandatory for all services. The remaining balance is to be paid in cash or via bank transfer on the day of your appointment."
+    question: "What is your cancellation and lateness policy?",
+    answer: "We require at least 48 hours' notice for cancellations or rescheduling to transfer your deposit. A 15-minute grace period is allowed for lateness; however, arriving later than this may result in a £15 lateness fee, or your appointment being shortened, rescheduled, or cancelled."
   },
   {
-    question: "Do I need to supply my own hair?",
-    answer: "For braiding and loc services, you are required to bring your own hair (unless a specific package was discussed). For sew-ins, please provide your bundles and closure/frontal."
+    question: "How should I prepare for my hair appointment?",
+    answer: "Please arrive with your hair freshly washed, completely blow-dried, and detangled. Do not apply heavy oils, grease, or leave-in conditioners before your appointment. If you are supplying your own hair extensions, please ensure they are suitable for your chosen style."
   },
   {
-    question: "How should I prepare for my visit?",
-    answer: "Please arrive with your hair freshly washed, completely blow-dried, and detangled. We kindly ask that you do not apply heavy oils, grease, or leave-in conditioners prior to your appointment."
+    question: "Do you have health and safety requirements?",
+    answer: "Yes. For lash, brow, and piercing services, you must disclose any allergies, skin sensitivities, or medical conditions beforehand. We reserve the right to decline or postpone any service if there is a reasonable health, safety, or hygiene concern."
   },
   {
-    question: "What is your cancellation policy?",
-    answer: "We require a minimum of 48 hours' notice for any cancellations or rescheduling. Cancellations made within 48 hours of the appointment will result in the forfeiture of your deposit."
+    question: "How long does hair extension delivery take?",
+    answer: "Our estimated delivery timeframe is 1–3 days once your order has been confirmed and processed. We also offer collection in Plymouth, which will be arranged after your order is confirmed."
   },
   {
-    question: "Can I purchase hair extensions?",
-    answer: "Absolutely. Our premium hair extensions are available to purchase directly through our online shop. You can have them shipped to your address or collect them at your installation appointment."
+    question: "Can I return hair extensions?",
+    answer: "For hygiene reasons, sealed hair extensions are exempt from change-of-mind returns once unsealed. However, if your order is incorrect, damaged, or faulty, please contact us immediately with photos so we can resolve the issue."
   }
 ];
 
@@ -38,7 +38,7 @@ export function FAQ() {
   };
 
   return (
-    <section className="w-full bg-white py-20 px-5 md:py-32 md:px-8 border-t border-brand-100">
+    <section className="w-full bg-[#FAF7FE] py-20 px-5 md:py-32 md:px-8 border-t border-brand-100">
       <div className="mx-auto max-w-4xl">
         
         {/* SMART HEADER - Centered, no extra text */}
@@ -109,7 +109,7 @@ export function FAQ() {
         {/* BOTTOM WHATSAPP LINK */}
         <div className="mt-12 flex justify-center">
           <Link 
-            href="https://wa.me/440000000000"
+            href="https://wa.me/447393157901"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-ink"
