@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/app/CartContext";
 
-const WHATSAPP_NUMBER = "440000000000"; // TODO: replace with real number
+const WHATSAPP_NUMBER = "447393157901"; // Updated number
 
 function bookLink(service?: string) {
   const text = service
@@ -103,12 +103,12 @@ export function Header() {
 
   const overHero = heroHeight > 0 && scrolled < heroHeight - 40;
   const textClass = overHero ? "text-white" : "text-ink";
+  
+  // LOGO COLOR: White on hero, Purple when scrolled
+  const logoClass = overHero ? "text-white" : "text-brand-700";
 
   const NAV = [
-    {
-      label: "Shop",
-      href: "/shop",
-    },
+    { label: "Shop", href: "/shop" },
     {
       label: "Services",
       targetId: "services",
@@ -229,9 +229,10 @@ export function Header() {
         <div className="mx-auto hidden h-[72px] w-full max-w-7xl grid-cols-3 items-center px-8 lg:grid">
           <div className="flex justify-start">
             <Link href="/" className="flex items-center">
+              {/* UPDATED FONT: Cormorant */}
               <span
-                className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[18px] ${textClass}`}
-                style={{ fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
+                className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[22px] ${logoClass}`}
+                style={{ fontFamily: "var(--font-cormorant), serif", fontWeight: 600 }}
               >
                 M.a Luxury
               </span>
@@ -379,9 +380,10 @@ export function Header() {
 
           <div className="flex flex-1 items-center justify-center">
             <Link href="/" className="flex items-center">
+              {/* UPDATED FONT: Cormorant */}
               <span
-                className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[16px] ${textClass}`}
-                style={{ fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
+                className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[18px] ${logoClass}`}
+                style={{ fontFamily: "var(--font-cormorant), serif", fontWeight: 600 }}
               >
                 M.a Luxury
               </span>
