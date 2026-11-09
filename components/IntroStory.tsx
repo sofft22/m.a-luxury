@@ -73,4 +73,4 @@ export function IntroStory() {
       </div>
     </section>
   );
-}s
+}
