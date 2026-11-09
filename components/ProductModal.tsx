@@ -18,7 +18,6 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
   const [addedFlash, setAddedFlash] = useState(false);
   const [mainImgLoaded, setMainImgLoaded] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [showHeader, setShowHeader] = useState(false); 
   
   // Reviews State
   const [reviews, setReviews] = useState<any[]>([]);
@@ -60,7 +59,6 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
   const [activeImage, setActiveImage] = useState(displayImages[0] || "");
 
   const isSoldOut = product?.inStock === 0;
-  const isBulkAvailable = product?.isBulk === 1;
 
   useEffect(() => {
     if (product) {
@@ -68,7 +66,6 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
       setQty(1);
       setMainImgLoaded(false);
       setAddedFlash(false);
-      setShowHeader(false);
       setIsLightboxOpen(false);
       setShowReviewForm(false);
       setActiveImage(displayImages[0] || "");
@@ -115,16 +112,10 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
     if (isSoldOut) return;
     addToCart({ ...product, price: currentPrice }, selectedSize, qty); 
     setAddedFlash(true);
-    setShowHeader(true); 
     setTimeout(() => {
       setAddedFlash(false);
-      setShowHeader(false);
-    }, 3000);
-  };
-
-  const handleBulkQuote = () => {
-    const message = `Hi M.a Luxury! I'd like to request a bulk quote for:%0A%0A*Product:* ${product.title}%0A*Size:* ${selectedSize}%0A%0APlease let me know the pricing and availability.`;
-    window.open(`https://wa.me/447393157901?text=${message}`, '_blank');
+      setIsCartOpen(true); // Open cart instantly
+    }, 800);
   };
 
   const handleReviewSubmit = async (e: React.FormEvent) => {
@@ -159,11 +150,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
           
           <div className="flex w-full flex-1 flex-col overflow-y-auto overscroll-contain scroll-smooth">
             
-            <header 
-              className={`relative z-20 flex w-full flex-col border-b border-ink/10 bg-[#FAF7FE] transition-transform duration-300 ${
-                showHeader ? "translate-y-0" : ""
-              }`}
-            >
+            <header className="relative z-20 flex w-full flex-col border-b border-ink/10 bg-[#FAF7FE]">
               <div className="mx-auto flex h-[60px] w-full items-center justify-between px-6">
                 <button onClick={onClose} className="text-ink/50 hover:text-ink transition-colors">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5"><path d="M6 6l12 12M18 6L6 18" /></svg>
@@ -179,7 +166,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
             <div className="flex w-full flex-col md:flex-row border-b border-ink/10">
               
               <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-brand-100">
-                <div className="relative w-full h-[60vh] sm:h-[650px]">
+                <div className="relative w-full h-[50vh] sm:h-[600px]">
                   <div className="relative w-full h-full cursor-zoom-in group" onClick={() => setIsLightboxOpen(true)}>
                     {!mainImgLoaded && <div className="absolute inset-0 animate-pulse bg-brand-100" />}
                     <Image 
@@ -193,30 +180,20 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                     
                     {isSoldOut && (
                       <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                        <span className="bg-white/90 px-6 py-2 text-[14px] font-bold uppercase tracking-widest text-ink rounded-sm shadow-sm">Sold Out</span>
+                        <span className="bg-white/90 px-6 py-2 text-[12px] font-bold uppercase tracking-widest text-ink rounded-sm shadow-sm">Sold Out</span>
                       </div>
                     )}
                   </div>
                 </div>
-                
-                {displayImages.length > 1 && (
-                  <div className="flex gap-2 p-4 bg-white border-t border-ink/10 overflow-x-auto">
-                    {displayImages.map((img: string, i: number) => (
-                      <button key={i} onClick={() => setActiveImage(img)} className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all ${activeImage === img ? 'border-brand-700 opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}>
-                        <Image src={img} alt="Thumbnail" fill className="object-cover" />
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
               <div className="w-full md:w-1/2 flex flex-col p-6 md:p-10">
                 <div className="mb-6">
                   <h2 className="text-[32px] leading-tight text-ink md:text-[40px]" style={{ fontFamily: "var(--font-cormorant), serif" }}>{product.title}</h2>
-                  <p className="mt-2 text-[24px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
+                  <p className="mt-2 text-[22px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
                 </div>
 
-                <p className="text-[14px] leading-relaxed text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>{product.description || "Premium quality hair extensions designed for a flawless, seamless install."}</p>
+                <p className="text-[14px] leading-relaxed text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>{product.description || "Premium quality hair extensions."}</p>
                 
                 <hr className="mb-8 border-ink/10" />
 
@@ -257,10 +234,6 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                       {addedFlash ? "Added to Bag ✓" : `Add to Bag — £${totalPrice.toFixed(2)}`}
                     </button>
                   )}
-
-                  {isBulkAvailable && !isSoldOut && (
-                    <button onClick={handleBulkQuote} className="w-full rounded-full border border-brand-700 py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-all hover:bg-brand-50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Request Bulk Quote</button>
-                  )}
                 </div>
 
                 <div className="flex items-center gap-3 mt-auto pt-4">
@@ -298,10 +271,10 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                             <Image src={p.image || "/placeholder.png"} alt={formattedTitle} fill className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                           </div>
                           <div className="mt-3 flex flex-col gap-1">
-                            <h3 className="text-[16px] text-ink leading-tight truncate" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{formattedTitle}</h3>
+                            <h3 className="text-[18px] text-ink leading-tight truncate" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{formattedTitle}</h3>
                             <div className="flex items-baseline gap-1">
-                              <span className="text-[10px] font-bold uppercase tracking-widest text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>From</span>
-                              <p className="text-[14px] text-ink" style={{ fontFamily: 'var(--font-cormorant), serif' }}>£{rawPrice.toFixed(2)}</p>
+                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>From</span>
+                              <p className="text-[15px] text-ink" style={{ fontFamily: 'var(--font-cormorant), serif' }}>£{rawPrice.toFixed(2)}</p>
                             </div>
                           </div>
                         </div>
