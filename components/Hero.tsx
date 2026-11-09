@@ -51,7 +51,6 @@ export function Hero() {
   };
 
   return (
-    // REDUCED MOBILE HEIGHT TO 68VH
     <section id="hero" className="relative w-full h-[68vh] md:h-[93vh] min-h-[500px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
@@ -90,7 +89,8 @@ export function Hero() {
             >
               Luxury Braids & 
               <br />
-              <span className="italic text-gold">Premium Extensions.</span>
+              {/* CHANGED TO BRAND PURPLE */}
+              <span className="italic text-brand-700">Premium Extensions.</span>
             </h1>
 
             {/* SIDE BY SIDE CTAs */}
