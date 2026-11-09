@@ -3,8 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "440000000000"; // Replace later
-
 const GALLERY_IMAGES = [
   {
     src: "/hero-1.jpg",
@@ -13,7 +11,7 @@ const GALLERY_IMAGES = [
   },
   {
     src: "/hero-2.jpg",
-    title: "Boho Curls",
+    title: "Soft Boho Curls",
     size: "square", // aspect-square
   },
   {
@@ -27,15 +25,25 @@ const GALLERY_IMAGES = [
     size: "square",
   },
   {
-    src: "/hero-1.jpg",
+    src: "/hero-2.jpg",
     title: "Custom Installs",
     size: "square",
   },
   {
-    src: "/hero-2.jpg",
-    title: "Soft Glam",
+    src: "/hero-1.jpg",
+    title: "Feed-in Braids",
     size: "tall",
   },
+  {
+    src: "/hero-4.jpg",
+    title: "Marley Twists",
+    size: "square",
+  },
+  {
+    src: "/hero-3.jpg",
+    title: "Bridal Styling",
+    size: "tall",
+  }
 ];
 
 export function Gallery() {
@@ -46,17 +54,11 @@ export function Gallery() {
         {/* HEADER */}
         <div className="mb-12 flex flex-col md:flex-row items-center md:items-end justify-between gap-6 text-center md:text-left">
           <div>
-            <p 
-              className="text-gold text-[10px] font-bold uppercase tracking-[0.3em] mb-3"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-            >
-              ✦ Portfolio
-            </p>
             <h2 
               className="text-[32px] sm:text-[44px] text-ink leading-tight" 
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
-              The Lookbook
+              Book the Look
             </h2>
           </div>
           
@@ -73,7 +75,7 @@ export function Gallery() {
         </div>
 
         {/* MASONRY GRID */}
-        <div className="columns-2 md:columns-3 gap-4 md:gap-6 space-y-4 md:space-y-6">
+        <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 space-y-4 md:space-y-6">
           {GALLERY_IMAGES.map((img, idx) => (
             <Link
               key={idx}
@@ -96,16 +98,16 @@ export function Gallery() {
                 {/* Hover Overlay (Desktop) */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col items-center justify-center">
                   <span 
-                    className="text-white text-[18px] italic translate-y-4 group-hover:translate-y-0 transition-transform duration-300"
+                    className="text-white text-[18px] italic translate-y-4 group-hover:translate-y-0 transition-transform duration-300 mb-3"
                     style={{ fontFamily: 'var(--font-cormorant), serif' }}
                   >
                     {img.title}
                   </span>
                   <span 
-                    className="mt-2 text-[9px] font-bold uppercase tracking-[0.2em] text-white/80 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75"
+                    className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 border-b border-white/50 pb-1"
                     style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                   >
-                    Book This Look →
+                    Book This Style
                   </span>
                 </div>
               </div>
