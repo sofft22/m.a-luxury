@@ -1,111 +1,119 @@
-import Image from "next/image";
+"use client";
+
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "440000000000"; // Replace later
-
-function bookLink(service: string) {
-  const text = `Hi M.a Luxury! I'd like to book ${service} 💜`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-}
-
-const FEATURED_SERVICES = [
+const CATEGORIES = [
   {
-    title: "Knotless Braids",
-    desc: "Small, Medium, Large, Jumbo",
-    image: "/hero-1.jpg", 
+    title: "Braids",
+    items: [
+      { name: "Knotless Braids", price: "from £100" },
+      { name: "Boho Braids", price: "from £120" },
+      { name: "Stitch Braids", price: "from £80" },
+      { name: "Feed-in Braids", price: "from £70" }
+    ]
   },
   {
-    title: "Boho Braids",
-    desc: "Shoulder, Mid-back, Waist",
-    image: "/hero-2.jpg",
+    title: "Locs & Twists",
+    items: [
+      { name: "Locs & Relocs", price: "from £90" },
+      { name: "Twists (Expression)", price: "from £85" },
+      { name: "Kinky Twists", price: "from £95" },
+      { name: "Marley Twists", price: "from £95" }
+    ]
   },
   {
-    title: "Locs & Relocs",
-    desc: "Interlocking, Retwist, Styling",
-    image: "/hero-3.jpg",
+    title: "Installs & Styling",
+    items: [
+      { name: "Sew-ins", price: "from £110" },
+      { name: "Retouch & Wash", price: "from £40" },
+      { name: "Hair Straightening", price: "from £30" }
+    ]
   },
   {
-    title: "Twists",
-    desc: "Passion, Kinky, Marley",
-    image: "/hero-4.jpg",
+    title: "Beauty",
+    items: [
+      { name: "Lash Extensions", price: "from £45" },
+      { name: "Brow Lamination & Tint", price: "from £35" },
+      { name: "SPMU Brows", price: "from £150" }
+    ]
+  },
+  {
+    title: "More",
+    items: [
+      { name: "Piercing", price: "from £15" },
+      { name: "New Client Consult", price: "Free" }
+    ]
   }
 ];
 
 export function ServicesPreview() {
   return (
-    <section className="w-full bg-white py-16 px-4 md:py-24 md:px-6">
-      <div className="mx-auto max-w-[1400px]">
+    <section className="w-full bg-white py-16 px-5 md:py-24 md:px-8 border-t border-brand-100">
+      <div className="mx-auto max-w-6xl">
         
         {/* HEADER */}
-        <div className="mb-10 flex flex-row items-end justify-between gap-2 sm:gap-6 border-b border-brand-100 pb-6">
-          <div>
-            <p className="text-gold text-[10px] font-bold uppercase tracking-[0.25em] mb-2" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
-              ✦ Expert Styling
-            </p>
-            <h2 
-              className="text-[26px] sm:text-[36px] text-ink leading-tight whitespace-nowrap" 
-              style={{ fontFamily: 'var(--font-cormorant), serif' }}
-            >
-              Our Services
-            </h2>
-          </div>
-          
-          <Link 
-            href="/services" 
-            className="group flex shrink-0 items-center gap-1 sm:gap-2 pb-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
-            style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+        <div className="mb-12 flex flex-col items-center text-center">
+          <p 
+            className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold mb-3"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
           >
-            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">View All Services</span>
-            <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-          </Link>
+            ✦ The M.a Experience
+          </p>
+          <h2 
+            className="text-[32px] sm:text-[44px] text-ink leading-tight" 
+            style={{ fontFamily: 'var(--font-cormorant), serif' }}
+          >
+            What We Offer
+          </h2>
+          <div className="w-8 h-[1px] bg-ink/20 mt-6" />
         </div>
 
-        {/* GRID: 1 col mobile, 2 col tablet, 4 col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-6">
-          {FEATURED_SERVICES.map((service, idx) => (
-            <div key={idx} className="group flex flex-col">
+        {/* EDITORIAL MENU LAYOUT */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 md:gap-8">
+          {CATEGORIES.map((category, idx) => (
+            <div key={idx} className="flex flex-col">
+              {/* Category Title */}
+              <h3 
+                className="text-[20px] text-brand-700 italic mb-4 pb-2 border-b border-brand-700/20"
+                style={{ fontFamily: 'var(--font-cormorant), serif' }}
+              >
+                {category.title}
+              </h3>
               
-              {/* Image Card */}
-              <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm ring-1 ring-brand-100">
-                <Image
-                  src={service.image}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                
-                {/* Hover Overlay with Book Button */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <a 
-                    href={bookLink(service.title)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="rounded-full bg-white px-6 py-3 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-900 shadow-xl hover:scale-105 transition-transform"
-                    style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                  >
-                    Book on WhatsApp
-                  </a>
-                </div>
-              </div>
-
-              {/* Text Under Image */}
-              <div className="mt-4 flex flex-col">
-                <h3 
-                  className="text-[22px] text-ink leading-tight truncate group-hover:text-brand-700 transition-colors"
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {service.title}
-                </h3>
-                <p 
-                  className="text-[12px] text-muted mt-1"
-                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                >
-                  {service.desc}
-                </p>
-              </div>
-
+              {/* Category Items with Prices */}
+              <ul className="flex flex-col gap-3">
+                {category.items.map((item, i) => (
+                  <li key={i} className="flex flex-col">
+                    <Link 
+                      href={`/services#${category.title.toLowerCase()}`}
+                      className="text-[13px] text-ink hover:text-brand-700 transition-colors duration-300"
+                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                    >
+                      {item.name}
+                    </Link>
+                    <span 
+                      className="text-[11px] text-muted mt-0.5"
+                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                    >
+                      {item.price}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
+        </div>
+
+        {/* BOTTOM CTA */}
+        <div className="mt-16 flex justify-center">
+          <Link 
+            href="/services"
+            className="group flex items-center gap-2 rounded-full border border-ink/20 px-8 py-3.5 text-center text-[10px] font-bold uppercase tracking-[0.15em] text-ink transition-all hover:bg-ink hover:text-white"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+          >
+            View Full Service Menu
+            <span className="transition-transform group-hover:translate-x-1">→</span>
+          </Link>
         </div>
 
       </div>
