@@ -235,4 +235,4 @@ export function Footer() {
       <LegalModal isOpen={legalModalOpen} onClose={() => setLegalModalOpen(false)} type={legalType} />
     </footer>
   );
-}s
+}
