@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 export function IntroStory() {
   return (
     <section className="relative w-full bg-white py-24 md:py-32 px-5 md:px-8 overflow-hidden border-b border-brand-100">
@@ -35,21 +33,11 @@ export function IntroStory() {
 
         {/* SHORTENED SMART TEXT */}
         <p 
-          className="text-[15px] md:text-[17px] leading-loose text-muted max-w-2xl mb-10"
+          className="text-[15px] md:text-[17px] leading-loose text-muted max-w-2xl"
           style={{ fontFamily: 'var(--font-inter), sans-serif' }}
         >
           Welcome to M.a Luxury, Plymouth's premier destination for flawless braiding, expert loc maintenance, and premium extensions. We blend technical precision with a luxury VIP experience to protect your hair and elevate your everyday style.
         </p>
-
-        {/* CTA */}
-        <Link 
-          href="/book"
-          className="group inline-flex items-center gap-2 border-b border-brand-700 pb-1.5 text-[10px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-ink hover:border-ink"
-          style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-        >
-          Experience the standard
-          <span className="transition-transform group-hover:translate-x-1">→</span>
-        </Link>
 
       </div>
     </section>
