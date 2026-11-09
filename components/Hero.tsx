@@ -1,126 +1,48 @@
-"use client";
-
-import { useState, useEffect, useRef } from "react";
-import Image from "next/image";
-import Link from "next/link";
-
-const WHATSAPP_NUMBER = "440000000000"; // Replace later
-
-const HERO_IMAGES = [
-  "/hero-1.jpg",
-  "/hero-2.jpg",
-  "/hero-3.jpg",
-  "/hero-4.jpg",
-];
-
-function bookLink() {
-  const text = "Hi M.a Luxury! I'd like to book an appointment 💜";
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-}
-
-// FIXED EXPORT: Removed "default", added brackets {}
-export function Hero() {
-  const [currentImage, setCurrentImage] = useState(0);
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, 3500);
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-    const distance = touchStartX.current - touchEndX.current;
-    if (distance > 50) {
-      setCurrentImage((prev) => (prev + 1) % HERO_IMAGES.length);
-    } else if (distance < -50) {
-      setCurrentImage((prev) => (prev - 1 + HERO_IMAGES.length) % HERO_IMAGES.length);
-    }
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
-
+export function TrustStrip() {
   return (
-    // HEIGHT: 75% mobile, 93% desktop
-    <section id="hero" className="relative w-full h-[75vh] md:h-[93vh] min-h-[550px] bg-ink">
-      
-      {/* FULL BLEED IMAGES */}
-      <div 
-        className="absolute inset-0 overflow-hidden"
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {HERO_IMAGES.map((src, index) => (
-          <Image
-            key={src}
-            src={src}
-            alt={`M.a Luxury Hair ${index + 1}`}
-            fill
-            priority={index === 0}
-            className={`object-cover object-[center_20%] absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentImage ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
-          />
-        ))}
+    <section className="w-full bg-brand-50 border-y border-brand-100 py-4 md:py-6 overflow-hidden">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
         
-        {/* DARK OVERLAY FOR READABILITY */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
-      </div>
-
-      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
-      <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
-        <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
+        {/* Mobile: Horizontal Scrollable row. Desktop: Centered flexible row */}
+        <div className="flex flex-row items-center justify-start md:justify-center gap-8 md:gap-16 overflow-x-auto no-scrollbar whitespace-nowrap">
           
-          <div className="max-w-xl md:max-w-2xl">
-            
-            {/* HEADLINE */}
-            <h1
-              className="text-white font-normal leading-[1.05] tracking-tight text-[46px] sm:text-[60px] md:text-[76px]"
-              style={{ fontFamily: "var(--font-cormorant), serif" }}
-            >
-              Luxury Braids & 
-              <br />
-              <span className="italic text-gold">Premium Extensions.</span>
-            </h1>
+          <span 
+            className="text-[10px] md:text-[12px] font-bold uppercase tracking-[0.2em] text-brand-900 flex items-center gap-2 shrink-0"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+          >
+            {/* Smaller, cleaner diamond icon */}
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+            </svg>
+            Signature Braiding
+          </span>
 
-            {/* CTAs */}
-            <div className="mt-8 flex flex-row gap-3 sm:gap-4">
-              <a
-                href={bookLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                Book Now
-              </a>
+          <span className="hidden md:block h-1.5 w-1.5 rounded-full bg-brand-200 shrink-0" aria-hidden />
 
-              <Link
-                href="/shop"
-                className="flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                Shop Hair
-              </Link>
-            </div>
-            
-          </div>
+          <span 
+            className="text-[10px] md:text-[12px] font-bold uppercase tracking-[0.2em] text-brand-900 flex items-center gap-2 shrink-0"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+          >
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+            </svg>
+            Luxury Hair Extensions
+          </span>
+
+          <span className="hidden md:block h-1.5 w-1.5 rounded-full bg-brand-200 shrink-0" aria-hidden />
+
+          <span 
+            className="text-[10px] md:text-[12px] font-bold uppercase tracking-[0.2em] text-brand-900 flex items-center gap-2 shrink-0"
+            style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+          >
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor" className="text-gold">
+              <path d="M12 0L14.59 9.41L24 12L14.59 14.59L12 24L9.41 14.59L0 12L9.41 9.41L12 0Z" />
+            </svg>
+            VIP Experience
+          </span>
 
         </div>
       </div>
-
     </section>
   );
 }
