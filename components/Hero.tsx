@@ -18,7 +18,6 @@ function bookLink() {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
-// FIXED EXPORT: Removed "default" so it matches your page.tsx import
 export function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -52,7 +51,8 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative w-full h-[75vh] md:h-[93vh] min-h-[550px] bg-ink">
+    // MOBILE HEIGHT REDUCED BY 3VH (72vh)
+    <section id="hero" className="relative w-full h-[72vh] md:h-[93vh] min-h-[550px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
