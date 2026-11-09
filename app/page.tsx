@@ -1,7 +1,8 @@
 import { Hero } from "@/components/Hero";
 import { TrustStrip } from "@/components/TrustStrip";
 import { HomeClient } from "@/components/HomeClient";
-import { ServicesPreview } from "@/components/ServicesPreview"; // <-- IMPORT
+import { ServicesPreview } from "@/components/ServicesPreview";
+import { Gallery } from "@/components/Gallery"; // <-- NEW IMPORT
 import { BoxBuilderSection } from "@/components/BoxBuilderSection";
 import { ProductLines } from "@/components/ProductLines";
 import { OurStory } from "@/components/OurStory";
@@ -13,23 +14,36 @@ export default function HomePage() {
   return (
     <main style={{ margin: 0, padding: 0, width: '100%', overflowX: 'hidden', backgroundColor: '#FAF7FE' }}>
       
+      {/* 1. HERO */}
       <Hero />
+      
+      {/* 2. TRUST STRIP */}
       <TrustStrip />
 
-      {/* FLEX CONTAINER */}
-      <div className="flex flex-col gap-12 md:gap-20 mt-12 md:mt-20">
+      {/* MAIN CONTENT SECTIONS */}
+      <div className="flex flex-col mt-12 md:mt-20">
         
-        <HomeClient /> {/* <-- This is the Hair Edit */}
+        {/* 3. SHOP TEASER (Inside HomeClient) */}
+        <HomeClient />
         
-        <ServicesPreview /> {/* <-- NEW SERVICES SECTION */}
+        {/* 4. SERVICES PREVIEW (The 5-category editorial menu) */}
+        <ServicesPreview />
         
-        <BoxBuilderSection />
-        <ProductLines /> 
+        {/* 5. GALLERY / LOOKBOOK */}
+        <Gallery />
+
+        {/* 6. ABOUT STORY */}
         <OurStory />
+
+        {/* 7. REVIEWS */}
         <RecentReviews />
+        
+        {/* 8. OLD TRUST BANNER (Delivery/Policy stuff) */}
         <TrustBanner />
+        
       </div>
 
+      {/* 9. FOOTER */}
       <Footer />
       
     </main>
