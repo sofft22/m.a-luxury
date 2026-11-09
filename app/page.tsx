@@ -2,10 +2,7 @@ import { Hero } from "@/components/Hero";
 import { TrustStrip } from "@/components/TrustStrip";
 import { HomeClient } from "@/components/HomeClient";
 import { ServicesPreview } from "@/components/ServicesPreview";
-import { Gallery } from "@/components/Gallery"; // <-- NEW IMPORT
-import { BoxBuilderSection } from "@/components/BoxBuilderSection";
-import { ProductLines } from "@/components/ProductLines";
-import { OurStory } from "@/components/OurStory";
+import { Gallery } from "@/components/Gallery"; 
 import { RecentReviews } from "@/components/RecentReviews";
 import { TrustBanner } from "@/components/TrustBanner";
 import { Footer } from "@/components/Footer";
@@ -21,29 +18,26 @@ export default function HomePage() {
       <TrustStrip />
 
       {/* MAIN CONTENT SECTIONS */}
-      <div className="flex flex-col mt-12 md:mt-20">
+      <div className="flex flex-col">
         
         {/* 3. SHOP TEASER (Inside HomeClient) */}
         <HomeClient />
         
-        {/* 4. SERVICES PREVIEW (The 5-category editorial menu) */}
+        {/* 4. SERVICES PREVIEW */}
         <ServicesPreview />
         
         {/* 5. GALLERY / LOOKBOOK */}
         <Gallery />
 
-        {/* 6. ABOUT STORY */}
-        <OurStory />
-
-        {/* 7. REVIEWS */}
+        {/* 6. REVIEWS */}
         <RecentReviews />
         
-        {/* 8. OLD TRUST BANNER (Delivery/Policy stuff) */}
+        {/* 7. OLD TRUST BANNER (Delivery/Policy stuff) */}
         <TrustBanner />
         
       </div>
 
-      {/* 9. FOOTER */}
+      {/* 8. FOOTER */}
       <Footer />
       
     </main>
