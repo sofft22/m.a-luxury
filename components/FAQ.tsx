@@ -38,18 +38,20 @@ export function FAQ() {
   };
 
   return (
-    <section className="w-full bg-[#FAF7FE] py-20 px-5 md:py-32 md:px-8 border-t border-brand-100">
-      <div className="mx-auto max-w-4xl">
+    <section className="w-full bg-white py-20 px-5 md:py-28 md:px-8 border-t border-brand-100">
+      <div className="mx-auto max-w-3xl">
         
-        {/* SMART HEADER - Centered, no extra text */}
-        <div className="mb-12 text-center flex flex-col items-center">
+        {/* SMART HEADER */}
+        <div className="mb-14 flex flex-col items-center text-center">
+          <p className="text-gold text-[10px] font-bold uppercase tracking-[0.3em] mb-3" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+            ✦ Support
+          </p>
           <h2 
-            className="text-[36px] sm:text-[52px] text-ink leading-tight" 
+            className="text-[32px] sm:text-[44px] text-ink leading-tight" 
             style={{ fontFamily: 'var(--font-cormorant), serif' }}
           >
-            FAQs
+            Frequently Asked Questions
           </h2>
-          <div className="w-12 h-[1px] bg-ink/20 mt-6" />
         </div>
 
         {/* ACCORDION LIST */}
@@ -58,30 +60,30 @@ export function FAQ() {
             const isOpen = openIndex === idx;
 
             return (
-              <div key={idx} className="border-b border-ink/10">
+              <div key={idx} className="border-b border-ink/10 group">
                 <button 
                   onClick={() => toggleFAQ(idx)}
-                  className="w-full flex items-center justify-between py-6 group text-left transition-colors"
+                  className="w-full flex items-start justify-between py-6 text-left transition-colors"
                 >
                   <h3 
-                    className={`text-[18px] md:text-[22px] transition-colors pr-6 ${
-                      isOpen ? "text-brand-700 italic" : "text-ink group-hover:text-brand-700"
+                    className={`text-[16px] md:text-[18px] pr-8 transition-colors ${
+                      isOpen ? "text-brand-700 font-medium" : "text-ink group-hover:text-brand-700"
                     }`}
-                    style={{ fontFamily: 'var(--font-cormorant), serif' }}
+                    style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                   >
                     {faq.question}
                   </h3>
                   
-                  {/* GOLD + / - ICON */}
-                  <div className={`flex h-6 w-6 shrink-0 items-center justify-center transition-all duration-500 ${
-                    isOpen ? "text-gold rotate-180" : "text-ink/40 group-hover:text-gold"
+                  {/* MINIMALIST + / - ICON */}
+                  <div className={`mt-0.5 flex shrink-0 items-center justify-center transition-all duration-300 ${
+                    isOpen ? "text-gold rotate-180" : "text-ink/30 group-hover:text-gold"
                   }`}>
                     {isOpen ? (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" />
                       </svg>
                     ) : (
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-6 w-6">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                       </svg>
                     )}
@@ -95,7 +97,7 @@ export function FAQ() {
                   }`}
                 >
                   <p 
-                    className="text-[14px] text-muted leading-relaxed pr-12"
+                    className="text-[13px] md:text-[14px] text-muted leading-relaxed pr-12"
                     style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                   >
                     {faq.answer}
