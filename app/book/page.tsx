@@ -107,4 +107,4 @@ export default function BookPage() {
       <BookingContent />
     </Suspense>
   );
-}S
+}
