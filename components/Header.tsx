@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/app/CartContext";
@@ -28,18 +28,11 @@ export function Header() {
   const [desktopCategoriesOpen, setDesktopCategoriesOpen] = useState(false);
 
   const [scrolled, setScrolled] = useState(0);
-  const [hidden, setHidden] = useState(false);
   const [heroHeight, setHeroHeight] = useState(0);
 
   const [bannerText, setBannerText] = useState("");
   const [bannerActive, setBannerActive] = useState(false);
   const [isBannerClosed, setIsBannerClosed] = useState(false);
-
-  const lastY = useRef(0);
-  const ticking = useRef(false);
-
-  const HIDE_AFTER = 50;
-  const TOLERANCE = 5;
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -78,24 +71,7 @@ export function Header() {
 
   useEffect(() => {
     const onScroll = () => {
-      if (ticking.current) return;
-      ticking.current = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const prev = lastY.current;
-        const diff = y - prev;
-
-        setScrolled(y);
-
-        if (y > HIDE_AFTER && diff > TOLERANCE) {
-          setHidden(true);
-        } else if (diff < -TOLERANCE || y <= HIDE_AFTER) {
-          setHidden(false);
-        }
-
-        lastY.current = y;
-        ticking.current = false;
-      });
+      setScrolled(window.scrollY);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -111,17 +87,7 @@ export function Header() {
     { label: "Shop", href: "/shop" },
     {
       label: "Services",
-      targetId: "services",
-      dropdown: [
-        { label: "Knotless Braids", href: "/services/knotless-braids" },
-        { label: "Boho Braids", href: "/services/boho-braids" },
-        { label: "Locs & Retwist", href: "/services/locs-retwist" },
-        { label: "Twists", href: "/services/twists" },
-        { label: "Sew-ins", href: "/services/sew-ins" },
-        { label: "Lashes", href: "/services/lash-extensions" },
-        { label: "Brows", href: "/services/brows" },
-        { label: "View all services →", href: "/services" },
-      ],
+      href: "/services", // Changed to direct link
     },
     { label: "Gallery", targetId: "gallery" },
     { label: "Reviews", targetId: "reviews" },
@@ -131,7 +97,6 @@ export function Header() {
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: any) => {
     if (item.href) return;
-    if (item.dropdown) return;
 
     e.preventDefault();
     setMobileMenuOpen(false);
@@ -158,10 +123,9 @@ export function Header() {
 
   return (
     <>
+      {/* CHANGED: Removed translate logic. It stays fixed at the top. */}
       <header
-        className={`fixed left-0 right-0 top-0 z-40 transition-[background-color,border-color,transform,color] duration-300 ease-out flex flex-col ${
-          hidden ? "-translate-y-full" : "translate-y-0"
-        }`}
+        className={`fixed left-0 right-0 top-0 z-40 transition-colors duration-300 ease-out flex flex-col`}
         style={{
           backgroundColor: overHero ? "transparent" : "#FAF7FE",
           borderBottom: overHero ? "1px solid transparent" : "1px solid rgba(31, 18, 53, 0.08)",
@@ -229,7 +193,6 @@ export function Header() {
         <div className="mx-auto hidden h-[72px] w-full max-w-7xl grid-cols-3 items-center px-8 lg:grid">
           <div className="flex justify-start">
             <Link href="/" className="flex items-center">
-              {/* UPDATED FONT: Cormorant */}
               <span
                 className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[22px] ${logoClass}`}
                 style={{ fontFamily: "var(--font-cormorant), serif", fontWeight: 600 }}
@@ -244,8 +207,6 @@ export function Header() {
               <div
                 key={item.label}
                 className="relative group h-full py-6 flex items-center"
-                onMouseEnter={() => item.dropdown && setDesktopCategoriesOpen(true)}
-                onMouseLeave={() => item.dropdown && setDesktopCategoriesOpen(false)}
               >
                 <Link
                   href={item.href || `/#${item.targetId}`}
@@ -254,45 +215,7 @@ export function Header() {
                   style={{ fontFamily: "var(--font-inter), sans-serif" }}
                 >
                   {item.label}
-                  {item.dropdown && (
-                    <svg
-                      className={`h-3 w-3 transition-transform duration-300 ${
-                        desktopCategoriesOpen ? "rotate-180" : ""
-                      }`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M19 9l-7 7-7-7"
-                      />
-                    </svg>
-                  )}
                 </Link>
-
-                {item.dropdown && (
-                  <div
-                    className={`absolute top-[60px] left-1/2 -translate-x-1/2 w-56 flex-col gap-1 rounded-xl bg-white p-2 shadow-xl border border-ink/10 transition-all duration-200 ${
-                      desktopCategoriesOpen
-                        ? "opacity-100 translate-y-0 pointer-events-auto flex"
-                        : "opacity-0 -translate-y-2 pointer-events-none hidden"
-                    }`}
-                  >
-                    {item.dropdown.map((sub) => (
-                      <Link
-                        key={sub.label}
-                        href={sub.href}
-                        className="rounded-lg px-4 py-2.5 text-[11px] font-medium text-ink hover:bg-brand-50 transition-colors"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                      >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
               </div>
             ))}
           </nav>
@@ -380,7 +303,6 @@ export function Header() {
 
           <div className="flex flex-1 items-center justify-center">
             <Link href="/" className="flex items-center">
-              {/* UPDATED FONT: Cormorant */}
               <span
                 className={`uppercase leading-none tracking-[0.15em] transition-colors duration-300 text-[18px] ${logoClass}`}
                 style={{ fontFamily: "var(--font-cormorant), serif", fontWeight: 600 }}
@@ -441,61 +363,14 @@ export function Header() {
           <nav className="flex flex-col p-2">
             {NAV.map((item) => (
               <div key={item.label} className="flex flex-col">
-                {item.dropdown ? (
-                  <>
-                    <button
-                      onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-                      className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100 w-full text-left"
-                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                    >
-                      {item.label}
-                      <svg
-                        className={`h-4 w-4 transition-transform duration-300 ${
-                          mobileCategoriesOpen ? "rotate-180" : ""
-                        }`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M19 9l-7 7-7-7"
-                        />
-                      </svg>
-                    </button>
-
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${
-                        mobileCategoriesOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                      }`}
-                    >
-                      <div className="flex flex-col ml-4 pl-4 border-l border-ink/10 mb-2">
-                        {item.dropdown.map((sub) => (
-                          <Link
-                            key={sub.label}
-                            href={sub.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="rounded-lg px-4 py-3 text-[12px] font-medium text-ink/70 transition-colors hover:text-ink hover:bg-brand-100"
-                            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <Link
-                    href={item.href || `/#${item.targetId}`}
-                    onClick={(e) => handleNavClick(e, item)}
-                    className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
-                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                  >
-                    {item.label}
-                  </Link>
-                )}
+                <Link
+                  href={item.href || `/#${item.targetId}`}
+                  onClick={(e) => handleNavClick(e, item)}
+                  className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
+                  style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                >
+                  {item.label}
+                </Link>
               </div>
             ))}
 
