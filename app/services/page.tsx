@@ -2,7 +2,31 @@ import Link from "next/link";
 import Image from "next/image";
 
 const CATEGORIES = [
- 
+  {
+    id: "braids",
+    title: "Braids",
+    image: "/hero-1.jpg",
+    subCategories: ["Knotless", "Boho", "Stitch", "Feed-in"]
+  },
+  {
+    id: "locs-twists",
+    title: "Locs & Twists",
+    image: "/hero-2.jpg",
+    subCategories: ["Locs", "Relocs", "Twists", "Kinky", "Marley"]
+  },
+  {
+    id: "installs",
+    title: "Installs & Styling",
+    image: "/hero-3.jpg",
+    subCategories: ["Sew-ins", "Retouch & Wash", "Straightening"]
+  },
+  {
+    id: "beauty",
+    title: "Beauty & Piercing",
+    image: "/hero-4.jpg",
+    subCategories: ["Lashes", "Brows", "SPMU", "Piercing"]
+  }
+];
 
 export default function ServicesPage() {
   return (
@@ -22,6 +46,7 @@ export default function ServicesPage() {
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
             Select a category below to view specific treatments, sizes, and options. 
+            All bookings require a £10 deposit.
           </p>
         </div>
       </section>
@@ -36,7 +61,7 @@ export default function ServicesPage() {
               className="group flex flex-col"
             >
               {/* Image Card */}
-              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-sm border border-brand-100">
+              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-sm border border-brand-100 mb-5">
                 <Image
                   src={category.image}
                   alt={category.title}
@@ -47,21 +72,25 @@ export default function ServicesPage() {
               </div>
 
               {/* Text Area */}
-              <div className="mt-5 flex flex-col">
+              <div className="flex flex-col">
                 <h3 
-                  className="text-[24px] md:text-[28px] text-ink leading-tight mb-2 group-hover:text-brand-700 transition-colors"
+                  className="text-[24px] md:text-[28px] text-ink leading-tight mb-3 group-hover:text-brand-700 transition-colors"
                   style={{ fontFamily: 'var(--font-cormorant), serif' }}
                 >
                   {category.title}
                 </h3>
-                <p 
-                  className="text-[13px] text-muted leading-relaxed"
-                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                >
-                  {category.description}
-                </p>
-                <div className="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-brand-700">
-                  View Options <span>→</span>
+                
+                {/* SUB-CATEGORY TAGS */}
+                <div className="flex flex-wrap gap-2">
+                  {category.subCategories.map((sub, i) => (
+                    <span 
+                      key={i} 
+                      className="text-[10px] font-bold uppercase tracking-wider text-muted bg-brand-50 px-2.5 py-1 rounded-sm"
+                      style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
+                    >
+                      {sub}
+                    </span>
+                  ))}
                 </div>
               </div>
             </Link>
