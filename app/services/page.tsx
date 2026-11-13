@@ -1,30 +1,25 @@
 import Link from "next/link";
-import Image from "next/image";
 
 const CATEGORIES = [
   {
     id: "braids",
     title: "Braids",
-    image: "/hero-1.jpg",
-    subCategories: ["Knotless", "Boho", "Stitch", "Feed-in"]
+    subCategories: ["Knotless Braids", "Boho Braids", "Stitch Braids", "Feed-in Braids"]
   },
   {
     id: "locs-twists",
     title: "Locs & Twists",
-    image: "/hero-2.jpg",
-    subCategories: ["Locs", "Relocs", "Twists", "Kinky", "Marley"]
+    subCategories: ["Locs", "Relocs", "Twists", "Kinky Twists", "Marley Twists"]
   },
   {
     id: "installs",
     title: "Installs & Styling",
-    image: "/hero-3.jpg",
-    subCategories: ["Sew-ins", "Retouch & Wash", "Straightening"]
+    subCategories: ["Sew-ins", "Retouch & Washing", "Hair Straightening", "Consultation"]
   },
   {
     id: "beauty",
     title: "Beauty & Piercing",
-    image: "/hero-4.jpg",
-    subCategories: ["Lashes", "Brows", "SPMU", "Piercing"]
+    subCategories: ["Lash Extensions", "Brow Tint & Lamination", "SPMU", "Piercing"]
   }
 ];
 
@@ -42,62 +37,70 @@ export default function ServicesPage() {
             Our Services
           </h1>
           <p 
-            className="text-[14px] md:text-[16px] text-white/70 max-w-lg mx-auto"
-            style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+            className="text-[13px] md:text-[14px] text-white/60 uppercase tracking-[0.2em]"
+            style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
           >
-            Select a category below to view specific treatments, sizes, and options. 
-            All bookings require a £10 deposit.
+            Select a category to view options
           </p>
         </div>
       </section>
 
-      {/* 4-COLUMN GRID */}
-      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+      {/* EDITORIAL LIST */}
+      <section className="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-20">
+        <div className="flex flex-col border-t border-ink/10">
+          
           {CATEGORIES.map((category, idx) => (
             <Link 
               key={idx} 
               href={`/services/${category.id}`}
-              className="group flex flex-col"
+              className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 md:py-14 border-b border-ink/10 hover:bg-white transition-colors px-4 md:px-8 -mx-4 md:-mx-8"
             >
-              {/* Image Card */}
-              <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden shadow-sm border border-brand-100 mb-5">
-                <Image
-                  src={category.image}
-                  alt={category.title}
-                  fill
-                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-
-              {/* Text Area */}
-              <div className="flex flex-col">
-                <h3 
-                  className="text-[24px] md:text-[28px] text-ink leading-tight mb-3 group-hover:text-brand-700 transition-colors"
+              
+              {/* LEFT: Number & Title */}
+              <div className="flex items-baseline gap-6 md:gap-10">
+                <span 
+                  className="text-[12px] font-bold text-ink/30 tracking-widest"
+                  style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
+                >
+                  0{idx + 1}
+                </span>
+                <h2 
+                  className="text-[36px] md:text-[56px] text-ink group-hover:text-brand-700 transition-colors"
                   style={{ fontFamily: 'var(--font-cormorant), serif' }}
                 >
                   {category.title}
-                </h3>
+                </h2>
+              </div>
+
+              {/* RIGHT: Subcategories & Arrow */}
+              <div className="mt-6 md:mt-0 flex items-center justify-between md:justify-end gap-8 w-full md:w-auto">
                 
-                {/* SUB-CATEGORY TAGS */}
-                <div className="flex flex-wrap gap-2">
+                {/* Subcategories (fade in on hover for desktop, always visible on mobile) */}
+                <div className="flex flex-wrap gap-x-4 gap-y-2 max-w-sm md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
                   {category.subCategories.map((sub, i) => (
                     <span 
-                      key={i} 
-                      className="text-[10px] font-bold uppercase tracking-wider text-muted bg-brand-50 px-2.5 py-1 rounded-sm"
+                      key={i}
+                      className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-muted"
                       style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
                     >
                       {sub}
                     </span>
                   ))}
                 </div>
+
+                {/* Arrow Icon */}
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 group-hover:bg-brand-700 group-hover:text-white transition-all transform group-hover:translate-x-2">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </div>
               </div>
+
             </Link>
           ))}
+
         </div>
       </section>
-
     </main>
   );
 }
