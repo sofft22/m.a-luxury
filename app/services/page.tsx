@@ -6,7 +6,23 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "447393157901";
 
-const SERVICES_DATA = [
+// ADDED TYPE DEFINITION SO TYPESCRIPT KNOWS SIZES/DETAILS ARE OPTIONAL
+interface ServiceItem {
+  name: string;
+  sizes?: string;
+  lengths?: string;
+  details?: string;
+}
+
+interface ServiceCategory {
+  id: string;
+  title: string;
+  image: string;
+  description: string;
+  services: ServiceItem[];
+}
+
+const SERVICES_DATA: ServiceCategory[] = [
   {
     id: "braids",
     title: "Braids",
