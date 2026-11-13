@@ -1,26 +1,85 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
-function BookingContent() {
+// --- MOCK DATA FOR PRICING ---
+// In the future, this comes from your database.
+const PRICING: Record<string, { basePrice: number, sizes: string[], lengths: string[] }> = {
+  "Knotless Braids": {
+    basePrice: 70,
+    sizes: ["Small", "Medium", "Large", "Jumbo"],
+    lengths: ["Shoulder", "Mid-back", "Waist"],
+  },
+  "Boho Braids": {
+    basePrice: 80,
+    sizes: ["Small", "Medium", "Large", "Jumbo"],
+    lengths: ["Shoulder", "Mid-back", "Waist"],
+  },
+  "Kinky Twists": {
+    basePrice: 60,
+    sizes: ["Small", "Medium", "Large", "Jumbo"],
+    lengths: ["Shoulder", "Mid-back", "Waist"],
+  },
+  "Marley Twists": {
+    basePrice: 60,
+    sizes: ["Small", "Medium", "Large", "Jumbo"],
+    lengths: ["Shoulder", "Mid-back", "Waist"],
+  },
+  "Locs": {
+    basePrice: 50,
+    sizes: ["Standard"],
+    lengths: ["Standard"],
+  }
+};
+
+function BookingOptionsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  // Grab the service from the URL (e.g., ?service=Relocs)
   const serviceName = searchParams.get("service") || "General Appointment";
+  
+  // Get pricing details for this service (fallback to a default if not found)
+  const details = PRICING[serviceName] || {
+    basePrice: 40,
+    sizes: ["Standard"],
+    lengths: ["Standard"],
+  };
 
-  // Form state
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  // State for selections
+  const [selectedSize, setSelectedSize] = useState(details.sizes[0]);
+  const [selectedLength, setSelectedLength] = useState(details.lengths[0]);
+
+  // Calculate price dynamically
+  // (Just a fake calculation for now: Size adds £20, Length adds £30)
+  const getPrice = () => {
+    let price = details.basePrice;
+    if (selectedSize === "Medium") price += 20;
+    if (selectedSize === "Large") price += 40;
+    if (selectedSize === "Jumbo") price += 50;
+    
+    if (selectedLength === "Mid-back") price += 20;
+    if (selectedLength === "Waist") price += 40;
+    
+    return price;
+  };
+
+  const currentPrice = getPrice();
+
+  // When they click continue, we push to the calendar page with all the info in the URL
+  const handleContinue = () => {
+    router.push(
+      `/book/calendar?service=${encodeURIComponent(serviceName)}&size=${encodeURIComponent(selectedSize)}&length=${encodeURIComponent(selectedLength)}&price=${currentPrice}`
+    );
+  };
 
   return (
     <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         
         {/* HEADER */}
-        <div className="mb-12 text-center">
+        <div className="mb-10 text-center">
           <Link 
             href="/services" 
             className="text-[10px] font-bold uppercase tracking-widest text-brand-700/60 hover:text-brand-700 transition-colors mb-6 inline-block"
@@ -28,70 +87,84 @@ function BookingContent() {
           >
             ← Back to services
           </Link>
-          <h1 className="text-[36px] md:text-[52px] text-ink leading-tight mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-            Complete Your Booking
+          <h1 className="text-[36px] md:text-[52px] text-ink leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+            {serviceName}
           </h1>
           <p className="text-[14px] text-muted">
-            You are booking: <strong className="text-ink">{serviceName}</strong>
+            Select your options below to see the final price.
           </p>
         </div>
 
-        {/* BOOKING CARD */}
+        {/* OPTIONS CARD */}
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5">
           
-          <div className="mb-8">
-            <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-              1. Select a Date
-            </h2>
-            {/* CALENDAR PLACEHOLDER */}
-            <div className="border border-dashed border-brand-200 bg-brand-50/50 rounded-xl p-10 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-brand-50 transition-colors">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} className="w-10 h-10 text-brand-700 mb-3">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-              <p className="text-[13px] text-brand-700 font-medium">Date Picker Integration Coming Soon</p>
-              <p className="text-[11px] text-muted mt-1">The admin will set available dates here.</p>
+          {/* SIZES */}
+          {details.sizes.length > 0 && details.sizes[0] !== "Standard" && (
+            <div className="mb-8">
+              <h2 className="text-[18px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                Select Size
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {details.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`py-3 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all ${
+                      selectedSize === size 
+                        ? "border-brand-700 bg-brand-700 text-white shadow-md" 
+                        : "border-ink/10 text-ink hover:border-brand-700"
+                    }`}
+                    style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="mb-8">
-            <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-              2. Select a Time
-            </h2>
-            {/* TIME SLOTS PLACEHOLDER */}
-            <div className="grid grid-cols-3 gap-2">
-              {["09:00 AM", "11:00 AM", "01:00 PM", "03:00 PM", "05:00 PM"].map((time) => (
-                <button 
-                  key={time}
-                  className="py-3 rounded-md border border-ink/10 text-[12px] text-ink hover:border-brand-700 hover:text-brand-700 transition-colors bg-white"
-                  style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                >
-                  {time}
-                </button>
-              ))}
+          {/* LENGTHS */}
+          {details.lengths.length > 0 && details.lengths[0] !== "Standard" && (
+            <div className="mb-8">
+              <h2 className="text-[18px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                Select Length
+              </h2>
+              <div className="grid grid-cols-3 gap-3">
+                {details.lengths.map((length) => (
+                  <button
+                    key={length}
+                    onClick={() => setSelectedLength(length)}
+                    className={`py-3 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all ${
+                      selectedLength === length 
+                        ? "border-brand-700 bg-brand-700 text-white shadow-md" 
+                        : "border-ink/10 text-ink hover:border-brand-700"
+                    }`}
+                    style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+                  >
+                    {length}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="mb-8">
-            <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-              3. Your Details
-            </h2>
-            <div className="flex flex-col gap-3">
-              <input type="text" placeholder="Full Name" className="w-full rounded-md border border-ink/20 bg-[#FAF7FE] px-4 py-3 text-[14px] outline-none focus:border-brand-700 transition-colors" />
-              <input type="tel" placeholder="Phone Number" className="w-full rounded-md border border-ink/20 bg-[#FAF7FE] px-4 py-3 text-[14px] outline-none focus:border-brand-700 transition-colors" />
-              <input type="email" placeholder="Email Address (Optional)" className="w-full rounded-md border border-ink/20 bg-[#FAF7FE] px-4 py-3 text-[14px] outline-none focus:border-brand-700 transition-colors" />
+          {/* PRICE SUMMARY & CONTINUE */}
+          <div className="pt-6 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-widest text-muted mb-1" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+                Total Price
+              </p>
+              <p className="text-[32px] text-brand-700" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                £{currentPrice}
+              </p>
             </div>
-          </div>
-
-          {/* DEPOSIT CHECKOUT */}
-          <div className="pt-6 border-t border-ink/10 flex flex-col items-center">
-            <p className="text-[12px] text-muted mb-4 text-center">
-              A £10 non-refundable deposit is required to secure your slot. The remaining balance is due on the day.
-            </p>
+            
             <button 
-              className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900"
+              onClick={handleContinue}
+              className="w-full md:w-auto rounded-full bg-brand-700 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
-              Pay £10 Deposit & Book
+              Continue to Date & Time →
             </button>
           </div>
 
@@ -101,10 +174,10 @@ function BookingContent() {
   );
 }
 
-export default function BookPage() {
+export default function BookingPage() {
   return (
     <Suspense fallback={<div className="min-h-screen bg-[#FAF7FE] flex justify-center pt-32"><div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>}>
-      <BookingContent />
+      <BookingOptionsContent />
     </Suspense>
   );
 }
