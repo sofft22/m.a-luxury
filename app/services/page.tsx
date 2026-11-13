@@ -1,99 +1,39 @@
-"use client";
-
-import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "447393157901";
-
-// ADDED TYPE DEFINITION SO TYPESCRIPT KNOWS SIZES/DETAILS ARE OPTIONAL
-interface ServiceItem {
-  name: string;
-  sizes?: string;
-  lengths?: string;
-  details?: string;
-}
-
-interface ServiceCategory {
-  id: string;
-  title: string;
-  image: string;
-  description: string;
-  services: ServiceItem[];
-}
-
-const SERVICES_DATA: ServiceCategory[] = [
+const SERVICES_DATA = [
   {
     id: "braids",
     title: "Braids",
-    image: "/hero-1.jpg",
+    image: "https://images.unsplash.com/photo-1605980776566-0486c3ac7617?w=1200&q=80",
     description: "Flawless, tension-free braiding tailored to your crown.",
-    services: [
-      { name: "Knotless Braids", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Boho Braids", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Stitch Braids", sizes: "All lengths" },
-      { name: "Feed-in Braids", sizes: "Ponytails, All Backs, Alicia Keys, Fulani, Lemonade" },
-    ]
   },
   {
     id: "locs-twists",
     title: "Locs & Twists",
-    image: "/hero-2.jpg",
+    image: "https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=1200&q=80",
     description: "Expert maintenance and installation for locs and twists.",
-    services: [
-      { name: "Locs", details: "Two strand twist, Interlocking" },
-      { name: "Relocs", details: "Interlocking, Retwist (with/without styling)" },
-      { name: "Twists", details: "With expression" },
-      { name: "Kinky Twists", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Marley Twists", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-    ]
   },
   {
     id: "installs",
     title: "Installs & Styling",
-    image: "/hero-3.jpg",
+    image: "https://images.unsplash.com/photo-1519699047748-de8e457a634e?w=1200&q=80",
     description: "Seamless installations, treatments, and healthy hair care.",
-    services: [
-      { name: "Sew-ins" },
-      { name: "Retouch & Washing" },
-      { name: "Hair Straightening" },
-      { name: "New Client Consultation" },
-    ]
   },
   {
     id: "beauty",
     title: "Beauty",
-    image: "/hero-4.jpg",
+    image: "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1200&q=80",
     description: "Lashes, brows, and treatments to enhance your natural features.",
-    services: [
-      { name: "Lash Extensions", details: "Classic, Hybrid, Volume" },
-      { name: "Brow Tint" },
-      { name: "Brow Lamination" },
-      { name: "Brow Tint & Lamination" },
-      { name: "Brow Shaping" },
-      { name: "SPMU Brows", details: "Microblading, Microshading, Combo" },
-    ]
   },
   {
     id: "piercing",
     title: "Piercing",
-    image: "/hero-1.jpg",
+    image: "https://images.unsplash.com/photo-1615859310457-12e7b8d611ec?w=1200&q=80",
     description: "Safe, sterile, and professional piercing services.",
-    services: [
-      { name: "Standard Earlobe" },
-      { name: "Helix" },
-      { name: "Tragus" },
-    ]
   }
 ];
 
 export default function ServicesPage() {
-  const [openCategory, setOpenCategory] = useState<string | null>(null);
-
-  const toggleCategory = (id: string) => {
-    setOpenCategory(openCategory === id ? null : id);
-  };
-
   return (
     <main className="min-h-screen bg-[#FAF7FE] pt-[80px] md:pt-[100px]">
       
@@ -116,98 +56,49 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* SERVICES LIST */}
-      <section className="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-24">
-        <div className="flex flex-col gap-6 md:gap-10">
+      {/* SERVICES GRID */}
+      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
           
-          {SERVICES_DATA.map((category) => {
-            const isOpen = openCategory === category.id;
-
-            return (
+          {SERVICES_DATA.map((category, index) => (
+            <Link 
+              key={category.id}
+              href={`/services/${category.id}`}
+              className={`group relative block w-full overflow-hidden rounded-2xl border border-brand-100 shadow-sm hover:shadow-xl transition-all duration-500 ${
+                index === 0 || index === 3 ? "md:col-span-2 md:aspect-[21/9]" : "aspect-square md:aspect-[4/5]"
+              }`}
+            >
+              {/* Image Background */}
               <div 
-                key={category.id} 
-                className="group relative bg-white rounded-2xl overflow-hidden border border-brand-100 shadow-sm transition-all duration-500"
-              >
-                {/* CATEGORY HEADER (Clickable) */}
-                <button 
-                  onClick={() => toggleCategory(category.id)}
-                  className="w-full text-left flex flex-col md:flex-row items-center md:items-stretch h-auto md:h-[300px]"
+                className="absolute inset-0 w-full h-full bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                style={{ backgroundImage: `url(${category.image})` }}
+              />
+              
+              {/* Dark Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
+
+              {/* Text Content */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6 md:p-10">
+                <h2 
+                  className="text-[32px] md:text-[48px] text-white mb-2 transition-transform duration-300 group-hover:-translate-y-1"
+                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
                 >
-                  {/* Image */}
-                  <div className="relative w-full md:w-1/2 h-[250px] md:h-full overflow-hidden">
-                    <Image 
-                      src={category.image} 
-                      alt={category.title}
-                      fill
-                      className={`object-cover object-top transition-transform duration-700 ${isOpen ? "scale-105" : "group-hover:scale-105"}`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:bg-gradient-to-r" />
-                  </div>
-
-                  {/* Text */}
-                  <div className="flex-1 p-8 md:p-12 flex flex-col justify-center relative">
-                    <h2 
-                      className={`text-[32px] md:text-[48px] transition-colors duration-300 ${isOpen ? 'text-brand-700 italic' : 'text-ink group-hover:text-brand-700'}`}
-                      style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                    >
-                      {category.title}
-                    </h2>
-                    <p 
-                      className="mt-2 text-[14px] text-muted max-w-sm"
-                      style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                    >
-                      {category.description}
-                    </p>
-
-                    {/* Plus/Minus Icon */}
-                    <div className={`absolute top-8 right-8 md:top-12 md:right-12 flex h-10 w-10 items-center justify-center rounded-full border border-ink/10 transition-all duration-500 ${isOpen ? "bg-brand-700 text-white rotate-180" : "text-ink/40 group-hover:border-brand-700 group-hover:text-brand-700"}`}>
-                      {isOpen ? (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M20 12H4" /></svg>
-                      ) : (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                      )}
-                    </div>
-                  </div>
-                </button>
-
-                {/* EXPANDED SERVICES LIST */}
-                <div 
-                  className={`overflow-hidden transition-all duration-700 ease-in-out bg-[#FAF7FE] ${isOpen ? "max-h-[1000px] opacity-100 border-t border-brand-100" : "max-h-0 opacity-0"}`}
+                  {category.title}
+                </h2>
+                <p 
+                  className="text-[13px] md:text-[15px] text-white/80 max-w-sm transition-transform duration-300 group-hover:-translate-y-1"
+                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                 >
-                  <div className="p-8 md:p-12">
-                    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-700 mb-6" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
-                      Select a service to book
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {category.services.map((service, idx) => (
-                        <Link 
-                          key={idx}
-                          href={`/book?service=${encodeURIComponent(service.name)}`}
-                          className="group/item flex flex-col p-6 bg-white rounded-xl border border-ink/5 hover:border-brand-700 transition-colors"
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <h4 className="text-[20px] text-ink group-hover/item:text-brand-700 transition-colors" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                              {service.name}
-                            </h4>
-                            <span className="text-brand-700 opacity-0 group-hover/item:opacity-100 transition-opacity">→</span>
-                          </div>
-                          
-                          {(service.sizes || service.lengths || service.details) && (
-                            <div className="text-[12px] text-muted flex flex-col gap-0.5 mt-2" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                              {service.details && <p>{service.details}</p>}
-                              {service.sizes && <p><strong className="font-medium text-ink">Sizes:</strong> {service.sizes}</p>}
-                              {service.lengths && <p><strong className="font-medium text-ink">Lengths:</strong> {service.lengths}</p>}
-                            </div>
-                          )}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
+                  {category.description}
+                </p>
+                
+                <div className="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-gold opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                  View Services <span>→</span>
                 </div>
               </div>
-            );
-          })}
+            </Link>
+          ))}
+
         </div>
       </section>
     </main>
