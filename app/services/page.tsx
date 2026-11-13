@@ -1,25 +1,30 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const CATEGORIES = [
   {
     id: "braids",
     title: "Braids",
+    image: "/hero-1.jpg",
     subCategories: ["Knotless Braids", "Boho Braids", "Stitch Braids", "Feed-in Braids"]
   },
   {
     id: "locs-twists",
     title: "Locs & Twists",
-    subCategories: ["Locs", "Relocs", "Twists", "Kinky Twists", "Marley Twists"]
+    image: "/hero-2.jpg",
+    subCategories: ["Locs", "Relocs", "Twists", "Kinky", "Marley"]
   },
   {
     id: "installs",
     title: "Installs & Styling",
-    subCategories: ["Sew-ins", "Retouch & Washing", "Hair Straightening", "Consultation"]
+    image: "/hero-3.jpg",
+    subCategories: ["Sew-ins", "Retouch & Wash", "Hair Straightening"]
   },
   {
     id: "beauty",
     title: "Beauty & Piercing",
-    subCategories: ["Lash Extensions", "Brow Tint & Lamination", "SPMU", "Piercing"]
+    image: "/hero-4.jpg",
+    subCategories: ["Lashes", "Brows", "SPMU", "Piercing"]
   }
 ];
 
@@ -45,60 +50,54 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* EDITORIAL LIST */}
-      <section className="mx-auto max-w-5xl px-4 py-12 md:px-8 md:py-20">
-        <div className="flex flex-col border-t border-ink/10">
-          
+      {/* 4-COLUMN GRID */}
+      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
           {CATEGORIES.map((category, idx) => (
             <Link 
               key={idx} 
               href={`/services/${category.id}`}
-              className="group relative flex flex-col md:flex-row md:items-center justify-between py-10 md:py-14 border-b border-ink/10 hover:bg-white transition-colors px-4 md:px-8 -mx-4 md:-mx-8"
+              className="group flex flex-col"
             >
-              
-              {/* LEFT: Number & Title */}
-              <div className="flex items-baseline gap-6 md:gap-10">
-                <span 
-                  className="text-[12px] font-bold text-ink/30 tracking-widest"
-                  style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-                >
-                  0{idx + 1}
-                </span>
-                <h2 
-                  className="text-[36px] md:text-[56px] text-ink group-hover:text-brand-700 transition-colors"
+              {/* Image */}
+              <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden shadow-sm border border-brand-100 mb-6">
+                <Image
+                  src={category.image}
+                  alt={category.title}
+                  fill
+                  className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                />
+              </div>
+
+              {/* Text Area */}
+              <div className="flex flex-col text-center">
+                <h3 
+                  className="text-[28px] md:text-[32px] text-ink leading-tight mb-3 group-hover:text-brand-700 transition-colors"
                   style={{ fontFamily: 'var(--font-cormorant), serif' }}
                 >
                   {category.title}
-                </h2>
-              </div>
-
-              {/* RIGHT: Subcategories & Arrow */}
-              <div className="mt-6 md:mt-0 flex items-center justify-between md:justify-end gap-8 w-full md:w-auto">
+                </h3>
                 
-                {/* Subcategories (fade in on hover for desktop, always visible on mobile) */}
-                <div className="flex flex-wrap gap-x-4 gap-y-2 max-w-sm md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
+                {/* Professional Sub-category List (Separated by dots) */}
+                <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-1">
                   {category.subCategories.map((sub, i) => (
-                    <span 
-                      key={i}
-                      className="text-[10px] md:text-[11px] font-bold uppercase tracking-wider text-muted"
-                      style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}
-                    >
-                      {sub}
+                    <span key={i} className="flex items-center gap-x-2">
+                      <span 
+                        className="text-[11px] md:text-[12px] text-muted tracking-wide"
+                        style={{ fontFamily: 'var(--font-inter), sans-serif' }}
+                      >
+                        {sub}
+                      </span>
+                      {/* Add a dot separator if it's not the last item */}
+                      {i !== category.subCategories.length - 1 && (
+                        <span className="h-1 w-1 rounded-full bg-brand-700/30" />
+                      )}
                     </span>
                   ))}
                 </div>
-
-                {/* Arrow Icon */}
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-50 text-brand-700 group-hover:bg-brand-700 group-hover:text-white transition-all transform group-hover:translate-x-2">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-5 w-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
               </div>
-
             </Link>
           ))}
-
         </div>
       </section>
     </main>
