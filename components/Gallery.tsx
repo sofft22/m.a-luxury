@@ -63,13 +63,13 @@ export function Gallery() {
           </div>
           
           <Link 
-            href="https://instagram.com/ma.luxury" 
+            href="https://www.tiktok.com/@m.aluxury1" 
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 pb-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
             style={{ fontFamily: 'var(--font-inter), sans-serif' }}
           >
-            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">See More on Instagram</span>
+            <span className="border-b border-brand-700 pb-0.5 whitespace-nowrap">See More on TikTok</span>
             <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
