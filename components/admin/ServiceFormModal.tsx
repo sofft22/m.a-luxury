@@ -16,6 +16,9 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
   const [inStock, setInStock] = useState(service ? service.inStock === 1 : true);
   const [image, setImage] = useState(service?.image || "");
   
+  // DURATION STATE (in minutes)
+  const [duration, setDuration] = useState(service?.duration?.toString() || "60");
+
   const [options, setOptions] = useState<{ name: string; price: string }[]>(() => {
     if (!service || !service.options) return [{ name: "", price: "" }];
     try {
@@ -71,6 +74,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
       description: description.trim(),
       options: cleanOptions,
       image,
+      duration: Number(duration), // Saving the duration
       inStock,
     };
 
@@ -127,19 +131,35 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
             <input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="e.g. Knotless Braids" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
-          <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Category</label>
-            <select value={category} onChange={e => setCategory(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
-              <option value="braids">Braids & Twists</option>
-              <option value="locs">Locs & Maintenance</option>
-              <option value="installs">Installs & Styling</option>
-              <option value="beauty">Beauty</option>
-            </select>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Category</label>
+              <select value={category} onChange={e => setCategory(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
+                <option value="braids">Braids & Twists</option>
+                <option value="locs">Locs & Maintenance</option>
+                <option value="installs">Installs & Styling</option>
+                <option value="beauty">Beauty</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Est. Duration</label>
+              <select value={duration} onChange={e => setDuration(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
+                <option value="30">30 Minutes</option>
+                <option value="60">1 Hour</option>
+                <option value="90">1.5 Hours</option>
+                <option value="120">2 Hours</option>
+                <option value="180">3 Hours</option>
+                <option value="240">4 Hours</option>
+                <option value="300">5 Hours</option>
+                <option value="360">6 Hours</option>
+                <option value="480">8 Hours</option>
+              </select>
+            </div>
           </div>
 
           <div>
             <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="Describe the service..." className="w-full resize-none rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
+            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} placeholder="Describe the service..." className="w-full resize-none rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
           <div>
@@ -173,7 +193,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
 
           <div className="flex items-center justify-between border-y border-ink/10 py-4">
             <div>
-              <p className="text-[14px] font-semibold text-ink">Available for Booking</p>
+              <p className="text-[14px] font-semibold text-ink">Visible on Website</p>
             </div>
             <button onClick={() => setInStock(!inStock)} className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${inStock ? "bg-brand-700" : "bg-ink/20"}`}>
               <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${inStock ? "translate-x-[22px]" : "translate-x-0.5"}`} />
