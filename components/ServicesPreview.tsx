@@ -17,11 +17,9 @@ export function ServicesPreview() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        // ADDED CACHE BUSTER (?t=...)
         const res = await fetch(`/api/services?t=${Date.now()}`);
         const data = await res.json();
         
-        // Check if data is an array before setting it
         if (Array.isArray(data)) {
           setServices(data);
         } else {
@@ -63,7 +61,6 @@ export function ServicesPreview() {
         {/* 2-COLUMN LUXURY MENU GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 lg:gap-x-32 gap-y-16 md:gap-y-24">
           {CATEGORIES.map((category, idx) => {
-            // Filter services belonging to this category
             const categoryServices = services.filter(s => s.category === category.dbKey);
 
             return (
@@ -71,7 +68,7 @@ export function ServicesPreview() {
                 
                 {/* Category Header (Clickable) */}
                 <Link href={`/services/${category.slug}`} className="block">
-                  <div className="flex items-baseline justify-between border-b border-ink/10 pb-4 mb-6 group-hover:border-brand-700 transition-colors">
+                  <div className="flex items-center justify-between border-b border-ink/10 pb-4 mb-6 group-hover:border-brand-700 transition-colors">
                     <h3 
                       className="text-[28px] md:text-[36px] text-ink italic group-hover:text-brand-700 transition-colors"
                       style={{ fontFamily: 'var(--font-cormorant), serif' }}
@@ -79,7 +76,8 @@ export function ServicesPreview() {
                       {category.title}
                     </h3>
                     
-                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-2">
+                    {/* ALWAYS VISIBLE ARROW */}
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-brand-200 text-brand-700 transition-all group-hover:bg-brand-700 group-hover:text-white group-hover:border-brand-700">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                       </svg>
@@ -87,8 +85,8 @@ export function ServicesPreview() {
                   </div>
                 </Link>
                 
-                {/* Category Items (Pulled from Admin Data) */}
-                <ul className="flex flex-col gap-4 flex-grow mb-8">
+                {/* Category Items */}
+                <ul className="flex flex-col gap-4 flex-grow">
                   {categoryServices.length > 0 ? (
                     categoryServices.map((item, i) => {
                       let startingPrice = "Contact";
@@ -123,15 +121,6 @@ export function ServicesPreview() {
                   )}
                 </ul>
 
-                {/* See More Details Link */}
-                <Link 
-                  href={`/services/${category.slug}`}
-                  className="group/link inline-flex items-center gap-2 text-[9px] font-bold uppercase tracking-[0.2em] text-gold transition-colors hover:text-ink w-fit mt-auto"
-                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                >
-                  View {category.title} Options
-                  <span className="transition-transform group-hover/link:translate-x-1">→</span>
-                </Link>
               </div>
             );
           })}
