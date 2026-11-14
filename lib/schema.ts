@@ -20,7 +20,8 @@ export const services = sqliteTable("services", {
   title: text("title").notNull(),
   category: text("category").notNull(),
   description: text("description"),
-  options: text("options"), // This stores the sizes/lengths & prices JSON
+  options: text("options"), 
+  image: text("image"), // <--- ADD THIS LINE
   inStock: integer("inStock").default(1),
 });
 
