@@ -12,7 +12,9 @@ export async function GET() {
     const allServices = await db.select().from(services);
     return NextResponse.json(allServices);
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("GET SERVICES ERROR:", error.message);
+    // Return an empty array so the frontend doesn't crash if the table doesn't exist yet
+    return NextResponse.json([]); 
   }
 }
 
@@ -35,6 +37,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error("POST SERVICE ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -59,6 +62,7 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error("PUT SERVICE ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -77,6 +81,7 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error("DELETE SERVICE ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
