@@ -7,10 +7,9 @@ import { useCart } from "@/app/CartContext";
 
 const WHATSAPP_NUMBER = "447393157901"; 
 
-function bookLink(service?: string) {
-  const text = service
-    ? `Hi M.a Luxury! I'd like to book ${service} 💜`
-    : `Hi M.a Luxury! I'd like to book an appointment 💜`;
+// UPDATED LINK TEXT
+function whatsappLink() {
+  const text = "Hi M.a Luxury! I have a question 💜";
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
 }
 
@@ -193,7 +192,6 @@ export function Header() {
 
           <nav className="flex items-center justify-center gap-7">
             {NAV.map((item) => {
-              // Check if this is the shop or services dropdown
               const isShop = item.label === "Shop";
               const isServices = item.label === "Services";
               const isDropdownOpen = isShop ? desktopShopOpen : desktopServicesOpen;
@@ -250,8 +248,9 @@ export function Header() {
           </nav>
 
           <div className="flex justify-end items-center gap-3">
+            {/* UPDATED DESKTOP WHATSAPP BUTTON */}
             <a
-              href={bookLink()}
+              href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
               className={`hidden md:inline-flex items-center gap-2 rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] transition-all ${
@@ -260,7 +259,7 @@ export function Header() {
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               <WhatsAppIcon />
-              Book
+              Ask a Question
             </a>
 
             <button
@@ -313,11 +312,12 @@ export function Header() {
           </div>
 
           <div className="flex w-16 items-center justify-end gap-1">
+            {/* UPDATED MOBILE WHATSAPP ICON */}
             <a
-              href={bookLink()}
+              href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Book on WhatsApp"
+              aria-label="Ask a Question on WhatsApp"
               className={`flex h-10 w-10 items-center justify-center transition-colors duration-300 hover:opacity-70 ${textClass}`}
             >
               <WhatsAppIcon />
@@ -411,9 +411,9 @@ export function Header() {
               );
             })}
 
-            {/* MOBILE BOOK CTA */}
+            {/* UPDATED MOBILE BOOK CTA */}
             <a
-              href={bookLink()}
+              href={whatsappLink()}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileMenuOpen(false)}
@@ -421,7 +421,7 @@ export function Header() {
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               <WhatsAppIcon />
-              Book on WhatsApp
+              Ask a Question
             </a>
           </nav>
         </div>
