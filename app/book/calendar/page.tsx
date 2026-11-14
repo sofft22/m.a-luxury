@@ -30,9 +30,11 @@ function CalendarContent() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   
+  // Terms Checkbox State
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // FETCH BOOKINGS & AVAILABILITY
   useEffect(() => {
     if (!selectedDate) return;
     fetch(`/api/bookings?date=${selectedDate}`)
@@ -50,20 +52,17 @@ function CalendarContent() {
       });
   }, [selectedDate]);
 
-  // TIME SLOT GENERATOR LOGIC
   const generateSlots = () => {
     if (!selectedDate) return [];
 
-    // 1. Check specific date exception (Holiday/Custom Day)
     if (dayException) {
       if (dayException.isOpen === 0) {
         setIsClosed(true);
         return [];
       }
     } else {
-      // 2. Check standard weekly schedule
       const dateObj = new Date(selectedDate);
-      const dayOfWeek = dateObj.getDay(); // 0 = Sunday
+      const dayOfWeek = dateObj.getDay(); 
       const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
       
       if (standardDay && standardDay.isOpen === 0) {
@@ -74,7 +73,6 @@ function CalendarContent() {
 
     setIsClosed(false);
 
-    // 3. Determine open/close times
     let openTime = 9; 
     let closeTime = 18; 
 
@@ -118,6 +116,9 @@ function CalendarContent() {
   const handleBook = async () => {
     if (!selectedDate || !selectedTime || !name || !phone) {
       return alert("Please fill all required fields");
+    }
+    if (!agreedToTerms) {
+      return alert("Please agree to the Terms of Service and Privacy Policy.");
     }
 
     setSubmitting(true);
@@ -296,9 +297,47 @@ Please find my receipt attached. Looking forward to it!`;
 
           <div className="pt-6 border-t border-ink/10 flex flex-col items-center">
             <p className="text-[12px] text-muted mb-4 text-center">A £10 non-refundable deposit is required to secure your slot.</p>
+            
+            {/* TERMS CHECKBOX */}
+            <div className="flex items-start gap-3 w-full mb-6 px-2">
+              <div className="relative flex items-center">
+                <input
+                  type="checkbox"
+                  id="terms"
+                  checked={agreedToTerms}
+                  onChange={(e) => setAgreedToTerms(e.target.checked)}
+                  className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-ink/30 bg-white transition-all checked:border-brand-700 checked:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-700/20 focus:ring-offset-1"
+                />
+                <svg
+                  className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+              </div>
+              <label htmlFor="terms" className="text-[12px] text-muted leading-tight cursor-pointer select-none">
+                I agree to the{" "}
+                <Link href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                  Privacy Policy
+                </Link>
+                .
+              </label>
+            </div>
+
             <button 
               onClick={handleBook}
-              disabled={!selectedTime || !name || !phone || submitting}
+              disabled={!selectedTime || !name || !phone || submitting || !agreedToTerms}
               className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 disabled:opacity-50"
             >
               {submitting ? "Processing..." : "Confirm Booking Details"}
