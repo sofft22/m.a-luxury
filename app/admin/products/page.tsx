@@ -19,6 +19,7 @@ export default function AdminProductsPage() {
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
 
   const loadProducts = async () => {
+    // Check the NEW login key
     if (localStorage.getItem("ma_admin_logged_in") !== "true") {
       router.push("/admin/login");
       return;
@@ -73,7 +74,6 @@ export default function AdminProductsPage() {
 
   const outOfStockCount = products.filter((p) => !p.inStock).length;
 
-  // YOUR NEW CATEGORIES
   const CATEGORIES = [
     { id: "all", label: "All" },
     { id: "bonestraight", label: "Bonestraight" },
@@ -88,7 +88,6 @@ export default function AdminProductsPage() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-8 sm:px-8 sm:py-10 min-h-screen bg-[#FAF7FE]">
       
-      {/* HEADER */}
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-700/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Catalog</p>
@@ -108,7 +107,6 @@ export default function AdminProductsPage() {
         </button>
       </div>
 
-      {/* FILTERS */}
       <div className="mb-6 border-b border-ink/10 pb-3 flex items-center justify-between gap-4">
         <nav className="flex flex-1 items-center gap-x-6 overflow-x-auto no-scrollbar pb-1">
           {CATEGORIES.map((c) => {
@@ -145,7 +143,6 @@ export default function AdminProductsPage() {
         </div>
       </div>
 
-      {/* LIST */}
       {loading ? (
         <div className="flex justify-center py-24"><div className="h-6 w-6 animate-spin rounded-full border-[2.5px] border-brand-200 border-t-brand-700" /></div>
       ) : filtered.length === 0 ? (
