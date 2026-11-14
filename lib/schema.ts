@@ -1,10 +1,11 @@
 // lib/schema.ts
-import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
 export const products = sqliteTable("products", {
   id: text("id").primaryKey(), 
   title: text("title").notNull(),
   price: integer("price").notNull(),
+  weight: real("weight").default(0), // <--- ADDED BACK
   description: text("description"), 
   category: text("category").notNull(),
   image: text("image").notNull(),
@@ -21,7 +22,7 @@ export const services = sqliteTable("services", {
   description: text("description"),
   options: text("options"), 
   image: text("image"), 
-  duration: integer("duration").default(60), 
+  duration: integer("duration").default(60),
   inStock: integer("inStock").default(1),
 });
 
@@ -40,7 +41,7 @@ export const bookings = sqliteTable("bookings", {
 });
 
 export const weeklySchedule = sqliteTable("weekly_schedule", {
-  id: integer("id").primaryKey(), // 0-6 (Sun-Sat)
+  id: integer("id").primaryKey(),
   isOpen: integer("isOpen").default(1),
   startTime: text("startTime").default("09:00"),
   endTime: text("endTime").default("18:00"),
