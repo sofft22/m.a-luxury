@@ -14,8 +14,8 @@ function BookingOptionsContent() {
   const [serviceData, setServiceData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  // State for the selected option
-  const [selectedOption, setSelectedOption] = useState<{ name: string, price: number } | null>(null);
+  // State for the selected option (now includes duration)
+  const [selectedOption, setSelectedOption] = useState<{ name: string, price: number, duration: number } | null>(null);
 
   useEffect(() => {
     if (!serviceId) {
@@ -30,13 +30,18 @@ function BookingOptionsContent() {
         const found = data.find((s: any) => s.id === serviceId);
         
         if (found) {
-          // Parse the options JSON string
           const parsedOptions = typeof found.options === 'string' ? JSON.parse(found.options || "[]") : found.options;
-          setServiceData({ ...found, options: parsedOptions });
           
-          // Auto-select the first option
-          if (parsedOptions.length > 0) {
-            setSelectedOption(parsedOptions[0]);
+          // Ensure duration exists, fallback to 60
+          const cleanOptions = parsedOptions.map((o: any) => ({
+            ...o,
+            duration: o.duration || 60
+          }));
+
+          setServiceData({ ...found, options: cleanOptions });
+          
+          if (cleanOptions.length > 0) {
+            setSelectedOption(cleanOptions[0]);
           }
         }
       } catch (error) {
@@ -52,9 +57,9 @@ function BookingOptionsContent() {
   const handleContinue = () => {
     if (!selectedOption) return alert("Please select an option");
     
-    // Pass everything to the calendar page, INCLUDING THE DURATION
+    // Pass the specific option's duration to the calendar
     router.push(
-      `/book/calendar?service=${encodeURIComponent(serviceName)}&id=${serviceId}&option=${encodeURIComponent(selectedOption.name)}&price=${selectedOption.price}&duration=${serviceData.duration || 60}`
+      `/book/calendar?service=${encodeURIComponent(serviceName)}&id=${serviceId}&option=${encodeURIComponent(selectedOption.name)}&price=${selectedOption.price}&duration=${selectedOption.duration}`
     );
   };
 
@@ -66,7 +71,6 @@ function BookingOptionsContent() {
     <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         
-        {/* HEADER */}
         <div className="mb-10 text-center">
           <Link 
             href="/services" 
@@ -83,7 +87,6 @@ function BookingOptionsContent() {
           </p>
         </div>
 
-        {/* OPTIONS CARD */}
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5">
           
           <div className="mb-8">
@@ -92,7 +95,7 @@ function BookingOptionsContent() {
             </h2>
             
             {serviceData && serviceData.options.length > 0 ? (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                 {serviceData.options.map((opt: any, i: number) => (
                   <button
                     key={i}
@@ -108,6 +111,9 @@ function BookingOptionsContent() {
                     <span className={`text-[14px] ${selectedOption?.name === opt.name ? "text-white/80" : "text-brand-700"}`}>
                       £{opt.price}
                     </span>
+                    <span className={`text-[10px] ${selectedOption?.name === opt.name ? "text-white/60" : "text-muted"}`}>
+                      {opt.duration >= 60 ? `${(opt.duration / 60).toFixed(1).replace('.0', '')} hrs` : `${opt.duration} mins`}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -116,7 +122,6 @@ function BookingOptionsContent() {
             )}
           </div>
 
-          {/* PRICE SUMMARY & CONTINUE */}
           <div className="pt-6 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-muted mb-1" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
