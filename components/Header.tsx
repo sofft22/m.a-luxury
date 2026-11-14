@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/app/CartContext";
 
-const WHATSAPP_NUMBER = "447393157901"; // Updated number
+const WHATSAPP_NUMBER = "447393157901"; 
 
 function bookLink(service?: string) {
   const text = service
@@ -80,14 +80,20 @@ export function Header() {
   const overHero = heroHeight > 0 && scrolled < heroHeight - 40;
   const textClass = overHero ? "text-white" : "text-ink";
   
-  // LOGO COLOR: White on hero, Purple when scrolled
   const logoClass = overHero ? "text-white" : "text-brand-700";
 
+  // UPDATED NAV WITH SUB-CATEGORIES UNDER SERVICES
   const NAV = [
     { label: "Shop", href: "/shop" },
     {
       label: "Services",
-      href: "/services", // Changed to direct link
+      href: "/services",
+      dropdown: [
+        { label: "Braids & Twists", href: "/services/braids" },
+        { label: "Locs & Maintenance", href: "/services/locs-twists" },
+        { label: "Installs & Styling", href: "/services/installs" },
+        { label: "Beauty", href: "/services/beauty" },
+      ],
     },
     { label: "Gallery", targetId: "gallery" },
     { label: "Reviews", targetId: "reviews" },
@@ -96,7 +102,8 @@ export function Header() {
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: any) => {
-    if (item.href) return;
+    if (item.href && !item.dropdown) return;
+    if (item.dropdown) return;
 
     e.preventDefault();
     setMobileMenuOpen(false);
@@ -123,9 +130,8 @@ export function Header() {
 
   return (
     <>
-      {/* CHANGED: Removed translate logic. It stays fixed at the top. */}
       <header
-        className={`fixed left-0 right-0 top-0 z-40 transition-colors duration-300 ease-out flex flex-col`}
+        className="fixed left-0 right-0 top-0 z-40 transition-colors duration-300 ease-out flex flex-col"
         style={{
           backgroundColor: overHero ? "transparent" : "#FAF7FE",
           borderBottom: overHero ? "1px solid transparent" : "1px solid rgba(31, 18, 53, 0.08)",
@@ -138,54 +144,18 @@ export function Header() {
               overHero ? "text-white" : "text-ink"
             }`}
           >
-            <div className="flex-shrink-0 px-4 z-10">
-              <svg
-                className="h-3.5 w-3.5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
-                />
-              </svg>
-            </div>
             <div className="flex-1 overflow-hidden relative h-full flex items-center">
               <div className="animate-marquee whitespace-nowrap absolute flex">
-                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">
-                  {bannerText}
-                </span>
-                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">
-                  {bannerText}
-                </span>
-                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">
-                  {bannerText}
-                </span>
-                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">
-                  {bannerText}
-                </span>
+                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">{bannerText}</span>
+                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">{bannerText}</span>
+                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">{bannerText}</span>
+                <span className="mx-4 text-[10px] font-bold uppercase tracking-[0.15em]">{bannerText}</span>
               </div>
             </div>
-            <button
-              onClick={() => setIsBannerClosed(true)}
-              className="flex-shrink-0 px-4 opacity-50 hover:opacity-100 z-10 transition-opacity"
-            >
-              <svg
-                className="h-3 w-3"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" />
-              </svg>
+            <button onClick={() => setIsBannerClosed(true)} className="flex-shrink-0 px-4 opacity-50 hover:opacity-100 z-10 transition-opacity">
+              <svg className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6 6l12 12M18 6L6 18" /></svg>
             </button>
-            {!overHero && (
-              <div className="absolute bottom-0 left-0 w-full h-[1px] bg-ink/10" />
-            )}
+            {!overHero && <div className="absolute bottom-0 left-0 w-full h-[1px] bg-ink/10" />}
           </div>
         )}
 
@@ -207,6 +177,8 @@ export function Header() {
               <div
                 key={item.label}
                 className="relative group h-full py-6 flex items-center"
+                onMouseEnter={() => item.dropdown && setDesktopCategoriesOpen(true)}
+                onMouseLeave={() => item.dropdown && setDesktopCategoriesOpen(false)}
               >
                 <Link
                   href={item.href || `/#${item.targetId}`}
@@ -215,21 +187,44 @@ export function Header() {
                   style={{ fontFamily: "var(--font-inter), sans-serif" }}
                 >
                   {item.label}
+                  {item.dropdown && (
+                    <svg
+                      className={`h-3 w-3 transition-transform duration-300 ${desktopCategoriesOpen ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
                 </Link>
+
+                {/* DESKTOP DROPDOWN */}
+                {item.dropdown && desktopCategoriesOpen && (
+                  <div className="absolute top-[60px] left-1/2 -translate-x-1/2 w-56 flex flex-col gap-1 rounded-xl bg-white p-2 shadow-xl border border-ink/10 transition-all duration-200">
+                    {item.dropdown.map((sub) => (
+                      <Link
+                        key={sub.label}
+                        href={sub.href}
+                        className="rounded-lg px-4 py-2.5 text-[11px] font-medium text-ink hover:bg-brand-50 transition-colors"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </nav>
 
           <div className="flex justify-end items-center gap-3">
-            {/* BOOK ON WHATSAPP */}
             <a
               href={bookLink()}
               target="_blank"
               rel="noopener noreferrer"
               className={`hidden md:inline-flex items-center gap-2 rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] transition-all ${
-                overHero
-                  ? "bg-white text-brand-700 hover:bg-brand-50"
-                  : "bg-brand-700 text-white hover:bg-brand-900"
+                overHero ? "bg-white text-brand-700 hover:bg-brand-50" : "bg-brand-700 text-white hover:bg-brand-900"
               }`}
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
@@ -242,24 +237,12 @@ export function Header() {
               aria-label="Cart"
               className={`relative flex h-10 w-10 items-center justify-center transition-colors duration-300 hover:opacity-70 ${textClass}`}
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-[18px] w-[18px]"
-              >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
                 <path d="M6 8h12l-1 12H7L6 8z" />
                 <path d="M9 8V6a3 3 0 016 0v2" />
               </svg>
               {cartCount > 0 && (
-                <span
-                  className={`absolute -right-0.5 -top-0.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[9.5px] font-bold leading-none transition-colors duration-300 ${
-                    overHero ? "bg-white text-ink" : "bg-brand-700 text-white"
-                  }`}
-                >
+                <span className={`absolute -right-0.5 -top-0.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[9.5px] font-bold leading-none transition-colors duration-300 ${overHero ? "bg-white text-ink" : "bg-brand-700 text-white"}`}>
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
               )}
@@ -276,25 +259,11 @@ export function Header() {
               className={`-ml-2 flex h-10 w-10 items-center justify-center transition-colors duration-300 hover:opacity-70 ${textClass}`}
             >
               {mobileMenuOpen ? (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  className="h-[18px] w-[18px]"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="h-[18px] w-[18px]">
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               ) : (
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  className="h-[18px] w-[18px]"
-                >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" className="h-[18px] w-[18px]">
                   <path d="M3 6h18M3 12h18M3 18h18" />
                 </svg>
               )}
@@ -327,24 +296,12 @@ export function Header() {
               aria-label="Cart"
               className={`relative flex h-10 w-10 items-center justify-center transition-colors duration-300 hover:opacity-70 ${textClass}`}
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="h-[18px] w-[18px]"
-              >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
                 <path d="M6 8h12l-1 12H7L6 8z" />
                 <path d="M9 8V6a3 3 0 016 0v2" />
               </svg>
               {cartCount > 0 && (
-                <span
-                  className={`absolute -right-0.5 -top-0.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[9.5px] font-bold leading-none transition-colors duration-300 ${
-                    overHero ? "bg-white text-ink" : "bg-brand-700 text-white"
-                  }`}
-                >
+                <span className={`absolute -right-0.5 -top-0.5 flex h-[16px] min-w-[16px] items-center justify-center rounded-full px-1 text-[9.5px] font-bold leading-none transition-colors duration-300 ${overHero ? "bg-white text-ink" : "bg-brand-700 text-white"}`}>
                   {cartCount > 99 ? "99+" : cartCount}
                 </span>
               )}
@@ -363,14 +320,52 @@ export function Header() {
           <nav className="flex flex-col p-2">
             {NAV.map((item) => (
               <div key={item.label} className="flex flex-col">
-                <Link
-                  href={item.href || `/#${item.targetId}`}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
-                  style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                >
-                  {item.label}
-                </Link>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
+                      className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100 w-full text-left"
+                      style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                    >
+                      {item.label}
+                      <svg
+                        className={`h-4 w-4 transition-transform duration-300 ${mobileCategoriesOpen ? "rotate-180" : ""}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ${mobileCategoriesOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
+                    >
+                      <div className="flex flex-col ml-4 pl-4 border-l border-ink/10 mb-2">
+                        {item.dropdown.map((sub) => (
+                          <Link
+                            key={sub.label}
+                            href={sub.href}
+                            onClick={() => setMobileMenuOpen(false)}
+                            className="rounded-lg px-4 py-3 text-[12px] font-medium text-ink/70 transition-colors hover:text-ink hover:bg-brand-100"
+                            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <Link
+                    href={item.href || `/#${item.targetId}`}
+                    onClick={(e) => handleNavClick(e, item)}
+                    className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
+                    {item.label}
+                  </Link>
+                )}
               </div>
             ))}
 
