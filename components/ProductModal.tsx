@@ -168,9 +168,9 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
 
             <div className="flex w-full flex-col md:flex-row">
               
-              {/* IMAGE SECTION */}
+              {/* IMAGE SECTION - Increased height on mobile */}
               <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-[#FAF7FE] border-r border-ink/5">
-                <div className="relative w-full h-[50vh] sm:h-[600px] p-6 md:p-10">
+                <div className="relative w-full h-[65vh] sm:h-[600px] p-6 md:p-10">
                   <div className="relative w-full h-full cursor-zoom-in group rounded-xl overflow-hidden shadow-sm" onClick={() => setIsLightboxOpen(true)}>
                     {!mainImgLoaded && <div className="absolute inset-0 animate-pulse bg-brand-100" />}
                     <Image 
@@ -197,9 +197,12 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                   <p className="mt-3 text-[26px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
                 </div>
 
-                <p className="text-[14px] leading-loose text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-                  {product.description || "Premium quality hair extensions, hand-selected for a flawless, luxury finish."}
-                </p>
+                {/* REMOVED HARDCODED FALLBACK DESCRIPTION */}
+                {product.description && (
+                  <p className="text-[14px] leading-loose text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                    {product.description}
+                  </p>
+                )}
                 
                 <hr className="mb-8 border-ink/5" />
 
