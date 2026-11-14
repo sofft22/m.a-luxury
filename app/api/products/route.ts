@@ -16,11 +16,11 @@ export async function GET() {
     price: products.price,
     category: products.category,
     image: products.image,
+    images: products.images,
+    description: products.description,
     inStock: products.inStock,
     sizes: products.sizes,
     featured: products.featured,
-    isBulk: products.isBulk,
-    weight: products.weight, // <-- NEW: Fetch weight
   }).from(products);
 
   return NextResponse.json(allProducts, {
@@ -41,12 +41,10 @@ export async function POST(request: Request) {
     description: body.description,
     category: body.category,
     image: body.image,
-    images: JSON.stringify(body.images),
-    sizes: JSON.stringify(body.sizes),
+    images: JSON.stringify(body.images || []),
+    sizes: JSON.stringify(body.sizes || []),
     inStock: body.inStock ? 1 : 0,
     featured: body.featured ? 1 : 0,
-    isBulk: body.isBulk ? 1 : 0,
-    weight: body.weight || 0, // <-- NEW: Save weight
   });
 
   revalidatePath("/", "layout");
@@ -66,12 +64,10 @@ export async function PUT(request: Request) {
       description: body.description,
       category: body.category,
       image: body.image,
-      images: JSON.stringify(body.images),
-      sizes: JSON.stringify(body.sizes),
+      images: JSON.stringify(body.images || []),
+      sizes: JSON.stringify(body.sizes || []),
       inStock: body.inStock ? 1 : 0,
       featured: body.featured ? 1 : 0,
-      isBulk: body.isBulk ? 1 : 0,
-      weight: body.weight || 0, // <-- NEW: Update weight
     })
     .where(eq(products.id, body.id));
 
