@@ -3,62 +3,51 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 
-const ALL_SERVICES: Record<string, { title: string, image: string, services: any[] }> = {
-  "braids": {
-    title: "Braids",
-    image: "/hero-1.jpg",
-    services: [
-      { name: "Knotless Braids", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Boho Braids", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Stitch Braids", sizes: "All lengths" },
-      { name: "Feed-in Braids", sizes: "Ponytails, All Backs, Alicia Keys, Fulani, Lemonade" },
-    ]
-  },
-  "locs-twists": {
-    title: "Locs & Twists",
-    image: "/hero-2.jpg",
-    services: [
-      { name: "Locs", details: "Two strand twist, Interlocking" },
-      { name: "Relocs", details: "Interlocking, Retwist (with/without styling)" },
-      { name: "Twists", details: "With expression" },
-      { name: "Kinky Twists", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-      { name: "Marley Twists", sizes: "Small, Medium, Large, Jumbo", lengths: "Shoulder, Mid-back, Waist" },
-    ]
-  },
-  "installs": {
-    title: "Installs & Styling",
-    image: "/hero-3.jpg",
-    services: [
-      { name: "Sew-ins" },
-      { name: "Retouch & Washing" },
-      { name: "Hair Straightening" },
-      { name: "New Client Consultation" },
-    ]
-  },
-  "beauty": {
-    title: "Beauty & Piercing",
-    image: "/hero-4.jpg",
-    services: [
-      { name: "Lash Extensions", details: "Classic, Hybrid, Volume" },
-      { name: "Brow Tint" },
-      { name: "Brow Lamination" },
-      { name: "Brow Tint & Lamination" },
-      { name: "Brow Shaping" },
-      { name: "SPMU Brows", details: "Microblading, Microshading, Combo" },
-      { name: "Piercing", details: "Earlobe, Helix, Tragus" },
-    ]
-  }
+// Map the URL slug to the database category name and a hero image
+const CATEGORY_INFO: Record<string, { title: string, dbCategory: string, image: string }> = {
+  "braids": { title: "Braids & Twists", dbCategory: "braids", image: "/hero-1.jpg" },
+  "locs-twists": { title: "Locs & Maintenance", dbCategory: "locs", image: "/hero-2.jpg" },
+  "installs": { title: "Installs & Styling", dbCategory: "installs", image: "/hero-3.jpg" },
+  "beauty": { title: "Beauty", dbCategory: "beauty", image: "/hero-4.jpg" },
 };
 
 export default function ServiceCategoryPage() {
   const params = useParams();
   const slug = params?.slug as string;
-  const category = ALL_SERVICES[slug];
+  const categoryInfo = CATEGORY_INFO[slug];
 
-  if (!category) {
-    notFound();
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!categoryInfo) return;
+
+    const fetchServices = async () => {
+      try {
+        const res = await fetch("/api/services");
+        const data = await res.json();
+        
+        // Filter only the services that match this category
+        const filtered = data.filter((s: any) => s.category === categoryInfo.dbCategory && s.inStock === 1);
+        setServices(filtered);
+      } catch (error) {
+        console.error("Failed to fetch services", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, [categoryInfo]);
+
+  if (!categoryInfo) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#FAF7FE]">
+        <h1 className="text-2xl text-ink">Category not found</h1>
+      </div>
+    );
   }
 
   return (
@@ -67,8 +56,8 @@ export default function ServiceCategoryPage() {
       {/* HERO SECTION */}
       <section className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden">
         <Image 
-          src={category.image} 
-          alt={category.title} 
+          src={categoryInfo.image} 
+          alt={categoryInfo.title} 
           fill 
           className="object-cover object-top" 
           priority 
@@ -87,45 +76,46 @@ export default function ServiceCategoryPage() {
             className="text-[48px] md:text-[72px] text-white leading-tight" 
             style={{ fontFamily: 'var(--font-cormorant), serif' }}
           >
-            {category.title}
+            {categoryInfo.title}
           </h1>
         </div>
       </section>
 
-      {/* SUBCATEGORY LIST */}
+      {/* SERVICES LIST */}
       <section className="mx-auto max-w-3xl px-4 md:px-8 py-12 md:py-20">
-        <div className="flex flex-col gap-4">
-          {category.services.map((service: any, idx: number) => (
-            <Link 
-              key={idx}
-              href={`/book?service=${encodeURIComponent(service.name)}`}
-              className="group flex flex-col p-6 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
-            >
-              <div className="flex items-center justify-between mb-2">
-                <h3 
-                  className="text-[24px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" 
-                  style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                >
-                  {service.name}
-                </h3>
-                <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2">
-                  →
+        {loading ? (
+          <div className="flex justify-center py-20"><div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>
+        ) : services.length === 0 ? (
+          <div className="text-center py-20 text-muted">No services available in this category right now.</div>
+        ) : (
+          <div className="flex flex-col gap-4">
+            {services.map((service, idx) => (
+              <Link 
+                key={idx}
+                href={`/book?service=${encodeURIComponent(service.title)}&id=${service.id}`}
+                className="group flex flex-col p-6 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <h3 
+                    className="text-[24px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" 
+                    style={{ fontFamily: 'var(--font-cormorant), serif' }}
+                  >
+                    {service.title}
+                  </h3>
+                  <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2">
+                    →
+                  </div>
                 </div>
-              </div>
-              
-              {(service.sizes || service.lengths || service.details) && (
-                <div 
-                  className="text-[12px] text-muted flex flex-col gap-1 mt-1" 
-                  style={{ fontFamily: 'var(--font-inter), sans-serif' }}
-                >
-                  {service.details && <p>{service.details}</p>}
-                  {service.sizes && <p><strong className="font-medium text-ink">Sizes:</strong> {service.sizes}</p>}
-                  {service.lengths && <p><strong className="font-medium text-ink">Lengths:</strong> {service.lengths}</p>}
-                </div>
-              )}
-            </Link>
-          ))}
-        </div>
+                
+                {service.description && (
+                  <p className="text-[13px] text-muted mb-4 max-w-xl" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                    {service.description}
+                  </p>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );
