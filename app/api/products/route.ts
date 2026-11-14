@@ -5,88 +5,90 @@ import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 3600;
 
 export async function GET() {
-  const db = getDb();
-  
-  const allProducts = await db.select({
-    id: products.id,
-    title: products.title,
-    price: products.price,
-    category: products.category,
-    image: products.image,
-    images: products.images,
-    description: products.description,
-    inStock: products.inStock,
-    sizes: products.sizes,
-    featured: products.featured,
-  }).from(products);
-
-  return NextResponse.json(allProducts, {
-    headers: {
-      "Cache-Control": "public, s-maxage=60, stale-while-revalidate=120",
-    },
-  });
+  try {
+    const db = getDb();
+    const allProducts = await db.select().from(products);
+    return NextResponse.json(allProducts);
+  } catch (error: any) {
+    console.error("GET PRODUCTS ERROR:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function POST(request: Request) {
-  const body = await request.json();
-  const db = getDb();
-  
-  await db.insert(products).values({
-    id: `p-${Date.now()}`,
-    title: body.title,
-    price: body.price,
-    description: body.description,
-    category: body.category,
-    image: body.image,
-    images: JSON.stringify(body.images || []),
-    sizes: JSON.stringify(body.sizes || []),
-    inStock: body.inStock ? 1 : 0,
-    featured: body.featured ? 1 : 0,
-  });
-
-  revalidatePath("/", "layout");
-  revalidatePath("/shop", "layout");
-
-  return NextResponse.json({ success: true });
-}
-
-export async function PUT(request: Request) {
-  const body = await request.json();
-  const db = getDb();
-  
-  await db.update(products)
-    .set({
+  try {
+    const body = await request.json();
+    const db = getDb();
+    
+    await db.insert(products).values({
+      id: `p-${Date.now()}`,
       title: body.title,
       price: body.price,
-      description: body.description,
+      description: body.description || "",
       category: body.category,
       image: body.image,
       images: JSON.stringify(body.images || []),
       sizes: JSON.stringify(body.sizes || []),
       inStock: body.inStock ? 1 : 0,
       featured: body.featured ? 1 : 0,
-    })
-    .where(eq(products.id, body.id));
+    });
 
-  revalidatePath("/", "layout");
-  revalidatePath("/shop", "layout");
+    revalidatePath("/", "layout");
+    revalidatePath("/shop", "layout");
 
-  return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("POST PRODUCT ERROR:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const db = getDb();
+    
+    await db.update(products)
+      .set({
+        title: body.title,
+        price: body.price,
+        description: body.description || "",
+        category: body.category,
+        image: body.image,
+        images: JSON.stringify(body.images || []),
+        sizes: JSON.stringify(body.sizes || []),
+        inStock: body.inStock ? 1 : 0,
+        featured: body.featured ? 1 : 0,
+      })
+      .where(eq(products.id, body.id));
+
+    revalidatePath("/", "layout");
+    revalidatePath("/shop", "layout");
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("PUT PRODUCT ERROR:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
 
 export async function DELETE(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-  if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "Missing ID" }, { status: 400 });
 
-  const db = getDb();
-  await db.delete(products).where(eq(products.id, id));
-  
-  revalidatePath("/", "layout");
-  revalidatePath("/shop", "layout");
+    const db = getDb();
+    await db.delete(products).where(eq(products.id, id));
+    
+    revalidatePath("/", "layout");
+    revalidatePath("/shop", "layout");
 
-  return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("DELETE PRODUCT ERROR:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
