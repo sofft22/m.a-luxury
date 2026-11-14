@@ -4,75 +4,63 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 
-// --- MOCK DATA FOR PRICING ---
-// In the future, this comes from your database.
-const PRICING: Record<string, { basePrice: number, sizes: string[], lengths: string[] }> = {
-  "Knotless Braids": {
-    basePrice: 70,
-    sizes: ["Small", "Medium", "Large", "Jumbo"],
-    lengths: ["Shoulder", "Mid-back", "Waist"],
-  },
-  "Boho Braids": {
-    basePrice: 80,
-    sizes: ["Small", "Medium", "Large", "Jumbo"],
-    lengths: ["Shoulder", "Mid-back", "Waist"],
-  },
-  "Kinky Twists": {
-    basePrice: 60,
-    sizes: ["Small", "Medium", "Large", "Jumbo"],
-    lengths: ["Shoulder", "Mid-back", "Waist"],
-  },
-  "Marley Twists": {
-    basePrice: 60,
-    sizes: ["Small", "Medium", "Large", "Jumbo"],
-    lengths: ["Shoulder", "Mid-back", "Waist"],
-  },
-  "Locs": {
-    basePrice: 50,
-    sizes: ["Standard"],
-    lengths: ["Standard"],
-  }
-};
-
 function BookingOptionsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   
-  const serviceName = searchParams.get("service") || "General Appointment";
+  const serviceName = searchParams.get("service") || "Service";
+  const serviceId = searchParams.get("id");
+
+  const [serviceData, setServiceData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   
-  // Get pricing details for this service (fallback to a default if not found)
-  const details = PRICING[serviceName] || {
-    basePrice: 40,
-    sizes: ["Standard"],
-    lengths: ["Standard"],
-  };
+  // State for the selected option
+  const [selectedOption, setSelectedOption] = useState<{ name: string, price: number } | null>(null);
 
-  // State for selections
-  const [selectedSize, setSelectedSize] = useState(details.sizes[0]);
-  const [selectedLength, setSelectedLength] = useState(details.lengths[0]);
+  useEffect(() => {
+    if (!serviceId) {
+      setLoading(false);
+      return;
+    }
 
-  // Calculate price dynamically
-  // (Just a fake calculation for now: Size adds £20, Length adds £30)
-  const getPrice = () => {
-    let price = details.basePrice;
-    if (selectedSize === "Medium") price += 20;
-    if (selectedSize === "Large") price += 40;
-    if (selectedSize === "Jumbo") price += 50;
-    
-    if (selectedLength === "Mid-back") price += 20;
-    if (selectedLength === "Waist") price += 40;
-    
-    return price;
-  };
+    const fetchService = async () => {
+      try {
+        const res = await fetch("/api/services");
+        const data = await res.json();
+        const found = data.find((s: any) => s.id === serviceId);
+        
+        if (found) {
+          // Parse the options JSON string
+          const parsedOptions = typeof found.options === 'string' ? JSON.parse(found.options || "[]") : found.options;
+          setServiceData({ ...found, options: parsedOptions });
+          
+          // Auto-select the first option
+          if (parsedOptions.length > 0) {
+            setSelectedOption(parsedOptions[0]);
+          }
+        }
+      } catch (error) {
+        console.error("Failed to fetch service options", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const currentPrice = getPrice();
+    fetchService();
+  }, [serviceId]);
 
-  // When they click continue, we push to the calendar page with all the info in the URL
   const handleContinue = () => {
+    if (!selectedOption) return alert("Please select an option");
+    
+    // Pass everything to the calendar page
     router.push(
-      `/book/calendar?service=${encodeURIComponent(serviceName)}&size=${encodeURIComponent(selectedSize)}&length=${encodeURIComponent(selectedLength)}&price=${currentPrice}`
+      `/book/calendar?service=${encodeURIComponent(serviceName)}&option=${encodeURIComponent(selectedOption.name)}&price=${selectedOption.price}`
     );
   };
+
+  if (loading) {
+    return <div className="min-h-screen bg-[#FAF7FE] flex justify-center pt-32"><div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>;
+  }
 
   return (
     <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
@@ -98,55 +86,35 @@ function BookingOptionsContent() {
         {/* OPTIONS CARD */}
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5">
           
-          {/* SIZES */}
-          {details.sizes.length > 0 && details.sizes[0] !== "Standard" && (
-            <div className="mb-8">
-              <h2 className="text-[18px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                Select Size
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {details.sizes.map((size) => (
+          <div className="mb-8">
+            <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+              Select Size / Length
+            </h2>
+            
+            {serviceData && serviceData.options.length > 0 ? (
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                {serviceData.options.map((opt: any, i: number) => (
                   <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`py-3 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all ${
-                      selectedSize === size 
+                    key={i}
+                    onClick={() => setSelectedOption(opt)}
+                    className={`py-3 px-4 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 ${
+                      selectedOption?.name === opt.name 
                         ? "border-brand-700 bg-brand-700 text-white shadow-md" 
                         : "border-ink/10 text-ink hover:border-brand-700"
                     }`}
                     style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                   >
-                    {size}
+                    <span>{opt.name}</span>
+                    <span className={`text-[14px] ${selectedOption?.name === opt.name ? "text-white/80" : "text-brand-700"}`}>
+                      £{opt.price}
+                    </span>
                   </button>
                 ))}
               </div>
-            </div>
-          )}
-
-          {/* LENGTHS */}
-          {details.lengths.length > 0 && details.lengths[0] !== "Standard" && (
-            <div className="mb-8">
-              <h2 className="text-[18px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                Select Length
-              </h2>
-              <div className="grid grid-cols-3 gap-3">
-                {details.lengths.map((length) => (
-                  <button
-                    key={length}
-                    onClick={() => setSelectedLength(length)}
-                    className={`py-3 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all ${
-                      selectedLength === length 
-                        ? "border-brand-700 bg-brand-700 text-white shadow-md" 
-                        : "border-ink/10 text-ink hover:border-brand-700"
-                    }`}
-                    style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-                  >
-                    {length}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+            ) : (
+              <p className="text-[13px] text-muted">No specific options available for this service.</p>
+            )}
+          </div>
 
           {/* PRICE SUMMARY & CONTINUE */}
           <div className="pt-6 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
@@ -155,13 +123,14 @@ function BookingOptionsContent() {
                 Total Price
               </p>
               <p className="text-[32px] text-brand-700" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                £{currentPrice}
+                £{selectedOption ? selectedOption.price : 0}
               </p>
             </div>
             
             <button 
               onClick={handleContinue}
-              className="w-full md:w-auto rounded-full bg-brand-700 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900"
+              disabled={!selectedOption}
+              className="w-full md:w-auto rounded-full bg-brand-700 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 disabled:opacity-50"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               Continue to Date & Time →
