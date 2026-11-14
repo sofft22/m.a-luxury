@@ -46,6 +46,9 @@ const GALLERY_IMAGES = [
   }
 ];
 
+// YOUR TIKTOK LINK
+const TIKTOK_URL = "https://www.tiktok.com/@m.aluxury1";
+
 export function Gallery() {
   return (
     <section className="w-full bg-[#FAF7FE] py-12 px-4 md:py-16 md:px-6 border-t border-brand-100">
@@ -58,12 +61,12 @@ export function Gallery() {
               className="text-[32px] sm:text-[44px] text-ink leading-tight" 
               style={{ fontFamily: 'var(--font-cormorant), serif' }}
             >
-              Book the Look
+              The Style Edit
             </h2>
           </div>
           
           <Link 
-            href="https://www.tiktok.com/@m.aluxury1" 
+            href={TIKTOK_URL} 
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 pb-1 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.15em] text-brand-700 transition-colors hover:text-brand-900" 
@@ -74,12 +77,15 @@ export function Gallery() {
           </Link>
         </div>
 
-        {/* MASONRY GRID - REDUCED GAPS */}
+        {/* MASONRY GRID */}
         <div className="columns-2 md:columns-3 lg:columns-4 gap-2 md:gap-3 space-y-2 md:space-y-3">
           {GALLERY_IMAGES.map((img, idx) => (
             <Link
               key={idx}
-              href="/book"
+              // CHANGED: Now opens TikTok instead of /book
+              href={TIKTOK_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="group relative block w-full overflow-hidden rounded-lg break-inside-avoid"
             >
               {/* Image Container with varying aspect ratios */}
@@ -98,7 +104,7 @@ export function Gallery() {
                 {/* Hover Overlay (Desktop) */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col items-center justify-center">
                   <span 
-                    className="text-white text-[18px] italic translate-y-4 group-hover:translate-y-0 transition-transform duration-300 mb-3"
+                    className="text-white text-[20px] italic translate-y-4 group-hover:translate-y-0 transition-transform duration-300 mb-3"
                     style={{ fontFamily: 'var(--font-cormorant), serif' }}
                   >
                     {img.title}
@@ -107,7 +113,7 @@ export function Gallery() {
                     className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/90 translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 border-b border-white/50 pb-1"
                     style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                   >
-                    Book This Style
+                    Watch on TikTok
                   </span>
                 </div>
               </div>
