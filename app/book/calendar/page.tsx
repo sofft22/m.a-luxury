@@ -14,11 +14,12 @@ function CalendarContent() {
   const serviceId = searchParams.get("id") || "";
   const optionName = searchParams.get("option") || "";
   const price = searchParams.get("price") || "0";
-  const duration = Number(searchParams.get("duration")) || 60; // Duration passed from options page
+  const duration = Number(searchParams.get("duration")) || 60;
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
+  const [isClosed, setIsClosed] = useState(false);
   
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -31,30 +32,37 @@ function CalendarContent() {
     if (!selectedDate) return;
     fetch(`/api/bookings?date=${selectedDate}`)
       .then(res => res.json())
-      .then(data => setExistingBookings(Array.isArray(data) ? data : []))
+      .then(data => {
+        if (data.bookings) setExistingBookings(data.bookings);
+        // The API returns availability for this specific day (or null if using weekly schedule)
+        if (data.availability) {
+          setIsClosed(data.availability.isOpen === 0);
+        } else {
+          setIsClosed(false); // If no override, assume it's open based on weekly rules
+        }
+      })
       .catch(console.error);
   }, [selectedDate]);
 
   const generateSlots = () => {
-    if (!selectedDate) return [];
+    if (!selectedDate || isClosed) return [];
+    
+    // In a real app, you would fetch the WeeklySchedule here too.
+    // For now, assume 9 AM - 6 PM if no custom exception exists.
+    const openTime = 9; 
+    const closeTime = 18; 
+    
     const slots = [];
-    const openTime = 9; // 9 AM
-    const closeTime = 18; // 6 PM
     
     for (let hour = openTime; hour < closeTime; hour++) {
-      // Calculate end time of this slot based on the specific option's duration
       const endHour = hour + (duration / 60);
-      
       if (endHour > closeTime) continue;
 
       const startStr = `${hour.toString().padStart(2, '0')}:00`;
-      
-      // Format end string correctly (e.g., 13:30)
       const endH = Math.floor(endHour);
       const endM = (endHour % 1) !== 0 ? "30" : "00";
       const endStr = `${endH.toString().padStart(2, '0')}:${endM}`;
 
-      // Check if overlapping with existing bookings
       const isOverlapping = existingBookings.some(b => {
         return (startStr < b.endTime && endStr > b.startTime);
       });
@@ -105,7 +113,6 @@ function CalendarContent() {
     return (
       <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
         <div className="mx-auto max-w-2xl px-5 md:px-8">
-          
           <div className="bg-white p-8 md:p-12 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5 text-center">
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-8 h-8 text-green-600"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -194,7 +201,9 @@ function CalendarContent() {
           {selectedDate && (
             <div className="mb-8">
               <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>2. Pick a Time</h2>
-              {availableSlots.length === 0 ? (
+              {isClosed ? (
+                <p className="text-[13px] text-red-500 font-medium bg-red-50 p-4 rounded-lg">We are closed on this day. Please pick another date.</p>
+              ) : availableSlots.length === 0 ? (
                 <p className="text-[13px] text-red-500 font-medium bg-red-50 p-4 rounded-lg">No available slots for this day. Please pick another date.</p>
               ) : (
                 <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
