@@ -7,7 +7,6 @@ import { useCart } from "@/app/CartContext";
 
 const WHATSAPP_NUMBER = "447393157901"; 
 
-// UPDATED LINK TEXT
 function whatsappLink() {
   const text = "Hi M.a Luxury! I have a question 💜";
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
@@ -87,7 +86,7 @@ export function Header() {
   const textClass = overHero ? "text-white" : "text-ink";
   const logoClass = overHero ? "text-white" : "text-brand-700";
 
-  // FULL NAVIGATION WITH BOTH DROPDOWNS
+  // CLEANED UP NAV - ONLY ACTIVE ROUTES
   const NAV = [
     { 
       label: "Shop", 
@@ -113,35 +112,8 @@ export function Header() {
         { label: "Beauty", href: "/services/beauty" },
       ],
     },
-    { label: "Gallery", targetId: "gallery" },
-    { label: "Reviews", targetId: "reviews" },
     { label: "Book", href: "/book" },
-    { label: "About", targetId: "about" },
   ];
-
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: any) => {
-    if (item.href && !item.dropdown) return;
-    if (item.dropdown) return;
-
-    e.preventDefault();
-    setMobileMenuOpen(false);
-
-    const scrollToTarget = () => {
-      const el = document.getElementById(item.targetId);
-      if (el) {
-        const yOffset = -80;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
-    };
-
-    if (pathname === "/") {
-      scrollToTarget();
-    } else {
-      router.push("/");
-      setTimeout(scrollToTarget, 500);
-    }
-  };
 
   const showBanner =
     bannerActive && !isBannerClosed && (pathname === "/" || pathname === "/shop");
@@ -209,8 +181,7 @@ export function Header() {
                   onMouseLeave={() => item.dropdown && setDropdownOpen(false)}
                 >
                   <Link
-                    href={item.href || `/#${item.targetId}`}
-                    onClick={(e) => handleNavClick(e, item)}
+                    href={item.href}
                     className={`whitespace-nowrap text-[10px] font-normal tracking-[0.15em] uppercase transition-colors duration-300 hover:opacity-60 flex items-center gap-1 ${textClass}`}
                     style={{ fontFamily: "var(--font-inter), sans-serif" }}
                   >
@@ -248,7 +219,6 @@ export function Header() {
           </nav>
 
           <div className="flex justify-end items-center gap-3">
-            {/* UPDATED DESKTOP WHATSAPP BUTTON */}
             <a
               href={whatsappLink()}
               target="_blank"
@@ -312,7 +282,6 @@ export function Header() {
           </div>
 
           <div className="flex w-16 items-center justify-end gap-1">
-            {/* UPDATED MOBILE WHATSAPP ICON */}
             <a
               href={whatsappLink()}
               target="_blank"
@@ -399,8 +368,8 @@ export function Header() {
                     </>
                   ) : (
                     <Link
-                      href={item.href || `/#${item.targetId}`}
-                      onClick={(e) => handleNavClick(e, item)}
+                      href={item.href || "#"}
+                      onClick={() => setMobileMenuOpen(false)}
                       className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
                       style={{ fontFamily: "var(--font-inter), sans-serif" }}
                     >
@@ -411,7 +380,7 @@ export function Header() {
               );
             })}
 
-            {/* UPDATED MOBILE BOOK CTA */}
+            {/* MOBILE WHATSAPP CTA */}
             <a
               href={whatsappLink()}
               target="_blank"
