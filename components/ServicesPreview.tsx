@@ -17,11 +17,19 @@ export function ServicesPreview() {
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const res = await fetch("/api/services");
+        // ADDED CACHE BUSTER (?t=...)
+        const res = await fetch(`/api/services?t=${Date.now()}`);
         const data = await res.json();
-        setServices(data);
+        
+        // Check if data is an array before setting it
+        if (Array.isArray(data)) {
+          setServices(data);
+        } else {
+          setServices([]);
+        }
       } catch (error) {
         console.error("Failed to load services", error);
+        setServices([]);
       } finally {
         setLoading(false);
       }
@@ -71,7 +79,6 @@ export function ServicesPreview() {
                       {category.title}
                     </h3>
                     
-                    {/* ARROW INDICATOR */}
                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-50 text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-2">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="h-4 w-4">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -84,7 +91,6 @@ export function ServicesPreview() {
                 <ul className="flex flex-col gap-4 flex-grow mb-8">
                   {categoryServices.length > 0 ? (
                     categoryServices.map((item, i) => {
-                      // Get the lowest price from the options array
                       let startingPrice = "Contact";
                       try {
                         const parsedOptions = typeof item.options === 'string' ? JSON.parse(item.options) : item.options;
@@ -102,7 +108,6 @@ export function ServicesPreview() {
                           >
                             {item.title}
                           </span>
-                          {/* Dotted line connecting name to price */}
                           <div className="flex-grow border-b border-dotted border-ink/20 mx-2 relative -top-1" />
                           <span 
                             className="text-[12px] md:text-[13px] text-muted whitespace-nowrap"
