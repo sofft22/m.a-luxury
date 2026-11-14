@@ -14,15 +14,30 @@ export const products = sqliteTable("products", {
   featured: integer("featured").default(1),
 });
 
-// NEW SERVICES TABLE
 export const services = sqliteTable("services", {
   id: text("id").primaryKey(), 
   title: text("title").notNull(),
   category: text("category").notNull(),
   description: text("description"),
   options: text("options"), 
-  image: text("image"), // <--- ADD THIS LINE
+  image: text("image"), 
+  duration: integer("duration").default(60), // ADDED: Duration in minutes
   inStock: integer("inStock").default(1),
+});
+
+// NEW BOOKINGS TABLE
+export const bookings = sqliteTable("bookings", {
+  id: text("id").primaryKey(),
+  serviceId: text("serviceId").notNull(),
+  serviceName: text("serviceName").notNull(),
+  customerName: text("customerName").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email"),
+  date: text("date").notNull(),
+  startTime: text("startTime").notNull(),
+  endTime: text("endTime").notNull(),
+  depositPaid: integer("depositPaid").default(1),
+  createdAt: text("createdAt").notNull(),
 });
 
 export const orders = sqliteTable("orders", {
