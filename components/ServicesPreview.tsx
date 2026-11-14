@@ -4,32 +4,33 @@ import Link from "next/link";
 
 const CATEGORIES = [
   {
-    title: "Braids",
+    title: "Braids & Twists",
     slug: "braids",
     items: [
       { name: "Knotless Braids", price: "from £100" },
       { name: "Boho Braids", price: "from £120" },
-      { name: "Stitch Braids", price: "from £80" },
-      { name: "Feed-in Braids", price: "from £70" }
+      { name: "Stitch & Feed-in Braids", price: "from £70" },
+      { name: "Passion & Marley Twists", price: "from £90" },
+      { name: "Kinky Twists", price: "from £95" }
     ]
   },
   {
-    title: "Locs & Twists",
+    title: "Locs & Maintenance",
     slug: "locs-twists",
     items: [
-      { name: "Locs & Relocs", price: "from £90" },
-      { name: "Twists (Expression)", price: "from £85" },
-      { name: "Kinky Twists", price: "from £95" },
-      { name: "Marley Twists", price: "from £95" }
+      { name: "Locs (Two strand / Interlocking)", price: "from £80" },
+      { name: "Relocs (Retwist with styling)", price: "from £60" },
+      { name: "Retouch & Washing", price: "from £40" },
+      { name: "Hair Straightening", price: "from £30" }
     ]
   },
   {
     title: "Installs & Styling",
     slug: "installs",
     items: [
-      { name: "Sew-ins", price: "from £110" },
-      { name: "Retouch & Wash", price: "from £40" },
-      { name: "Hair Straightening", price: "from £30" }
+      { name: "Custom Sew-ins", price: "from £110" },
+      { name: "New Client Consultation", price: "Free" },
+      { name: "Bridal & Event Styling", price: "By Quote" }
     ]
   },
   {
@@ -37,8 +38,9 @@ const CATEGORIES = [
     slug: "beauty",
     items: [
       { name: "Lash Extensions", price: "from £45" },
-      { name: "Brow Lamination", price: "from £35" },
-      { name: "SPMU Brows", price: "from £150" }
+      { name: "Brow Tint & Lamination", price: "from £35" },
+      { name: "SPMU Brows", price: "from £150" },
+      { name: "Piercing", price: "from £15" }
     ]
   }
 ];
@@ -74,7 +76,7 @@ export function ServicesPreview() {
               <Link href={`/services/${category.slug}`} className="block">
                 <div className="flex items-baseline justify-between border-b border-ink/10 pb-4 mb-6 group-hover:border-brand-700 transition-colors">
                   <h3 
-                    className="text-[32px] md:text-[40px] text-ink italic group-hover:text-brand-700 transition-colors"
+                    className="text-[28px] md:text-[36px] text-ink italic group-hover:text-brand-700 transition-colors"
                     style={{ fontFamily: 'var(--font-cormorant), serif' }}
                   >
                     {category.title}
@@ -94,13 +96,13 @@ export function ServicesPreview() {
                 {category.items.map((item, i) => (
                   <li key={i} className="flex items-baseline justify-between group/item">
                     <span 
-                      className="text-[14px] md:text-[15px] text-ink font-medium transition-colors group-hover/item:text-brand-700"
+                      className="text-[13px] md:text-[14px] text-ink font-medium transition-colors group-hover/item:text-brand-700 pr-4"
                       style={{ fontFamily: 'var(--font-inter), sans-serif' }}
                     >
                       {item.name}
                     </span>
                     {/* Dotted line connecting name to price */}
-                    <div className="flex-grow border-b border-dotted border-ink/20 mx-4 relative -top-1" />
+                    <div className="flex-grow border-b border-dotted border-ink/20 mx-2 relative -top-1" />
                     <span 
                       className="text-[12px] md:text-[13px] text-muted whitespace-nowrap"
                       style={{ fontFamily: 'var(--font-inter), sans-serif' }}
