@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 function BookingOptionsContent() {
   const searchParams = useSearchParams();
@@ -14,7 +15,6 @@ function BookingOptionsContent() {
   const [serviceData, setServiceData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   
-  // State for the selected option (now includes duration)
   const [selectedOption, setSelectedOption] = useState<{ name: string, price: number, duration: number } | null>(null);
 
   useEffect(() => {
@@ -32,7 +32,6 @@ function BookingOptionsContent() {
         if (found) {
           const parsedOptions = typeof found.options === 'string' ? JSON.parse(found.options || "[]") : found.options;
           
-          // Ensure duration exists, fallback to 60
           const cleanOptions = parsedOptions.map((o: any) => ({
             ...o,
             duration: o.duration || 60
@@ -57,7 +56,6 @@ function BookingOptionsContent() {
   const handleContinue = () => {
     if (!selectedOption) return alert("Please select an option");
     
-    // Pass the specific option's duration to the calendar
     router.push(
       `/book/calendar?service=${encodeURIComponent(serviceName)}&id=${serviceId}&option=${encodeURIComponent(selectedOption.name)}&price=${selectedOption.price}&duration=${selectedOption.duration}`
     );
@@ -67,27 +65,44 @@ function BookingOptionsContent() {
     return <div className="min-h-screen bg-[#FAF7FE] flex justify-center pt-32"><div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>;
   }
 
+  // Fallback image if the service doesn't have one
+  const bannerImage = serviceData?.image || "/hero-1.jpg";
+
   return (
-    <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
-      <div className="mx-auto max-w-3xl px-5 md:px-8">
+    <main className="min-h-screen bg-[#FAF7FE] pb-24">
+      
+      {/* HERO BANNER WITH IMAGE */}
+      <section className="relative h-[35vh] md:h-[45vh] flex items-center justify-center overflow-hidden pt-[80px] md:pt-[100px]">
+        <Image 
+          src={bannerImage} 
+          alt={serviceName} 
+          fill 
+          className="object-cover object-top" 
+          priority 
+        />
+        {/* DARK OVERLAY */}
+        <div className="absolute inset-0 bg-black/60" />
         
-        <div className="mb-10 text-center">
+        <div className="relative z-10 text-center px-6 mt-10">
           <Link 
             href="/services" 
-            className="text-[10px] font-bold uppercase tracking-widest text-brand-700/60 hover:text-brand-700 transition-colors mb-6 inline-block"
+            className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white mb-4 inline-block transition-colors"
             style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
           >
             ← Back to services
           </Link>
-          <h1 className="text-[36px] md:text-[52px] text-ink leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+          <h1 className="text-[42px] md:text-[64px] text-white leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
             {serviceName}
           </h1>
-          <p className="text-[14px] text-muted">
-            Select your options below to see the final price.
+          <p className="text-[13px] text-white/80">
+            Select your options below
           </p>
         </div>
+      </section>
 
-        <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5">
+      {/* OPTIONS CARD */}
+      <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
+        <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
           
           <div className="mb-8">
             <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
@@ -103,7 +118,7 @@ function BookingOptionsContent() {
                     className={`py-3 px-4 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 ${
                       selectedOption?.name === opt.name 
                         ? "border-brand-700 bg-brand-700 text-white shadow-md" 
-                        : "border-ink/10 text-ink hover:border-brand-700"
+                        : "border-ink/10 text-ink hover:border-brand-700 bg-white"
                     }`}
                     style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                   >
@@ -122,6 +137,7 @@ function BookingOptionsContent() {
             )}
           </div>
 
+          {/* PRICE SUMMARY & CONTINUE */}
           <div className="pt-6 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-muted mb-1" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
