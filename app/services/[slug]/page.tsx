@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-// Map the URL slug to the database category name and a hero image
 const CATEGORY_INFO: Record<string, { title: string, dbCategory: string, image: string }> = {
   "braids": { title: "Braids & Twists", dbCategory: "braids", image: "/hero-1.jpg" },
   "locs-twists": { title: "Locs & Maintenance", dbCategory: "locs", image: "/hero-2.jpg" },
@@ -26,12 +25,14 @@ export default function ServiceCategoryPage() {
 
     const fetchServices = async () => {
       try {
-        const res = await fetch("/api/services");
+        const res = await fetch(`/api/services?t=${Date.now()}`); // Cache buster
         const data = await res.json();
         
-        // Filter only the services that match this category
-        const filtered = data.filter((s: any) => s.category === categoryInfo.dbCategory && s.inStock === 1);
-        setServices(filtered);
+        if (Array.isArray(data)) {
+          // Filter only the services that match this category
+          const filtered = data.filter((s: any) => s.category === categoryInfo.dbCategory && s.inStock === 1);
+          setServices(filtered);
+        }
       } catch (error) {
         console.error("Failed to fetch services", error);
       } finally {
@@ -45,7 +46,7 @@ export default function ServiceCategoryPage() {
   if (!categoryInfo) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAF7FE]">
-        <h1 className="text-2xl text-ink">Category not found</h1>
+        <h1 className="text-2xl text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Category not found</h1>
       </div>
     );
   }
@@ -93,25 +94,39 @@ export default function ServiceCategoryPage() {
               <Link 
                 key={idx}
                 href={`/book?service=${encodeURIComponent(service.title)}&id=${service.id}`}
-                className="group flex flex-col p-6 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
+                className="group flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 p-6 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
               >
-                <div className="flex items-center justify-between mb-2">
-                  <h3 
-                    className="text-[24px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" 
-                    style={{ fontFamily: 'var(--font-cormorant), serif' }}
-                  >
-                    {service.title}
-                  </h3>
-                  <div className="h-8 w-8 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2">
-                    →
+                {/* SERVICE THUMBNAIL IMAGE */}
+                {service.image && (
+                  <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-brand-50">
+                    <Image 
+                      src={service.image} 
+                      alt={service.title} 
+                      fill 
+                      className="object-cover" 
+                    />
                   </div>
-                </div>
-                
-                {service.description && (
-                  <p className="text-[13px] text-muted mb-4 max-w-xl" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                    {service.description}
-                  </p>
                 )}
+
+                <div className="flex-1 w-full">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 
+                      className="text-[24px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" 
+                      style={{ fontFamily: 'var(--font-cormorant), serif' }}
+                    >
+                      {service.title}
+                    </h3>
+                    <div className="h-8 w-8 shrink-0 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2">
+                      →
+                    </div>
+                  </div>
+                  
+                  {service.description && (
+                    <p className="text-[13px] text-muted max-w-xl" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                      {service.description}
+                    </p>
+                  )}
+                </div>
               </Link>
             ))}
           </div>
