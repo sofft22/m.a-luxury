@@ -1,20 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import { LegalModal } from "./LegalModal";
 
-const WHATSAPP_NUMBER = "447393157901"; // CORRECTED NUMBER
-const INSTAGRAM_HANDLE = "ma.luxury"; // Replace if different
-const TIKTOK_HANDLE = "ma.luxury"; // Replace if different
-const EMAIL = "hello@maluxury.com"; // Replace if different
-const CITY = "Plymouth";
+const WHATSAPP_NUMBER = "447393157901";
 
 export function Footer() {
-  const router = useRouter();
-  const pathname = usePathname();
-
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalType, setLegalType] = useState<"policies" | "privacy" | null>(null);
 
@@ -23,216 +15,120 @@ export function Footer() {
     setLegalModalOpen(true);
   };
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, item: any) => {
-    if (item.href) return;
-    e.preventDefault();
-    const scrollToTarget = () => {
-      const el = document.getElementById(item.targetId);
-      if (el) {
-        const yOffset = -80;
-        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: "smooth" });
-      }
-    };
-    if (pathname === "/") {
-      scrollToTarget();
-    } else {
-      router.push("/");
-      setTimeout(scrollToTarget, 500);
-    }
-  };
-
-  const SHOP_LINKS = [
-    { label: "Bonestraight", href: "/shop?line=bonestraight" },
-    { label: "French Curls", href: "/shop?line=french-curls" },
-    { label: "Kinky", href: "/shop?line=kinky" },
-    { label: "Passion Twist", href: "/shop?line=passion-twist" },
-    { label: "Expression", href: "/shop?line=expression" },
-    { label: "Crochet", href: "/shop?line=crochet" },
-    { label: "Sew-in Extensions", href: "/shop?line=sew-in" },
-    { label: "Locs Extensions", href: "/shop?line=locs" },
-    { label: "Shop all →", href: "/shop" },
-  ];
-
-  const SERVICE_LINKS = [
-    { label: "Knotless Braids", href: "/services/knotless-braids" },
-    { label: "Boho Braids", href: "/services/boho-braids" },
-    { label: "Locs & Retwist", href: "/services/locs-retwist" },
-    { label: "Twists", href: "/services/twists" },
-    { label: "Sew-ins", href: "/services/sew-ins" },
-    { label: "Lash Extensions", href: "/services/lash-extensions" },
-    { label: "Brows & SPMU", href: "/services/brows" },
-    { label: "Retouch & Wash", href: "/services/retouch" },
-    { label: "View all services →", href: "/services" },
-  ];
-
-  const INFO_LINKS = [
-    { label: "Book on WhatsApp", href: "/book" },
-    { label: "Gallery", targetId: "gallery" },
-    { label: "Reviews", targetId: "reviews" },
-    { label: "About", targetId: "about" },
-    { label: "FAQs", targetId: "faq" },
-  ];
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi M.a Luxury! I have a question 💜")}`;
 
   return (
-    <footer id="footer" className="w-full bg-brand-900 pt-20 pb-10 px-6 md:pt-24 md:px-12">
-      <div className="mx-auto max-w-[1200px]">
-        {/* TOP ROW: 4 columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 pb-16 border-b border-white/10">
-          {/* Column 1: Brand + tagline + socials */}
-          <div className="col-span-2 md:col-span-1 flex flex-col items-start">
-            <Link href="/" className="flex items-baseline mb-3">
-              <span
-                className="text-[22px] md:text-[24px] uppercase leading-none tracking-[0.2em] text-white"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 600 }}
+    <>
+      <footer className="w-full bg-brand-900 pt-20 pb-10 px-6 md:pt-24 md:px-12">
+        <div className="mx-auto max-w-7xl flex flex-col">
+          
+          {/* TOP SECTION - BRAND & CTA */}
+          <div className="flex flex-col items-start gap-6">
+            <div>
+              <h2 
+                className="text-[28px] md:text-[32px] text-white tracking-[0.15em] uppercase leading-none mb-3" 
+                style={{ fontFamily: "var(--font-montserrat), sans-serif", fontWeight: 500 }}
               >
-                M.a Luxury
-              </span>
-            </Link>
-            <p
-              className="text-[10px] md:text-[11px] uppercase tracking-[0.15em] mt-2 text-white/50"
-              style={{ fontFamily: "var(--font-inter), sans-serif" }}
-            >
-              Hair & Beauty · {CITY}
-            </p>
+                M.A LUXURY
+              </h2>
+              <p 
+                className="text-[10px] md:text-[11px] text-white/50 uppercase tracking-[0.2em]"
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              >
+                Hair & Beauty · Plymouth
+              </p>
+            </div>
 
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER}`}
+            <a 
+              href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 rounded-full border border-gold/40 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.15em] text-gold hover:bg-gold hover:text-brand-900 transition-colors"
+              className="inline-flex items-center justify-center rounded-full border border-gold/50 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gold transition-all hover:bg-gold hover:text-brand-900 mt-2"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               Book on WhatsApp
             </a>
           </div>
 
-          {/* Column 2: Shop */}
-          <div className="flex flex-col gap-3">
-            <h4
-              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+          {/* MIDDLE SECTION - LINKS */}
+          <div className="mt-16 grid grid-cols-2 gap-8 md:flex md:gap-16 border-t border-white/10 pt-10">
+            <Link 
+              href="/shop" 
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80 hover:text-gold transition-colors"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               Shop
-            </h4>
-            {SHOP_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Column 3: Services */}
-          <div className="flex flex-col gap-3">
-            <h4
-              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+            </Link>
+            <Link 
+              href="/services" 
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80 hover:text-gold transition-colors"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
               Services
-            </h4>
-            {SERVICE_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Column 4: Info + contact */}
-          <div className="flex flex-col gap-3">
-            <h4
-              className="text-[10px] font-bold uppercase tracking-[0.15em] mb-1 text-gold"
+            </Link>
+            <Link 
+              href="/book" 
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80 hover:text-gold transition-colors hidden md:block"
               style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
-              Info
-            </h4>
-            {INFO_LINKS.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href || `/#${item.targetId}`}
-                onClick={(e) => handleNavClick(e, item)}
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                {item.label}
-              </Link>
-            ))}
+              Book
+            </Link>
+            <button 
+              onClick={() => openLegal("policies")}
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80 hover:text-gold transition-colors text-left"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Policies
+            </button>
+            <button 
+              onClick={() => openLegal("privacy")}
+              className="text-[11px] font-bold uppercase tracking-[0.2em] text-gold/80 hover:text-gold transition-colors text-left hidden md:block"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Privacy
+            </button>
+          </div>
 
-            <div className="mt-3 border-t border-white/10 pt-3 flex flex-col gap-2">
-              <a
-                href={`https://instagram.com/${INSTAGRAM_HANDLE}`}
+          {/* BOTTOM SECTION - DM PROMPT & COPYRIGHT */}
+          <div className="mt-20 pt-10 border-t border-white/10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            
+            <div>
+              <p 
+                className="text-[20px] md:text-[24px] text-white/90 mb-2"
+                style={{ fontFamily: "var(--font-cormorant), serif" }}
+              >
+                Why not..
+              </p>
+              <a 
+                href={whatsappLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
+                className="group flex items-center gap-2 text-[14px] md:text-[16px] text-white/60 hover:text-white transition-colors"
                 style={{ fontFamily: "var(--font-inter), sans-serif" }}
               >
-                Instagram
-              </a>
-              <a
-                href={`https://tiktok.com/@${TIKTOK_HANDLE}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                TikTok
-              </a>
-              <a
-                href={`mailto:${EMAIL}`}
-                className="text-[12px] text-white/70 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                {EMAIL}
+                Have any questions, send a DM
+                <span className="text-brand-700 bg-white/10 rounded-full p-1 group-hover:bg-white group-hover:text-brand-900 transition-all">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+                </span>
               </a>
             </div>
+
+            <p 
+              className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30"
+              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+            >
+              © {new Date().getFullYear()} M.A Luxury. All rights reserved.
+            </p>
           </div>
-        </div>
 
-        {/* MIDDLE: policies row */}
-        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 pt-8 pb-6 border-b border-white/10">
-          <button
-            onClick={() => openLegal("policies")}
-            className="text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-          >
-            Terms & Policies
-          </button>
-          <button
-            onClick={() => openLegal("privacy")}
-            className="text-[10px] uppercase tracking-[0.15em] text-white/50 hover:text-white transition-colors"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-          >
-            Privacy
-          </button>
         </div>
+      </footer>
 
-        {/* BOTTOM BAR */}
-        <div className="flex flex-col items-center justify-between pt-6 gap-3 md:flex-row">
-          <p
-            className="text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-center md:text-left text-white/50"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-          >
-            © {new Date().getFullYear()} M.a Luxury. All rights reserved.
-          </p>
-          <p
-            className="text-[9px] md:text-[10px] uppercase tracking-[0.1em] text-white/40 italic"
-            style={{ fontFamily: 'var(--font-cormorant), serif' }}
-          >
-            Luxury hair for luxury girls. 💜
-          </p>
-        </div>
-      </div>
-
-      <LegalModal isOpen={legalModalOpen} onClose={() => setLegalModalOpen(false)} type={legalType} />
-    </footer>
+      <LegalModal 
+        isOpen={legalModalOpen} 
+        onClose={() => setLegalModalOpen(false)} 
+        type={legalType} 
+      />
+    </>
   );
 }
