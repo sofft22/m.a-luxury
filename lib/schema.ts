@@ -21,11 +21,10 @@ export const services = sqliteTable("services", {
   description: text("description"),
   options: text("options"), 
   image: text("image"), 
-  duration: integer("duration").default(60), // ADDED: Duration in minutes
+  duration: integer("duration").default(60), // Duration in minutes
   inStock: integer("inStock").default(1),
 });
 
-// NEW BOOKINGS TABLE
 export const bookings = sqliteTable("bookings", {
   id: text("id").primaryKey(),
   serviceId: text("serviceId").notNull(),
@@ -38,6 +37,14 @@ export const bookings = sqliteTable("bookings", {
   endTime: text("endTime").notNull(),
   depositPaid: integer("depositPaid").default(1),
   createdAt: text("createdAt").notNull(),
+});
+
+export const availability = sqliteTable("availability", {
+  id: text("id").primaryKey(),
+  date: text("date").notNull().unique(),
+  isOpen: integer("isOpen").default(1),
+  startTime: text("startTime").default("09:00"),
+  endTime: text("endTime").default("18:00"),
 });
 
 export const orders = sqliteTable("orders", {
