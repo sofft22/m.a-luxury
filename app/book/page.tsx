@@ -65,14 +65,14 @@ function BookingOptionsContent() {
     return <div className="min-h-screen bg-[#FAF7FE] flex justify-center pt-32"><div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>;
   }
 
-  // Fallback image if the service doesn't have one
   const bannerImage = serviceData?.image || "/hero-1.jpg";
 
   return (
     <main className="min-h-screen bg-[#FAF7FE] pb-24">
       
       {/* HERO BANNER WITH IMAGE */}
-      <section className="relative h-[35vh] md:h-[45vh] flex items-center justify-center overflow-hidden pt-[80px] md:pt-[100px]">
+      {/* Increased height to h-[45vh] so the text has room */}
+      <section className="relative h-[45vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-[80px] md:pt-[100px]">
         <Image 
           src={bannerImage} 
           alt={serviceName} 
@@ -80,7 +80,6 @@ function BookingOptionsContent() {
           className="object-cover object-top" 
           priority 
         />
-        {/* DARK OVERLAY */}
         <div className="absolute inset-0 bg-black/60" />
         
         <div className="relative z-10 text-center px-6 mt-10">
@@ -101,7 +100,8 @@ function BookingOptionsContent() {
       </section>
 
       {/* OPTIONS CARD */}
-      <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
+      {/* Removed -mt-10, using normal padding pt-12 */}
+      <div className="mx-auto max-w-3xl px-5 md:px-8 pt-12 relative z-20">
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
           
           <div className="mb-8">
