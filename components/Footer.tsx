@@ -22,7 +22,7 @@ export function Footer() {
       <footer className="w-full bg-brand-900 pt-20 pb-10 px-6 md:pt-24 md:px-12">
         <div className="mx-auto max-w-7xl flex flex-col">
           
-          {/* TOP SECTION - BRAND & CTA */}
+          {/* TOP SECTION - BRAND & DM PROMPT */}
           <div className="flex flex-col items-start gap-6">
             <div>
               <h2 
@@ -39,14 +39,18 @@ export function Footer() {
               </p>
             </div>
 
+            {/* REPLACED WHATSAPP BUTTON WITH DM PROMPT */}
             <a 
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full border border-gold/50 px-6 py-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gold transition-all hover:bg-gold hover:text-brand-900 mt-2"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              className="group flex items-center gap-3 text-[15px] md:text-[16px] text-white/90 hover:text-white transition-colors mt-2"
+              style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
-              Book on WhatsApp
+              Have any questions? Send a DM
+              <span className="text-brand-900 bg-white/10 rounded-full p-1.5 group-hover:bg-gold group-hover:text-brand-900 transition-all">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
+              </span>
             </a>
           </div>
 
@@ -89,24 +93,8 @@ export function Footer() {
             </button>
           </div>
 
-          {/* BOTTOM SECTION - DM PROMPT & COPYRIGHT */}
-          <div className="mt-20 pt-10 border-t border-white/10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
-            
-            <div>
-              <a 
-                href={whatsappLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3 text-[16px] md:text-[18px] text-white/80 hover:text-white transition-colors"
-                style={{ fontFamily: "var(--font-inter), sans-serif" }}
-              >
-                Have any questions? Send a DM
-                <span className="text-brand-900 bg-white/10 rounded-full p-1.5 group-hover:bg-gold group-hover:text-brand-900 transition-all">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-3.5 h-3.5"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" /></svg>
-                </span>
-              </a>
-            </div>
-
+          {/* BOTTOM SECTION - COPYRIGHT */}
+          <div className="mt-20 pt-10 border-t border-white/10 flex flex-col md:flex-row md:items-center md:justify-between">
             <p 
               className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-white/30"
               style={{ fontFamily: "var(--font-inter), sans-serif" }}
