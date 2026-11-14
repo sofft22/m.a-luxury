@@ -34,11 +34,10 @@ function CalendarContent() {
       .then(res => res.json())
       .then(data => {
         if (data.bookings) setExistingBookings(data.bookings);
-        // The API returns availability for this specific day (or null if using weekly schedule)
         if (data.availability) {
           setIsClosed(data.availability.isOpen === 0);
         } else {
-          setIsClosed(false); // If no override, assume it's open based on weekly rules
+          setIsClosed(false);
         }
       })
       .catch(console.error);
@@ -47,8 +46,6 @@ function CalendarContent() {
   const generateSlots = () => {
     if (!selectedDate || isClosed) return [];
     
-    // In a real app, you would fetch the WeeklySchedule here too.
-    // For now, assume 9 AM - 6 PM if no custom exception exists.
     const openTime = 9; 
     const closeTime = 18; 
     
@@ -106,13 +103,35 @@ function CalendarContent() {
     }
   };
 
-  const whatsappMessage = `Hi M.a Luxury! I've just booked ${serviceName} (${optionName}) on ${selectedDate} at ${selectedTime}. Here is my receipt for the £10 deposit.`;
+  // BEAUTIFULLY FORMATTED WHATSAPP MESSAGE
+  const whatsappMessage = 
+`Hi M.a Luxury! 💜
+
+I have just paid my deposit for a new booking.
+
+*Booking Details:*
+━━━━━━━━━━━━━━━
+*Service:* ${serviceName}
+*Style:* ${optionName}
+*Date:* ${selectedDate}
+*Time:* ${selectedTime}
+*Price:* £${price}
+━━━━━━━━━━━━━━━
+
+*Name:* ${name}
+*Phone:* ${phone}
+
+*Deposit Paid:* £10
+
+Please find my receipt attached. Looking forward to it!`;
+
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 
   if (isSuccess) {
     return (
       <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
         <div className="mx-auto max-w-2xl px-5 md:px-8">
+          
           <div className="bg-white p-8 md:p-12 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5 text-center">
             <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-6">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-8 h-8 text-green-600"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
