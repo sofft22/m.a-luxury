@@ -71,11 +71,13 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
       setActiveImage(displayImages[0] || "");
 
       fetch("/api/reviews").then(res => res.json()).then(data => {
-        const productReviews = data.filter((r: any) => r.productId === product.id && r.approved === 1);
-        setReviews(productReviews);
+        if (Array.isArray(data)) {
+          const productReviews = data.filter((r: any) => r.productId === product.id && r.approved === 1);
+          setReviews(productReviews);
+        }
       }).catch(() => {});
 
-      // INSTANT FBT LOGIC
+      // FBT LOGIC
       let pool = allProducts;
       if (pool.length === 0) {
         const cached = localStorage.getItem("ma_products_cache");
@@ -114,7 +116,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
     setAddedFlash(true);
     setTimeout(() => {
       setAddedFlash(false);
-      setIsCartOpen(true); // Open cart instantly
+      setIsCartOpen(true); 
     }, 800);
   };
 
@@ -132,7 +134,7 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
     setShowReviewForm(false);
     setReviewName("");
     setReviewComment("");
-    alert("Thank you! Your review has been submitted and is pending approval.");
+    alert("Thank you! Your review has been submitted.");
   };
 
   const shareUrl = typeof window !== "undefined" ? `${window.location.origin}?product=${product.id}` : "";
@@ -144,68 +146,72 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-ink/80 backdrop-blur-sm md:p-8" onClick={onClose}>
+      <div className="fixed inset-0 z-50 flex items-stretch justify-center bg-ink/80 backdrop-blur-md md:p-8" onClick={onClose}>
         
-        <div onClick={(e) => e.stopPropagation()} className="relative flex h-full w-full flex-col bg-[#FAF7FE] shadow-2xl md:h-auto md:max-h-[92vh] md:max-w-[1000px] md:rounded-xl overflow-hidden">
+        <div onClick={(e) => e.stopPropagation()} className="relative flex h-full w-full flex-col bg-white shadow-2xl md:h-auto md:max-h-[92vh] md:max-w-[1000px] md:rounded-2xl overflow-hidden">
           
           <div className="flex w-full flex-1 flex-col overflow-y-auto overscroll-contain scroll-smooth">
             
-            <header className="relative z-20 flex w-full flex-col border-b border-ink/10 bg-[#FAF7FE]">
+            {/* CLEAN HEADER */}
+            <header className="relative z-20 flex w-full flex-col border-b border-ink/10 bg-white/80 backdrop-blur-md sticky top-0">
               <div className="mx-auto flex h-[60px] w-full items-center justify-between px-6">
-                <button onClick={onClose} className="text-ink/50 hover:text-ink transition-colors">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                <button onClick={onClose} className="text-ink/50 hover:text-ink transition-colors p-2 -ml-2 rounded-full hover:bg-ink/5">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-5 w-5"><path d="M6 6l12 12M18 6L6 18" /></svg>
                 </button>
-                <span className="uppercase tracking-[0.2em] text-brand-700 text-[18px] font-semibold" style={{ fontFamily: 'var(--font-cormorant), serif' }}>M.A LUXURY</span>
-                <button onClick={() => setIsCartOpen(true)} className="relative text-ink hover:scale-105 transition-transform">
+                <span className="uppercase tracking-[0.2em] text-brand-700 text-[18px]" style={{ fontFamily: 'var(--font-cormorant), serif', fontWeight: 600 }}>M.A LUXURY</span>
+                <button onClick={() => setIsCartOpen(true)} className="relative text-ink hover:scale-105 transition-transform p-2 -mr-2 rounded-full hover:bg-ink/5">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-5 w-5"><path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 016 0v2" /></svg>
-                  {cartCount > 0 && <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-brand-700 text-[9px] text-white">{cartCount}</span>}
+                  {cartCount > 0 && <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-brand-700 text-[9px] text-white">{cartCount}</span>}
                 </button>
               </div>
             </header>
 
-            <div className="flex w-full flex-col md:flex-row border-b border-ink/10">
+            <div className="flex w-full flex-col md:flex-row">
               
-              <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-brand-100">
-                <div className="relative w-full h-[50vh] sm:h-[600px]">
-                  <div className="relative w-full h-full cursor-zoom-in group" onClick={() => setIsLightboxOpen(true)}>
+              {/* IMAGE SECTION */}
+              <div className="w-full md:w-1/2 shrink-0 flex flex-col bg-[#FAF7FE] border-r border-ink/5">
+                <div className="relative w-full h-[50vh] sm:h-[600px] p-6 md:p-10">
+                  <div className="relative w-full h-full cursor-zoom-in group rounded-xl overflow-hidden shadow-sm" onClick={() => setIsLightboxOpen(true)}>
                     {!mainImgLoaded && <div className="absolute inset-0 animate-pulse bg-brand-100" />}
                     <Image 
                       src={activeImage || "/placeholder.png"} 
                       alt={product.title} 
                       fill 
-                      className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isSoldOut ? 'opacity-80 grayscale-[50%]' : ''}`}
+                      className={`object-cover transition-transform duration-700 group-hover:scale-105 ${isSoldOut ? 'opacity-60 grayscale-[50%]' : ''}`}
                       onLoad={() => setMainImgLoaded(true)} 
                       priority 
                     />
-                    
                     {isSoldOut && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/10">
-                        <span className="bg-white/90 px-6 py-2 text-[12px] font-bold uppercase tracking-widest text-ink rounded-sm shadow-sm">Sold Out</span>
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <span className="bg-white px-8 py-3 text-[11px] font-bold uppercase tracking-widest text-ink rounded-sm shadow-xl">Sold Out</span>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="w-full md:w-1/2 flex flex-col p-6 md:p-10">
-                <div className="mb-6">
-                  <h2 className="text-[32px] leading-tight text-ink md:text-[40px]" style={{ fontFamily: "var(--font-cormorant), serif" }}>{product.title}</h2>
-                  <p className="mt-2 text-[22px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
+              {/* DETAILS SECTION */}
+              <div className="w-full md:w-1/2 flex flex-col p-6 md:p-12">
+                <div className="mb-8">
+                  <h2 className="text-[36px] leading-tight text-ink md:text-[44px]" style={{ fontFamily: "var(--font-cormorant), serif" }}>{product.title}</h2>
+                  <p className="mt-3 text-[26px] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>£{currentPrice.toFixed(2)}</p>
                 </div>
 
-                <p className="text-[14px] leading-relaxed text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>{product.description || "Premium quality hair extensions."}</p>
+                <p className="text-[14px] leading-loose text-muted mb-8" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+                  {product.description || "Premium quality hair extensions, hand-selected for a flawless, luxury finish."}
+                </p>
                 
-                <hr className="mb-8 border-ink/10" />
+                <hr className="mb-8 border-ink/5" />
 
                 {parsedSizes.length > 0 && (
                   <div className="mb-8">
-                    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Select Length</p>
+                    <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Select Length</p>
                     <div className="grid grid-cols-3 gap-2">
                       {parsedSizes.map((s: any) => (
                         <button 
                           key={s.size} 
                           onClick={() => setSelectedSize(s.size)} 
-                          className={`flex h-[44px] items-center justify-center text-[11px] font-bold uppercase tracking-wide transition-all border rounded-full ${selectedSize === s.size ? "bg-brand-700 border-brand-700 text-white" : "border-ink/20 text-ink hover:border-brand-700 hover:text-brand-700"}`} 
+                          className={`flex h-[48px] items-center justify-center text-[11px] font-bold uppercase tracking-wide transition-all border rounded-lg ${selectedSize === s.size ? "bg-ink border-ink text-white shadow-md" : "bg-white border-ink/20 text-ink hover:border-ink"}`} 
                           style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
                         >
                           {s.size}
@@ -215,37 +221,38 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                   </div>
                 )}
 
-                <div className="flex flex-col gap-4 mb-8">
+                <div className="flex flex-col gap-6 mb-10">
                   {!isSoldOut && (
                     <div className="flex items-center gap-4">
                       <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Qty</p>
                       <div className="inline-flex items-stretch overflow-hidden rounded-full border border-ink/20 bg-white">
-                        <button onClick={() => setQty(Math.max(1, qty - 1))} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-brand-700 hover:text-white transition-colors">−</button>
+                        <button onClick={() => setQty(Math.max(1, qty - 1))} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-ink hover:text-white transition-colors">−</button>
                         <span className="flex h-10 w-12 items-center justify-center text-[13px] font-bold text-ink">{qty}</span>
-                        <button onClick={() => setQty(qty + 1)} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-brand-700 hover:text-white transition-colors">+</button>
+                        <button onClick={() => setQty(qty + 1)} className="flex h-10 w-10 items-center justify-center text-ink/60 hover:bg-ink hover:text-white transition-colors">+</button>
                       </div>
                     </div>
                   )}
 
                   {isSoldOut ? (
-                    <button disabled className="w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] bg-ink/10 text-ink/40 cursor-not-allowed" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Sold Out</button>
+                    <button disabled className="w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] bg-ink/5 text-ink/30 cursor-not-allowed" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Sold Out</button>
                   ) : (
-                    <button onClick={handleAdd} className={`w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${addedFlash ? "bg-brand-900 text-white scale-[0.98]" : "bg-brand-700 text-white hover:bg-brand-900"}`} style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+                    <button onClick={handleAdd} className={`w-full rounded-full py-4 text-center text-[11px] font-bold uppercase tracking-[0.15em] transition-all duration-300 ${addedFlash ? "bg-green-600 text-white scale-[0.98]" : "bg-ink text-white hover:bg-brand-700 shadow-xl shadow-ink/20"}`} style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
                       {addedFlash ? "Added to Bag ✓" : `Add to Bag — £${totalPrice.toFixed(2)}`}
                     </button>
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 mt-auto pt-4">
-                  <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-ink/50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Share</p>
-                  <div className="flex gap-2">
-                    <a href={`https://wa.me/?text=Check out this product: ${shareUrl}`} target="_blank" rel="noopener noreferrer" className="text-ink/50 hover:text-brand-700 transition-colors p-1">
-                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]">
+                {/* SHARE */}
+                <div className="flex items-center gap-4 mt-auto pt-6 border-t border-ink/5">
+                  <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-ink/40" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Share</p>
+                  <div className="flex gap-3">
+                    <a href={`https://wa.me/?text=Check out this product: ${shareUrl}`} target="_blank" rel="noopener noreferrer" className="text-ink/40 hover:text-brand-700 transition-colors">
+                      <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
                       </svg>
                     </a>
-                    <button onClick={copyToClipboard} className="text-ink/50 hover:text-brand-700 transition-colors p-1">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-[18px] w-[18px]">
+                    <button onClick={copyToClipboard} className="text-ink/40 hover:text-brand-700 transition-colors">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
                         <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                         <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                       </svg>
@@ -255,27 +262,24 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
               </div>
             </div>
 
-            <div className="w-full bg-white p-6 md:p-10">
+            {/* LOWER SECTION (FBT & Reviews) */}
+            <div className="w-full bg-[#FAF7FE] p-6 md:p-12 border-t border-ink/5">
               
-              {/* FREQUENTLY BOUGHT TOGETHER */}
               {relatedProducts.length > 0 && (
-                <div className="mb-14">
-                  <h3 className="mb-6 text-[28px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Frequently bought together</h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 gap-y-8 md:gap-x-5 md:gap-y-12">
+                <div className="mb-16">
+                  <h3 className="mb-8 text-[24px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Complete the Look</h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-6 md:gap-y-12">
                     {relatedProducts.map((p) => {
                       const rawPrice = typeof p.price === "number" ? p.price : parseFloat(String(p.price).replace(/[^0-9.]/g, ""));
                       const formattedTitle = p.title.replace(/\b\w/g, (char: string) => char.toUpperCase());
                       return (
-                        <div key={p.id} className="group flex flex-col cursor-pointer w-full">
-                          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-brand-100">
+                        <div key={p.id} className="group flex flex-col cursor-pointer w-full" onClick={() => { onClose(); setTimeout(() => window.location.reload(), 100); }}>
+                          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-white shadow-sm">
                             <Image src={p.image || "/placeholder.png"} alt={formattedTitle} fill className="object-cover transition-transform duration-700 ease-out group-hover:scale-105" />
                           </div>
-                          <div className="mt-3 flex flex-col gap-1">
+                          <div className="mt-4 flex flex-col gap-1">
                             <h3 className="text-[18px] text-ink leading-tight truncate" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{formattedTitle}</h3>
-                            <div className="flex items-baseline gap-1">
-                              <span className="text-[9px] font-bold uppercase tracking-widest text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>From</span>
-                              <p className="text-[15px] text-ink" style={{ fontFamily: 'var(--font-cormorant), serif' }}>£{rawPrice.toFixed(2)}</p>
-                            </div>
+                            <p className="text-[14px] text-muted" style={{ fontFamily: 'var(--font-cormorant), serif' }}>From £{rawPrice.toFixed(2)}</p>
                           </div>
                         </div>
                       )
@@ -284,40 +288,41 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
                 </div>
               )}
 
-              {/* Reviews */}
+              {/* ELEGANT REVIEWS */}
               <div>
-                <h3 className="mb-6 text-[28px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Reviews</h3>
+                <h3 className="mb-8 text-[24px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>Client Reviews</h3>
                 
                 {reviews.length === 0 ? (
-                  <p className="text-[13px] text-muted mb-6">No reviews yet. Be the first to review this item.</p>
+                  <p className="text-[13px] text-muted mb-6">No reviews yet. Be the first to share your experience.</p>
                 ) : (
-                  <div className="flex flex-col gap-5 mb-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                     {reviews.map(r => (
-                      <div key={r.id} className="bg-[#FAF7FE] p-5 rounded-lg border border-ink/5">
-                        <div className="flex items-center justify-between mb-3">
-                          <p className="text-[13px] font-bold text-ink">{r.customerName}</p>
-                          <span className="text-[12px] text-gold">{"★".repeat(r.rating)}</span>
+                      <div key={r.id} className="bg-white p-6 rounded-xl border border-ink/5 shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                          <p className="text-[12px] font-bold uppercase tracking-wider text-ink">{r.customerName}</p>
+                          <span className="text-[14px] text-gold">{"★".repeat(r.rating)}</span>
                         </div>
-                        <p className="text-[14px] text-muted leading-relaxed">"{r.comment}"</p>
+                        <p className="text-[14px] text-muted leading-relaxed italic" style={{ fontFamily: 'var(--font-cormorant), serif' }}>"{r.comment}"</p>
                       </div>
                     ))}
                   </div>
                 )}
 
                 {!showReviewForm ? (
-                  <button onClick={() => setShowReviewForm(true)} className="rounded-full border border-ink px-8 py-3 text-[10px] font-bold uppercase tracking-widest text-ink hover:bg-ink hover:text-white transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Write a Review</button>
+                  <button onClick={() => setShowReviewForm(true)} className="rounded-full border border-ink/20 px-8 py-3.5 text-[10px] font-bold uppercase tracking-widest text-ink hover:bg-ink hover:text-white transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Write a Review</button>
                 ) : (
-                  <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4 bg-[#FAF7FE] p-6 rounded-xl border border-ink/10 max-w-xl">
-                    <input value={reviewName} onChange={e => setReviewName(e.target.value)} placeholder="Your Name" required className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
+                  <form onSubmit={handleReviewSubmit} className="flex flex-col gap-4 bg-white p-6 md:p-8 rounded-xl border border-ink/10 max-w-2xl shadow-sm">
+                    <h4 className="text-[20px] text-ink mb-2" style={{ fontFamily: "var(--font-cormorant), serif" }}>Share your experience</h4>
+                    <input value={reviewName} onChange={e => setReviewName(e.target.value)} placeholder="Your Name" required className="w-full rounded-md border border-ink/20 bg-[#FAF7FE] px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
                     <div className="flex items-center gap-2">
-                      <span className="text-[13px] text-muted">Rating:</span>
+                      <span className="text-[12px] uppercase tracking-wider font-bold text-muted mr-2">Rating:</span>
                       {[1,2,3,4,5].map(star => (
-                        <button type="button" key={star} onClick={() => setReviewRating(star)} className={`text-[20px] transition-colors ${star <= reviewRating ? "text-gold" : "text-ink/20"}`}>★</button>
+                        <button type="button" key={star} onClick={() => setReviewRating(star)} className={`text-[24px] transition-colors ${star <= reviewRating ? "text-gold" : "text-ink/10"}`}>★</button>
                       ))}
                     </div>
-                    <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)} placeholder="Your review..." required rows={4} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
-                    <div className="flex gap-3 pt-2">
-                      <button type="submit" className="flex-1 bg-brand-700 text-white text-[10px] font-bold uppercase tracking-widest rounded-full py-3.5 hover:bg-brand-900 transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Submit</button>
+                    <textarea value={reviewComment} onChange={e => setReviewComment(e.target.value)} placeholder="How was the hair quality?" required rows={4} className="w-full rounded-md border border-ink/20 bg-[#FAF7FE] px-4 py-3 text-[14px] outline-none focus:border-brand-700" />
+                    <div className="flex gap-4 pt-2">
+                      <button type="submit" className="flex-1 bg-ink text-white text-[10px] font-bold uppercase tracking-widest rounded-full py-4 hover:bg-brand-700 transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Submit Review</button>
                       <button type="button" onClick={() => setShowReviewForm(false)} className="px-6 text-[10px] font-bold uppercase tracking-widest text-ink/50 hover:text-ink transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Cancel</button>
                     </div>
                   </form>
@@ -329,10 +334,10 @@ export function ProductModal({ product, onClose, allProducts = [] }: Props) {
         </div>
       </div>
 
-      {/* LIGHTBOX */}
+      {/* FULLSCREEN LIGHTBOX */}
       {isLightboxOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md" onClick={() => setIsLightboxOpen(false)}>
-          <Image src={activeImage || "/placeholder.png"} alt={product.title} fill className="object-contain" />
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md cursor-zoom-out" onClick={() => setIsLightboxOpen(false)}>
+          <Image src={activeImage || "/placeholder.png"} alt={product.title} fill className="object-contain p-4 md:p-12" />
           <button className="absolute left-6 top-6 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md hover:bg-white/20 transition-all">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-6 w-6"><path d="M6 6l12 12M18 6L6 18" /></svg>
           </button>
