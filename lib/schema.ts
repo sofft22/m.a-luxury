@@ -1,19 +1,17 @@
 // lib/schema.ts
-import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const products = sqliteTable("products", {
   id: text("id").primaryKey(), 
   title: text("title").notNull(),
   price: integer("price").notNull(),
-  weight: real("weight").default(0), // <--- NEW COLUMN ADDED HERE
   description: text("description"), 
   category: text("category").notNull(),
   image: text("image").notNull(),
   images: text("images"),
   inStock: integer("inStock").default(1),
-  sizes: text("sizes").notNull(),
-  featured: integer("featured").default(0),
-  isBulk: integer("isBulk").default(0),
+  sizes: text("sizes"), // This stores your lengths
+  featured: integer("featured").default(1),
 });
 
 export const orders = sqliteTable("orders", {
