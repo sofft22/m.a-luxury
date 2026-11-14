@@ -2,98 +2,50 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ProductCard } from "./ProductCard";
 
 interface Props {
   onProductClick: (product: any) => void;
 }
 
-const FALLBACK_PRODUCTS = [
-  {
-    id: "p-1",
-    title: "Bonestraight",
-    price: 45,
-    image: "/hero-1.jpg",
-    featured: 1,
-    inStock: 1,
-    sizes: JSON.stringify([{ size: '16"', price: 45 }]),
-  },
-  {
-    id: "p-2",
-    title: "French Curls",
-    price: 50,
-    image: "/hero-2.jpg",
-    featured: 1,
-    inStock: 1,
-    sizes: JSON.stringify([{ size: '18"', price: 50 }]),
-  },
-  {
-    id: "p-3",
-    title: "Passion Twist",
-    price: 40,
-    image: "/hero-3.jpg",
-    featured: 1,
-    inStock: 1,
-    sizes: JSON.stringify([{ size: '24"', price: 40 }]),
-  },
-  {
-    id: "p-4",
-    title: "Kinky",
-    price: 45,
-    image: "/hero-4.jpg",
-    featured: 1,
-    inStock: 1,
-    sizes: JSON.stringify([{ size: '18"', price: 45 }]),
-  }
-];
-
 export function FeaturedProducts({ onProductClick }: Props) {
   const [featuredItems, setFeaturedItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1. Try cache first
-    const cached = localStorage.getItem("ma_products_cache");
-    if (cached) {
+    const fetchFeatured = async () => {
       try {
-        const parsed = JSON.parse(cached);
-        const featured = parsed.filter((p: any) => p.featured === 1);
-        if (featured.length > 0) {
-          setFeaturedItems(featured.slice(0, 4)); 
-          setLoading(false);
-        }
-      } catch (e) {}
-    }
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        
+        // Filter only items marked as "featured" and format them
+        const featured = data
+          .filter((p: any) => p.featured === 1)
+          .slice(0, 4)
+          .map((p: any) => ({
+            ...p,
+            sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes || "[]") : p.sizes
+          }));
 
-    // 2. Fetch fresh from API
-    fetch("/api/products")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data && data.length > 0) {
-          const featured = data.filter((p: any) => p.featured === 1);
-          setFeaturedItems(featured.slice(0, 4));
-          localStorage.setItem("ma_products_cache", JSON.stringify(data));
-        } else {
-          setFeaturedItems(FALLBACK_PRODUCTS);
-        }
+        setFeaturedItems(featured);
+      } catch (error) {
+        console.error("Failed to load featured products", error);
+      } finally {
         setLoading(false);
-      })
-      .catch(() => {
-        setFeaturedItems(FALLBACK_PRODUCTS);
-        setLoading(false);
-      });
+      }
+    };
+
+    fetchFeatured();
   }, []);
 
   if (loading) return null; 
-  
-  const displayItems = featuredItems.length > 0 ? featuredItems : FALLBACK_PRODUCTS;
+  if (featuredItems.length === 0) return null; // Don't show section if no featured products
 
   return (
     <section className="w-full bg-[#FAF7FE] py-20 px-4 md:py-28 md:px-6">
       <div className="mx-auto max-w-[1400px]">
         
-        {/* HEADER - Forced to be side-by-side on mobile with justify-between */}
+        {/* HEADER */}
         <div className="mb-12 flex flex-row items-end justify-between gap-2 sm:gap-6 border-b border-brand-100 pb-6">
           <div>
             <h2 
@@ -116,7 +68,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
 
         {/* GRID */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6 lg:gap-y-14">
-          {displayItems.map((item, idx) => (
+          {featuredItems.map((item, idx) => (
             <div 
               key={item.id} 
               className="rounded-xl overflow-hidden group cursor-pointer" 
@@ -126,7 +78,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
                 product={{
                   ...item,
                   price: `£${item.price.toLocaleString()}`, 
-                  sizes: typeof item.sizes === 'string' ? JSON.parse(item.sizes || "[]") : item.sizes
+                  sizes: item.sizes
                 }} 
                 priority={idx < 2}
               />
