@@ -19,6 +19,10 @@ function CalendarContent() {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
+  
+  // Availability States
+  const [weeklySchedule, setWeeklySchedule] = useState<any[]>([]);
+  const [dayException, setDayException] = useState<any>(null);
   const [isClosed, setIsClosed] = useState(false);
   
   const [name, setName] = useState("");
@@ -34,25 +38,59 @@ function CalendarContent() {
       .then(res => res.json())
       .then(data => {
         if (data.bookings) setExistingBookings(data.bookings);
-        if (data.availability) {
-          setIsClosed(data.availability.isOpen === 0);
-        } else {
-          setIsClosed(false);
-        }
+        if (data.weeklySchedule) setWeeklySchedule(data.weeklySchedule);
+        if (data.exception) setDayException(data.exception);
+        else setDayException(null);
       })
       .catch(console.error);
   }, [selectedDate]);
 
+  // CALCULATE SLOTS
   const generateSlots = () => {
-    if (!selectedDate || isClosed) return [];
-    
-    const openTime = 9; 
-    const closeTime = 18; 
+    if (!selectedDate) return [];
+
+    // 1. Check if there is a specific exception for this day
+    if (dayException) {
+      if (dayException.isOpen === 0) {
+        setIsClosed(true);
+        return [];
+      }
+    } else {
+      // 2. If no exception, check the standard weekly schedule
+      const dateObj = new Date(selectedDate);
+      const dayOfWeek = dateObj.getDay(); // 0 = Sunday, 1 = Monday, etc.
+      const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
+      
+      if (standardDay && standardDay.isOpen === 0) {
+        setIsClosed(true);
+        return [];
+      }
+    }
+
+    setIsClosed(false);
+
+    // 3. Determine open/close times
+    let openTime = 9; 
+    let closeTime = 18; 
+
+    const dateObj = new Date(selectedDate);
+    const dayOfWeek = dateObj.getDay();
+    const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
+
+    if (dayException && dayException.isOpen === 1) {
+      openTime = parseInt(dayException.startTime.split(":")[0]);
+      closeTime = parseInt(dayException.endTime.split(":")[0]);
+    } else if (standardDay) {
+      openTime = parseInt(standardDay.startTime.split(":")[0]);
+      closeTime = parseInt(standardDay.endTime.split(":")[0]);
+    }
     
     const slots = [];
     
     for (let hour = openTime; hour < closeTime; hour++) {
       const endHour = hour + (duration / 60);
+      
+      // If service runs past closing time, skip it
       if (endHour > closeTime) continue;
 
       const startStr = `${hour.toString().padStart(2, '0')}:00`;
@@ -103,7 +141,6 @@ function CalendarContent() {
     }
   };
 
-  // BEAUTIFULLY FORMATTED WHATSAPP MESSAGE
   const whatsappMessage = 
 `Hi M.a Luxury! 💜
 
