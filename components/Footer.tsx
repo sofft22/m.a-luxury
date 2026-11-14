@@ -5,7 +5,6 @@ import { useState } from "react";
 import { LegalModal } from "./LegalModal";
 
 const WHATSAPP_NUMBER = "447393157901";
-const EMAIL = "hello@maluxury.com";
 const CITY = "Plymouth";
 const INSTAGRAM_HANDLE = "ma.luxury";
 const TIKTOK_HANDLE = "m.aluxury1";
@@ -73,15 +72,6 @@ export function Footer() {
               >
                 Hair & Beauty · {CITY}
               </p>
-              
-              <div className="mt-6 flex flex-col gap-2">
-                <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="text-[12px] text-white/70 hover:text-white transition-colors">
-                  {WHATSAPP_NUMBER}
-                </a>
-                <a href={`mailto:${EMAIL}`} className="text-[12px] text-white/70 hover:text-white transition-colors">
-                  {EMAIL}
-                </a>
-              </div>
             </div>
 
             {/* Column 2: Shop */}
