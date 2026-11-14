@@ -12,22 +12,20 @@ function CalendarContent() {
   
   const serviceName = searchParams.get("service") || "Service";
   const serviceId = searchParams.get("id") || "";
+  const optionName = searchParams.get("option") || "";
   const price = searchParams.get("price") || "0";
-  const duration = Number(searchParams.get("duration")) || 60;
+  const duration = Number(searchParams.get("duration")) || 60; // Duration passed from options page
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
   
-  // Form
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   
-  // Success State
   const [isSuccess, setIsSuccess] = useState(false);
-  const [finalEndTime, setFinalEndTime] = useState("");
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -37,7 +35,6 @@ function CalendarContent() {
       .catch(console.error);
   }, [selectedDate]);
 
-  // TIME SLOT GENERATOR
   const generateSlots = () => {
     if (!selectedDate) return [];
     const slots = [];
@@ -45,12 +42,19 @@ function CalendarContent() {
     const closeTime = 18; // 6 PM
     
     for (let hour = openTime; hour < closeTime; hour++) {
+      // Calculate end time of this slot based on the specific option's duration
       const endHour = hour + (duration / 60);
+      
       if (endHour > closeTime) continue;
 
       const startStr = `${hour.toString().padStart(2, '0')}:00`;
-      const endStr = `${Math.floor(endHour).toString().padStart(2, '0')}:${(endHour % 1 === 0.5 ? '30' : '00')}`;
+      
+      // Format end string correctly (e.g., 13:30)
+      const endH = Math.floor(endHour);
+      const endM = (endHour % 1) !== 0 ? "30" : "00";
+      const endStr = `${endH.toString().padStart(2, '0')}:${endM}`;
 
+      // Check if overlapping with existing bookings
       const isOverlapping = existingBookings.some(b => {
         return (startStr < b.endTime && endStr > b.startTime);
       });
@@ -71,14 +75,13 @@ function CalendarContent() {
 
     setSubmitting(true);
     const selectedSlot = availableSlots.find(s => s.start === selectedTime);
-    setFinalEndTime(selectedSlot?.end || "");
     
     try {
       await fetch("/api/bookings", {
         method: "POST",
         body: JSON.stringify({
           serviceId,
-          serviceName,
+          serviceName: `${serviceName} (${optionName})`,
           customerName: name,
           phone,
           email,
@@ -87,8 +90,6 @@ function CalendarContent() {
           endTime: selectedSlot?.end
         })
       });
-
-      // Show the payment details screen
       setIsSuccess(true);
     } catch (error) {
       alert("Failed to book. Please try again.");
@@ -97,11 +98,9 @@ function CalendarContent() {
     }
   };
 
-  // WHATSAPP RECEIPT LINK
-  const whatsappMessage = `Hi M.a Luxury! I've just booked ${serviceName} on ${selectedDate} at ${selectedTime}. Here is my receipt for the £10 deposit.`;
+  const whatsappMessage = `Hi M.a Luxury! I've just booked ${serviceName} (${optionName}) on ${selectedDate} at ${selectedTime}. Here is my receipt for the £10 deposit.`;
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 
-  // RENDER PAYMENT SUCCESS SCREEN
   if (isSuccess) {
     return (
       <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
@@ -164,7 +163,6 @@ function CalendarContent() {
     );
   }
 
-  // RENDER BOOKING FORM
   return (
     <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
@@ -177,7 +175,7 @@ function CalendarContent() {
             Select Date & Time
           </h1>
           <p className="text-[14px] text-muted">
-            You are booking: <strong className="text-ink">{serviceName}</strong> (Est. {duration} mins) — <strong className="text-brand-700">£{price}</strong>
+            You are booking: <strong className="text-ink">{serviceName} ({optionName})</strong> — <strong className="text-brand-700">£{price}</strong>
           </p>
         </div>
 
