@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 interface Props {
   service: any | null;
@@ -13,6 +14,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
   const [category, setCategory] = useState(service?.category || "braids");
   const [description, setDescription] = useState(service?.description || "");
   const [inStock, setInStock] = useState(service ? service.inStock === 1 : true);
+  const [image, setImage] = useState(service?.image || "");
   
   const [options, setOptions] = useState<{ name: string; price: string }[]>(() => {
     if (!service || !service.options) return [{ name: "", price: "" }];
@@ -23,7 +25,36 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
     return [{ name: "", price: "" }];
   });
   
+  const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new window.Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 600;
+        const scale = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+        setImage(dataUrl);
+        setUploading(false);
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
 
   const handleSave = async () => {
     if (!title.trim()) return alert("Title is required.");
@@ -39,6 +70,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
       category,
       description: description.trim(),
       options: cleanOptions,
+      image,
       inStock,
     };
 
@@ -71,6 +103,25 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
 
         <div className="p-6 flex flex-col gap-6 pb-8">
           
+          {/* IMAGE UPLOAD */}
+          <div>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Service Image (Optional)</label>
+            <div className="flex items-center gap-4">
+              {image && (
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md bg-brand-100 border border-ink/10">
+                  <Image src={image} alt="Service" fill className="object-cover" />
+                  <button onClick={() => setImage("")} className="absolute top-1 right-1 bg-white/90 rounded-full p-1 text-red-500 shadow-sm">
+                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-3 w-3"><path d="M6 6l12 12M18 6L6 18" /></svg>
+                  </button>
+                </div>
+              )}
+              <label className="flex flex-1 cursor-pointer items-center justify-center rounded-md border-2 border-dashed border-ink/20 bg-white py-4 text-[11px] font-bold uppercase tracking-wider text-ink/50 hover:border-brand-700 transition-colors">
+                {uploading ? "Compressing..." : image ? "Change Image" : "Upload Image"}
+                <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={uploading} />
+              </label>
+            </div>
+          </div>
+
           <div>
             <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Service Title</label>
             <input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="e.g. Knotless Braids" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
@@ -132,7 +183,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
         </div>
 
         <div className="p-6 pb-8 sm:pb-6 bg-white border-t border-ink/10 shrink-0">
-          <button onClick={handleSave} disabled={saving} className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-brand-900 disabled:opacity-50">
+          <button onClick={handleSave} disabled={saving || uploading} className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-brand-900 disabled:opacity-50">
             {saving ? "Saving..." : service ? "Save Changes" : "Create Service"}
           </button>
         </div>
