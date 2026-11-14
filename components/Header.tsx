@@ -24,8 +24,14 @@ export function Header() {
   }
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false);
-  const [desktopCategoriesOpen, setDesktopCategoriesOpen] = useState(false);
+  
+  // Mobile states for dropdowns
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  
+  // Desktop states for hover
+  const [desktopShopOpen, setDesktopShopOpen] = useState(false);
+  const [desktopServicesOpen, setDesktopServicesOpen] = useState(false);
 
   const [scrolled, setScrolled] = useState(0);
   const [heroHeight, setHeroHeight] = useState(0);
@@ -36,7 +42,8 @@ export function Header() {
 
   useEffect(() => {
     setMobileMenuOpen(false);
-    setMobileCategoriesOpen(false);
+    setMobileShopOpen(false);
+    setMobileServicesOpen(false);
   }, [pathname]);
 
   useEffect(() => {
@@ -79,12 +86,24 @@ export function Header() {
 
   const overHero = heroHeight > 0 && scrolled < heroHeight - 40;
   const textClass = overHero ? "text-white" : "text-ink";
-  
   const logoClass = overHero ? "text-white" : "text-brand-700";
 
-  // UPDATED NAV WITH SUB-CATEGORIES UNDER SERVICES
+  // FULL NAVIGATION WITH BOTH DROPDOWNS
   const NAV = [
-    { label: "Shop", href: "/shop" },
+    { 
+      label: "Shop", 
+      href: "/shop",
+      dropdown: [
+        { label: "Bonestraight", href: "/shop?category=bonestraight" },
+        { label: "French Curls", href: "/shop?category=french-curls" },
+        { label: "Kinky", href: "/shop?category=kinky" },
+        { label: "Passion Twist", href: "/shop?category=passion-twist" },
+        { label: "Expression", href: "/shop?category=expression" },
+        { label: "Crochet", href: "/shop?category=crochet" },
+        { label: "Sew-in", href: "/shop?category=sew-in" },
+        { label: "Locs", href: "/shop?category=locs" },
+      ]
+    },
     {
       label: "Services",
       href: "/services",
@@ -173,49 +192,61 @@ export function Header() {
           </div>
 
           <nav className="flex items-center justify-center gap-7">
-            {NAV.map((item) => (
-              <div
-                key={item.label}
-                className="relative group h-full py-6 flex items-center"
-                onMouseEnter={() => item.dropdown && setDesktopCategoriesOpen(true)}
-                onMouseLeave={() => item.dropdown && setDesktopCategoriesOpen(false)}
-              >
-                <Link
-                  href={item.href || `/#${item.targetId}`}
-                  onClick={(e) => handleNavClick(e, item)}
-                  className={`whitespace-nowrap text-[10px] font-normal tracking-[0.15em] uppercase transition-colors duration-300 hover:opacity-60 flex items-center gap-1 ${textClass}`}
-                  style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                >
-                  {item.label}
-                  {item.dropdown && (
-                    <svg
-                      className={`h-3 w-3 transition-transform duration-300 ${desktopCategoriesOpen ? "rotate-180" : ""}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                    </svg>
-                  )}
-                </Link>
+            {NAV.map((item) => {
+              // Check if this is the shop or services dropdown
+              const isShop = item.label === "Shop";
+              const isServices = item.label === "Services";
+              const isDropdownOpen = isShop ? desktopShopOpen : desktopServicesOpen;
+              
+              const setDropdownOpen = (val: boolean) => {
+                if (isShop) setDesktopShopOpen(val);
+                if (isServices) setDesktopServicesOpen(val);
+              };
 
-                {/* DESKTOP DROPDOWN */}
-                {item.dropdown && desktopCategoriesOpen && (
-                  <div className="absolute top-[60px] left-1/2 -translate-x-1/2 w-56 flex flex-col gap-1 rounded-xl bg-white p-2 shadow-xl border border-ink/10 transition-all duration-200">
-                    {item.dropdown.map((sub) => (
-                      <Link
-                        key={sub.label}
-                        href={sub.href}
-                        className="rounded-lg px-4 py-2.5 text-[11px] font-medium text-ink hover:bg-brand-50 transition-colors"
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              return (
+                <div
+                  key={item.label}
+                  className="relative group h-full py-6 flex items-center"
+                  onMouseEnter={() => item.dropdown && setDropdownOpen(true)}
+                  onMouseLeave={() => item.dropdown && setDropdownOpen(false)}
+                >
+                  <Link
+                    href={item.href || `/#${item.targetId}`}
+                    onClick={(e) => handleNavClick(e, item)}
+                    className={`whitespace-nowrap text-[10px] font-normal tracking-[0.15em] uppercase transition-colors duration-300 hover:opacity-60 flex items-center gap-1 ${textClass}`}
+                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                  >
+                    {item.label}
+                    {item.dropdown && (
+                      <svg
+                        className={`h-3 w-3 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    )}
+                  </Link>
+
+                  {/* DESKTOP DROPDOWN */}
+                  {item.dropdown && isDropdownOpen && (
+                    <div className="absolute top-[60px] left-1/2 -translate-x-1/2 w-56 flex flex-col gap-1 rounded-xl bg-white p-2 shadow-xl border border-ink/10 transition-all duration-200">
+                      {item.dropdown.map((sub) => (
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          className="rounded-lg px-4 py-2.5 text-[11px] font-medium text-ink hover:bg-brand-50 transition-colors"
+                          style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </nav>
 
           <div className="flex justify-end items-center gap-3">
@@ -318,56 +349,67 @@ export function Header() {
           } ${showBanner ? "top-[88px]" : "top-[56px]"}`}
         >
           <nav className="flex flex-col p-2">
-            {NAV.map((item) => (
-              <div key={item.label} className="flex flex-col">
-                {item.dropdown ? (
-                  <>
-                    <button
-                      onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-                      className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100 w-full text-left"
+            {NAV.map((item) => {
+              const isShop = item.label === "Shop";
+              const isServices = item.label === "Services";
+              const isDropdownOpen = isShop ? mobileShopOpen : mobileServicesOpen;
+              
+              const setDropdownOpen = (val: boolean) => {
+                if (isShop) setMobileShopOpen(val);
+                if (isServices) setMobileServicesOpen(val);
+              };
+
+              return (
+                <div key={item.label} className="flex flex-col">
+                  {item.dropdown ? (
+                    <>
+                      <button
+                        onClick={() => setDropdownOpen(!isDropdownOpen)}
+                        className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100 w-full text-left"
+                        style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                      >
+                        {item.label}
+                        <svg
+                          className={`h-4 w-4 transition-transform duration-300 ${isDropdownOpen ? "rotate-180" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ${isDropdownOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
+                      >
+                        <div className="flex flex-col ml-4 pl-4 border-l border-ink/10 mb-2">
+                          {item.dropdown.map((sub) => (
+                            <Link
+                              key={sub.label}
+                              href={sub.href}
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="rounded-lg px-4 py-3 text-[12px] font-medium text-ink/70 transition-colors hover:text-ink hover:bg-brand-100"
+                              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                            >
+                              {sub.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href || `/#${item.targetId}`}
+                      onClick={(e) => handleNavClick(e, item)}
+                      className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
                       style={{ fontFamily: "var(--font-inter), sans-serif" }}
                     >
                       {item.label}
-                      <svg
-                        className={`h-4 w-4 transition-transform duration-300 ${mobileCategoriesOpen ? "rotate-180" : ""}`}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </button>
-
-                    <div
-                      className={`overflow-hidden transition-all duration-300 ${mobileCategoriesOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
-                    >
-                      <div className="flex flex-col ml-4 pl-4 border-l border-ink/10 mb-2">
-                        {item.dropdown.map((sub) => (
-                          <Link
-                            key={sub.label}
-                            href={sub.href}
-                            onClick={() => setMobileMenuOpen(false)}
-                            className="rounded-lg px-4 py-3 text-[12px] font-medium text-ink/70 transition-colors hover:text-ink hover:bg-brand-100"
-                            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <Link
-                    href={item.href || `/#${item.targetId}`}
-                    onClick={(e) => handleNavClick(e, item)}
-                    className="flex items-center justify-between rounded-xl px-4 py-4 text-[13px] uppercase tracking-[0.1em] text-ink transition-colors hover:bg-brand-100"
-                    style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </div>
-            ))}
+                    </Link>
+                  )}
+                </div>
+              );
+            })}
 
             {/* MOBILE BOOK CTA */}
             <a
