@@ -10,8 +10,18 @@ export const products = sqliteTable("products", {
   image: text("image").notNull(),
   images: text("images"),
   inStock: integer("inStock").default(1),
-  sizes: text("sizes"), // This stores your lengths
+  sizes: text("sizes"), 
   featured: integer("featured").default(1),
+});
+
+// NEW SERVICES TABLE
+export const services = sqliteTable("services", {
+  id: text("id").primaryKey(), 
+  title: text("title").notNull(),
+  category: text("category").notNull(),
+  description: text("description"),
+  options: text("options"), // This stores the sizes/lengths & prices JSON
+  inStock: integer("inStock").default(1),
 });
 
 export const orders = sqliteTable("orders", {
