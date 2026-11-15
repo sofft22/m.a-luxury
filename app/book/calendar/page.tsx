@@ -15,16 +15,8 @@ const CATEGORY_NAMES: Record<string, string> = {
   "beauty": "Beauty",
 };
 
-const getNextDates = () => {
-  const dates = [];
-  const today = new Date();
-  for (let i = 0; i < 14; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    dates.push(d);
-  }
-  return dates;
-};
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 function CalendarContent() {
   const searchParams = useSearchParams();
@@ -40,6 +32,10 @@ function CalendarContent() {
   const [serviceImage, setServiceImage] = useState("/hero-1.jpg");
   const [serviceCategory, setServiceCategory] = useState("Services");
 
+  // Calendar State
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
@@ -64,8 +60,6 @@ function CalendarContent() {
     setLegalType(type);
     setLegalModalOpen(true);
   };
-
-  const availableDates = useMemo(() => getNextDates(), []);
 
   // FETCH BANNER IMAGE
   useEffect(() => {
@@ -189,6 +183,52 @@ function CalendarContent() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // CALENDAR LOGIC
+  const getDaysInMonth = (month: number, year: number) => {
+    return new Date(year, month + 1, 0).getDate();
+  };
+
+  const getFirstDayOfMonth = (month: number, year: number) => {
+    return new Date(year, month, 1).getDay();
+  };
+
+  const handlePrevMonth = () => {
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
+  };
+
+  const handleNextMonth = () => {
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
+  };
+
+  const generateCalendarDays = () => {
+    const daysInMonth = getDaysInMonth(currentMonth, currentYear);
+    const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
+    
+    const days = [];
+    
+    // Empty slots for days before the 1st
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+    
+    // Actual days
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(i);
+    }
+    
+    return days;
   };
 
   const whatsappMessage = 
@@ -317,41 +357,62 @@ Please find my receipt attached. Looking forward to it!`;
           <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
             <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
               
-              <div className="mb-8 relative">
-                <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>1. Pick a Date</h2>
+              {/* FULL CALENDAR */}
+              <div className="mb-10">
+                <h2 className="text-[20px] text-ink mb-6" style={{ fontFamily: 'var(--font-cormorant), serif' }}>1. Pick a Date</h2>
                 
-                <div className="relative">
-                  <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar snap-x scroll-smooth">
-                    {availableDates.map((date, i) => {
-                      const dateStr = date.toISOString().split('T')[0];
+                <div className="bg-[#FAF7FE] rounded-2xl border border-ink/5 p-4 sm:p-6">
+                  
+                  {/* CALENDAR HEADER */}
+                  <div className="flex items-center justify-between mb-6">
+                    <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-brand-100 transition-colors">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-ink"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                    </button>
+                    <h3 className="text-[18px] font-bold text-ink uppercase tracking-wider" style={{ fontFamily: 'var(--font-montserrat), sans-serif' }}>
+                      {MONTHS[currentMonth]} {currentYear}
+                    </h3>
+                    <button onClick={handleNextMonth} className="p-2 rounded-full hover:bg-brand-100 transition-colors">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-ink"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                    </button>
+                  </div>
+
+                  {/* DAY LABELS */}
+                  <div className="grid grid-cols-7 gap-1 mb-2">
+                    {DAYS.map(day => (
+                      <div key={day} className="text-center text-[11px] font-bold text-muted uppercase tracking-wider py-2">
+                        {day}
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* CALENDAR GRID */}
+                  <div className="grid grid-cols-7 gap-1 sm:gap-2">
+                    {generateCalendarDays().map((day, i) => {
+                      if (day === null) return <div key={`empty-${i}`} />;
+                      
+                      const dateStr = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                       const isSelected = selectedDate === dateStr;
-                      const dayName = date.toLocaleDateString('en-GB', { weekday: 'short' });
-                      const dayNum = date.getDate();
-                      const month = date.toLocaleDateString('en-GB', { month: 'short' });
+                      const isPast = new Date(dateStr) < new Date(new Date().setHours(0,0,0,0));
 
                       return (
                         <button
                           key={i}
+                          disabled={isPast}
                           onClick={() => { setSelectedDate(dateStr); setSelectedTime(""); }}
-                          className={`snap-start shrink-0 flex flex-col items-center justify-center w-[70px] h-[85px] rounded-xl border transition-all ${
-                            isSelected 
-                              ? "bg-brand-700 border-brand-700 text-white shadow-md" 
-                              : "bg-[#FAF7FE] border-ink/10 text-ink hover:border-brand-700"
+                          className={`aspect-square flex items-center justify-center rounded-lg text-[14px] sm:text-[16px] transition-all ${
+                            isPast 
+                              ? "text-ink/20 cursor-not-allowed" 
+                              : isSelected
+                                ? "bg-brand-700 text-white shadow-md font-bold scale-105"
+                                : "bg-white text-ink hover:bg-brand-50 hover:border-brand-200 border border-transparent"
                           }`}
                         >
-                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{dayName}</span>
-                          <span className="text-[22px] font-medium leading-none my-1" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{dayNum}</span>
-                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{month}</span>
+                          {day}
                         </button>
                       );
                     })}
                   </div>
-                  
-                  <div className="absolute top-0 right-0 bottom-4 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
-                  
-                  <div className="absolute -bottom-2 right-0 flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-brand-700 pointer-events-none">
-                    Swipe <span className="text-[12px]">→</span>
-                  </div>
+
                 </div>
               </div>
 
