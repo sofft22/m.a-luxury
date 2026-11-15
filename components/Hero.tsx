@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-const WHATSAPP_NUMBER = "447393157901"; // Updated number
-
 const HERO_IMAGES = [
   "/hero-1.jpg",
   "/hero-2.jpg",
@@ -13,12 +11,6 @@ const HERO_IMAGES = [
   "/hero-4.jpg",
 ];
 
-function bookLink() {
-  const text = "Hi M.a Luxury! I'd like to book an appointment 💜";
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-}
-
-// FIXED: Removed "default" so it matches the import in page.tsx
 export function Hero() {
   const [currentImage, setCurrentImage] = useState(0);
   const touchStartX = useRef<number | null>(null);
@@ -52,7 +44,8 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative w-full h-[68vh] md:h-[93vh] min-h-[500px] bg-ink">
+    // INCREASED HEIGHT
+    <section id="hero" className="relative w-full h-[80vh] md:h-[95vh] min-h-[550px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
       <div 
@@ -75,48 +68,48 @@ export function Hero() {
         ))}
         
         {/* DARK OVERLAY FOR READABILITY */}
-        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
+        <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
       </div>
 
-      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
-      <div className="relative z-30 flex h-full items-end pb-12 md:pb-24">
-        <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
+      {/* CENTERED TEXT LAYOUT */}
+      <div className="relative z-30 flex h-full items-center justify-center text-center">
+        <div className="mx-auto w-full max-w-4xl px-5 md:px-12 flex flex-col items-center">
           
-          <div className="max-w-xl md:max-w-2xl">
-            
-            {/* HEADLINE WITH BREAK */}
-            <h1
-              className="text-white font-normal leading-[1.05] tracking-tight text-[52px] sm:text-[68px] md:text-[84px]"
-              style={{ fontFamily: "var(--font-cormorant), serif" }}
+          <h1
+            className="text-white font-normal leading-[1.05] tracking-tight text-[52px] sm:text-[68px] md:text-[84px] drop-shadow-lg"
+            style={{ fontFamily: "var(--font-cormorant), serif" }}
+          >
+            Hair &
+            <br />
+            <span className="italic text-gold">Beauty.</span>
+          </h1>
+
+          <p 
+            className="mt-4 md:mt-6 text-white/80 text-[14px] md:text-[16px] max-w-md font-light tracking-wide"
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          >
+            Expert braiding, locs, and premium extensions in Plymouth.
+          </p>
+
+          {/* CTAs */}
+          <div className="mt-8 md:mt-10 flex flex-row gap-3 sm:gap-4">
+            <Link
+              href="/services"
+              className="group flex items-center justify-center rounded-full bg-white px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100 hover:scale-105"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
             >
-              Hair &
-              <br />
-              <span className="italic text-gold">Beauty.</span>
-            </h1>
+              Book Now
+            </Link>
 
-            {/* SIDE BY SIDE CTAs */}
-            <div className="mt-8 md:mt-10 flex flex-row gap-3 sm:gap-4">
-              <a
-                href={bookLink()}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full bg-white px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                Book Now
-              </a>
-
-              <Link
-                href="/shop"
-                className="flex flex-1 sm:flex-none sm:w-48 items-center justify-center rounded-full border border-white/40 px-4 py-3.5 sm:px-8 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
-                Shop Hair
-              </Link>
-            </div>
-            
+            <Link
+              href="/shop"
+              className="flex items-center justify-center rounded-full border border-white/40 px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10 hover:scale-105"
+              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+            >
+              Shop Hair
+            </Link>
           </div>
-
+          
         </div>
       </div>
 
