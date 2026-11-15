@@ -47,7 +47,6 @@ function CalendarContent() {
       })
       .catch(err => {
         console.error("Fetch error:", err);
-        // Fallbacks so the UI doesn't crash
         setExistingBookings([]);
         setWeeklySchedule([]);
         setDayException(null);
@@ -300,7 +299,7 @@ Please find my receipt attached. Looking forward to it!`;
           <div className="pt-6 border-t border-ink/10 flex flex-col items-center">
             <p className="text-[12px] text-muted mb-4 text-center">A £10 non-refundable deposit is required to secure your slot.</p>
             
-            {/* TERMS CHECKBOX */}
+            {/* TERMS CHECKBOX - FIXED TO USE <a> INSTEAD OF <Link> */}
             <div className="flex items-start gap-3 w-full mb-6 px-2">
               <div className="relative flex items-center">
                 <input
@@ -326,11 +325,11 @@ Please find my receipt attached. Looking forward to it!`;
               </div>
               <label htmlFor="terms" className="text-[12px] text-muted leading-tight cursor-pointer select-none">
                 I agree to the{" "}
-                <a href="/policies" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                <a href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="/policies" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                <a href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
                   Privacy Policy
                 </a>
                 .
