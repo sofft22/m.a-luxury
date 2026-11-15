@@ -4,15 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-// CLEANED UP NAV ITEMS
 const NAV_ITEMS = [
   { label: "Products", href: "/admin/products", icon: "products" },
   { label: "Services", href: "/admin/services", icon: "services" },
+  { label: "Bookings", href: "/admin/bookings", icon: "calendar" }, // <-- ADDED
   { label: "Availability", href: "/admin/availability", icon: "clock" },
 ];
 
-const MOBILE_TABS = NAV_ITEMS.slice(0, 3); 
-const MORE_ITEMS: any[] = []; // No extra items needed right now
+const MOBILE_TABS = NAV_ITEMS.slice(0, 4); 
+const MORE_ITEMS: any[] = []; 
 
 export function AdminNav() {
   const pathname = usePathname();
@@ -29,6 +29,7 @@ export function AdminNav() {
     switch (name) {
       case "products": return <svg className={cls} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>;
       case "services": return <svg className={cls} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M14 4l-2 2m0 0L6 12m6-6l4 4m-4-4l-2 2m8 0l-4 4m4-4l-2-2m0 0l-2 2m-6 6l-4 4m4-4l2 2m-2-2l-2-2m8 0l-2 2m2-2l2-2m-2 2l-4 4m4-4l4 4m-8 0l-2-2m2 2l2 2" /></svg>;
+      case "calendar": return <svg className={cls} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" /></svg>;
       case "clock": return <svg className={cls} fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>;
       default: return null;
     }
@@ -76,7 +77,6 @@ export function AdminNav() {
           );
         })}
         
-        {/* Only show "More" if there are extra items */}
         {MORE_ITEMS.length > 0 && (
           <button onClick={() => setMoreOpen(true)} className={`flex flex-col items-center justify-center gap-1 w-16 h-full ${moreOpen ? "text-brand-700" : "text-ink/40"}`}>
             <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 12h.01M12 12h.01M19 12h.01" /></svg>
@@ -85,7 +85,7 @@ export function AdminNav() {
         )}
       </nav>
 
-      {/* MOBILE MORE BOTTOM SHEET (Only renders if More items exist) */}
+      {/* MOBILE MORE BOTTOM SHEET */}
       {moreOpen && MORE_ITEMS.length > 0 && (
         <div className="lg:hidden fixed inset-0 z-[110] flex flex-col justify-end bg-black/50 backdrop-blur-sm">
           <div className="absolute inset-0" onClick={() => setMoreOpen(false)} />
