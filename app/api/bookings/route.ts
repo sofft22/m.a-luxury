@@ -13,22 +13,35 @@ export async function GET(request: Request) {
     const db = getDb();
     
     if (date) {
-      const dayBookings = await db.select().from(bookings).where(eq(bookings.date, date));
-      const dayException = await db.select().from(availabilityExceptions).where(eq(availabilityExceptions.date, date));
-      const schedule = await db.select().from(weeklySchedule);
+      let dayBookings: any[] = [];
+      let dayException: any = null;
+      let schedule: any[] = [];
+
+      try {
+        dayBookings = await db.select().from(bookings).where(eq(bookings.date, date));
+      } catch (e) { console.error("Bookings fetch error:", e); }
+
+      try {
+        const ex = await db.select().from(availabilityExceptions).where(eq(availabilityExceptions.date, date));
+        dayException = ex.length > 0 ? ex[0] : null;
+      } catch (e) { console.error("Exception fetch error:", e); }
+
+      try {
+        schedule = await db.select().from(weeklySchedule);
+      } catch (e) { console.error("Schedule fetch error:", e); }
 
       return NextResponse.json({
         bookings: dayBookings,
-        exception: dayException.length > 0 ? dayException[0] : null,
-        weeklySchedule: schedule || [] // Fallback to empty array
+        exception: dayException,
+        weeklySchedule: schedule 
       });
     } else {
       const allBookings = await db.select().from(bookings);
       return NextResponse.json(allBookings);
     }
   } catch (error: any) {
-    console.error("GET BOOKINGS ERROR:", error.message);
-    // Return safe fallbacks so the frontend doesn't crash
+    console.error("GLOBAL GET ERROR:", error.message);
+    // Fallback if everything fails
     return NextResponse.json({ 
       bookings: [], 
       exception: null, 
@@ -57,6 +70,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error("POST ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
