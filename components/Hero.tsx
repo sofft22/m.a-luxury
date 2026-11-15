@@ -44,7 +44,6 @@ export function Hero() {
   };
 
   return (
-    // INCREASED HEIGHT
     <section id="hero" className="relative w-full h-[80vh] md:h-[95vh] min-h-[550px] bg-ink">
       
       {/* FULL BLEED IMAGES */}
@@ -71,45 +70,42 @@ export function Hero() {
         <div className="absolute inset-0 z-20 bg-gradient-to-t from-black/90 via-black/50 to-black/30" />
       </div>
 
-      {/* CENTERED TEXT LAYOUT */}
-      <div className="relative z-30 flex h-full items-center justify-center text-center">
-        <div className="mx-auto w-full max-w-4xl px-5 md:px-12 flex flex-col items-center">
+      {/* TEXT LAYOUT - PUSHED TO THE BOTTOM */}
+      <div className="relative z-30 flex h-full items-end pb-16 md:pb-24">
+        <div className="mx-auto w-full max-w-7xl px-5 md:px-12">
           
-          <h1
-            className="text-white font-normal leading-[1.05] tracking-tight text-[52px] sm:text-[68px] md:text-[84px] drop-shadow-lg"
-            style={{ fontFamily: "var(--font-cormorant), serif" }}
-          >
-            Hair &
-            <br />
-            <span className="italic text-gold">Beauty.</span>
-          </h1>
-
-          <p 
-            className="mt-4 md:mt-6 text-white/80 text-[14px] md:text-[16px] max-w-md font-light tracking-wide"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}
-          >
-            Expert braiding, locs, and premium extensions in Plymouth.
-          </p>
-
-          {/* CTAs */}
-          <div className="mt-8 md:mt-10 flex flex-row gap-3 sm:gap-4">
-            <Link
-              href="/services"
-              className="group flex items-center justify-center rounded-full bg-white px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100 hover:scale-105"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+          <div className="max-w-xl md:max-w-2xl text-center sm:text-left mx-auto sm:mx-0">
+            
+            <h1
+              className="text-white font-normal leading-[1.05] tracking-tight text-[52px] sm:text-[68px] md:text-[84px]"
+              style={{ fontFamily: "var(--font-cormorant), serif" }}
             >
-              Book Now
-            </Link>
+              Hair &
+              <br />
+              <span className="italic text-brand-500">Beauty.</span>
+            </h1>
 
-            <Link
-              href="/shop"
-              className="flex items-center justify-center rounded-full border border-white/40 px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10 hover:scale-105"
-              style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-            >
-              Shop Hair
-            </Link>
+            {/* CTAs */}
+            <div className="mt-8 md:mt-10 flex flex-row justify-center sm:justify-start gap-3 sm:gap-4">
+              <Link
+                href="/services"
+                className="group flex items-center justify-center rounded-full bg-white px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-ink transition-all hover:bg-gray-100 hover:scale-105"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                Book Now
+              </Link>
+
+              <Link
+                href="/shop"
+                className="flex items-center justify-center rounded-full border border-white/40 px-8 py-3.5 sm:px-10 sm:py-4 text-center text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-white transition-all hover:bg-white/10 hover:scale-105"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                Shop Hair
+              </Link>
+            </div>
+            
           </div>
-          
+
         </div>
       </div>
 
