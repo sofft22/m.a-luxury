@@ -5,7 +5,7 @@ export const products = sqliteTable("products", {
   id: text("id").primaryKey(), 
   title: text("title").notNull(),
   price: integer("price").notNull(),
-  weight: real("weight").default(0), // <--- ADDED BACK
+  weight: real("weight").default(0),
   description: text("description"), 
   category: text("category").notNull(),
   image: text("image").notNull(),
@@ -37,11 +37,12 @@ export const bookings = sqliteTable("bookings", {
   startTime: text("startTime").notNull(),
   endTime: text("endTime").notNull(),
   depositPaid: integer("depositPaid").default(1),
+  status: text("status").default("Pending"), // <--- ADDED THIS
   createdAt: text("createdAt").notNull(),
 });
 
 export const weeklySchedule = sqliteTable("weekly_schedule", {
-  id: integer("id").primaryKey(),
+  id: integer("id").primaryKey(), 
   isOpen: integer("isOpen").default(1),
   startTime: text("startTime").default("09:00"),
   endTime: text("endTime").default("18:00"),
