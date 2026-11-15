@@ -82,7 +82,7 @@ export default function CheckoutPage() {
     }
   }
 
-  // Total Calculation (No Promo, No Processing Fee)
+  // --- Calculate Total (No Processing Fee) ---
   const total = cartTotal + shipping;
   
   const canSubmit = Boolean(firstName.trim() && lastName.trim() && phone.trim() && address.trim() && city.trim() && agreedToTerms);
@@ -98,8 +98,6 @@ export default function CheckoutPage() {
 
     const newOrderId = `MA-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(newOrderId);
-    
-    // Optional: You can add logic here to save the order to your database
     
     clearCart();
     setIsSuccess(true); 
