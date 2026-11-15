@@ -41,7 +41,6 @@ export async function GET(request: Request) {
     }
   } catch (error: any) {
     console.error("GLOBAL GET ERROR:", error.message);
-    // Fallback if everything fails
     return NextResponse.json({ 
       bookings: [], 
       exception: null, 
