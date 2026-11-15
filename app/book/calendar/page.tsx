@@ -3,9 +3,17 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { LegalModal } from "@/components/LegalModal";
 
 const WHATSAPP_NUMBER = "447393157901";
+
+const CATEGORY_NAMES: Record<string, string> = {
+  "braids": "Braids & Twists",
+  "locs": "Locs & Maintenance",
+  "installs": "Installs & Styling",
+  "beauty": "Beauty",
+};
 
 const getNextDates = () => {
   const dates = [];
@@ -28,6 +36,10 @@ function CalendarContent() {
   const price = searchParams.get("price") || "0";
   const duration = Number(searchParams.get("duration")) || 60;
 
+  // State for banner image
+  const [serviceImage, setServiceImage] = useState("/hero-1.jpg");
+  const [serviceCategory, setServiceCategory] = useState("Services");
+
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
@@ -48,12 +60,27 @@ function CalendarContent() {
   const [legalType, setLegalType] = useState<"policies" | "privacy" | null>(null);
 
   const openLegal = (type: "policies" | "privacy", e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent navigating to a missing page
+    e.preventDefault();
     setLegalType(type);
     setLegalModalOpen(true);
   };
 
   const availableDates = useMemo(() => getNextDates(), []);
+
+  // FETCH BANNER IMAGE
+  useEffect(() => {
+    if (!serviceId) return;
+    fetch("/api/services")
+      .then(res => res.json())
+      .then(data => {
+        const found = data.find((s: any) => s.id === serviceId);
+        if (found) {
+          if (found.image) setServiceImage(found.image);
+          if (found.category) setServiceCategory(CATEGORY_NAMES[found.category] || "Services");
+        }
+      })
+      .catch(console.error);
+  }, [serviceId]);
 
   useEffect(() => {
     if (!selectedDate) return;
@@ -248,50 +275,83 @@ Please find my receipt attached. Looking forward to it!`;
           </div>
         </main>
       ) : (
-        <main className="min-h-screen bg-[#FAF7FE] pt-[120px] md:pt-[160px] pb-24">
-          <div className="mx-auto max-w-3xl px-5 md:px-8">
+        <main className="min-h-screen bg-[#FAF7FE] pb-24">
+          
+          {/* HERO BANNER */}
+          <section className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-[80px] md:pt-[100px]">
+            <Image 
+              src={serviceImage} 
+              alt={serviceName} 
+              fill 
+              className="object-cover object-top" 
+              priority 
+            />
+            <div className="absolute inset-0 bg-black/60" />
             
-            <div className="mb-10 text-center">
-              <Link href={`/book?service=${serviceName}&id=${serviceId}`} className="text-[10px] font-bold uppercase tracking-widest text-brand-700/60 hover:text-brand-700 mb-6 inline-block transition-colors">
+            <div className="relative z-10 text-center px-6 mt-10">
+              <Link 
+                href={`/book?service=${serviceName}&id=${serviceId}`} 
+                className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white mb-4 inline-block transition-colors"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
                 ← Back to options
               </Link>
-              <h1 className="text-[36px] md:text-[52px] text-ink leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                Select Date & Time
+              
+              <p 
+                className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold mb-2"
+                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
+              >
+                {serviceCategory}
+              </p>
+              
+              <h1 className="text-[42px] md:text-[64px] text-white leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                {serviceName}
               </h1>
-              <p className="text-[14px] text-muted">
-                You are booking: <strong className="text-ink">{serviceName} ({optionName})</strong> — <strong className="text-brand-700">£{price}</strong>
+              
+              <p className="text-[13px] text-white/80">
+                Select your date and time below
               </p>
             </div>
+          </section>
 
-            <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/5">
+          <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
+            <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
               
-              <div className="mb-8">
+              <div className="mb-8 relative">
                 <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>1. Pick a Date</h2>
                 
-                <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar snap-x">
-                  {availableDates.map((date, i) => {
-                    const dateStr = date.toISOString().split('T')[0];
-                    const isSelected = selectedDate === dateStr;
-                    const dayName = date.toLocaleDateString('en-GB', { weekday: 'short' });
-                    const dayNum = date.getDate();
-                    const month = date.toLocaleDateString('en-GB', { month: 'short' });
+                <div className="relative">
+                  <div className="flex gap-2 overflow-x-auto pb-4 no-scrollbar snap-x scroll-smooth">
+                    {availableDates.map((date, i) => {
+                      const dateStr = date.toISOString().split('T')[0];
+                      const isSelected = selectedDate === dateStr;
+                      const dayName = date.toLocaleDateString('en-GB', { weekday: 'short' });
+                      const dayNum = date.getDate();
+                      const month = date.toLocaleDateString('en-GB', { month: 'short' });
 
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => { setSelectedDate(dateStr); setSelectedTime(""); }}
-                        className={`snap-start shrink-0 flex flex-col items-center justify-center w-[70px] h-[85px] rounded-xl border transition-all ${
-                          isSelected 
-                            ? "bg-brand-700 border-brand-700 text-white shadow-md" 
-                            : "bg-[#FAF7FE] border-ink/10 text-ink hover:border-brand-700"
-                        }`}
-                      >
-                        <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{dayName}</span>
-                        <span className="text-[22px] font-medium leading-none my-1" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{dayNum}</span>
-                        <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{month}</span>
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={i}
+                          onClick={() => { setSelectedDate(dateStr); setSelectedTime(""); }}
+                          className={`snap-start shrink-0 flex flex-col items-center justify-center w-[70px] h-[85px] rounded-xl border transition-all ${
+                            isSelected 
+                              ? "bg-brand-700 border-brand-700 text-white shadow-md" 
+                              : "bg-[#FAF7FE] border-ink/10 text-ink hover:border-brand-700"
+                          }`}
+                        >
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{dayName}</span>
+                          <span className="text-[22px] font-medium leading-none my-1" style={{ fontFamily: 'var(--font-cormorant), serif' }}>{dayNum}</span>
+                          <span className={`text-[10px] font-bold uppercase tracking-wider ${isSelected ? "text-white/80" : "text-muted"}`}>{month}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  
+                  <div className="absolute top-0 right-0 bottom-4 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
+                  
+                  <div className="absolute -bottom-2 right-0 flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-brand-700 pointer-events-none">
+                    Swipe <span className="text-[12px]">→</span>
+                  </div>
                 </div>
               </div>
 
@@ -384,7 +444,6 @@ Please find my receipt attached. Looking forward to it!`;
         </main>
       )}
 
-      {/* RENDER THE LEGAL MODAL */}
       <LegalModal 
         isOpen={legalModalOpen} 
         onClose={() => setLegalModalOpen(false)} 
