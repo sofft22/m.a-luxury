@@ -20,7 +20,6 @@ function CalendarContent() {
   const [selectedTime, setSelectedTime] = useState("");
   const [existingBookings, setExistingBookings] = useState<any[]>([]);
   
-  // Availability States
   const [weeklySchedule, setWeeklySchedule] = useState<any[]>([]);
   const [dayException, setDayException] = useState<any>(null);
   const [isClosed, setIsClosed] = useState(false);
@@ -30,22 +29,25 @@ function CalendarContent() {
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
   
-  // Terms Checkbox State
   const [agreedToTerms, setAgreedToTerms] = useState(false);
-  
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     if (!selectedDate) return;
+    
     fetch(`/api/bookings?date=${selectedDate}`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Network response was not ok");
+        return res.json();
+      })
       .then(data => {
         setExistingBookings(Array.isArray(data.bookings) ? data.bookings : []);
         setWeeklySchedule(Array.isArray(data.weeklySchedule) ? data.weeklySchedule : []);
         setDayException(data.exception || null);
       })
       .catch(err => {
-        console.error(err);
+        console.error("Fetch error:", err);
+        // Fallbacks so the UI doesn't crash
         setExistingBookings([]);
         setWeeklySchedule([]);
         setDayException(null);
@@ -324,13 +326,13 @@ Please find my receipt attached. Looking forward to it!`;
               </div>
               <label htmlFor="terms" className="text-[12px] text-muted leading-tight cursor-pointer select-none">
                 I agree to the{" "}
-                <Link href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                <a href="/policies" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
                   Terms of Service
-                </Link>{" "}
+                </a>{" "}
                 and{" "}
-                <Link href="/policies" target="_blank" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
+                <a href="/policies" className="font-bold text-ink underline underline-offset-2 hover:text-brand-700 transition-colors">
                   Privacy Policy
-                </Link>
+                </a>
                 .
               </label>
             </div>
