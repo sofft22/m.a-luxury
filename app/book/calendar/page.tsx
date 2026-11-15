@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams, useRouter } from "next/navigation";
-import { Suspense, useState, useEffect } from "react";
+import { Suspense, useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 
 const WHATSAPP_NUMBER = "447393157901";
@@ -22,7 +22,6 @@ function CalendarContent() {
   
   const [weeklySchedule, setWeeklySchedule] = useState<any[]>([]);
   const [dayException, setDayException] = useState<any>(null);
-  const [isClosed, setIsClosed] = useState(false);
   
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -53,27 +52,27 @@ function CalendarContent() {
       });
   }, [selectedDate]);
 
-  const generateSlots = () => {
-    if (!selectedDate) return [];
+  // USE MEMO TO CALCULATE SLOTS SAFELY WITHOUT CRASHING REACT
+  const { availableSlots, isClosed } = useMemo(() => {
+    if (!selectedDate) return { availableSlots: [], isClosed: false };
 
+    // 1. Check Exception
     if (dayException) {
       if (dayException.isOpen === 0) {
-        setIsClosed(true);
-        return [];
+        return { availableSlots: [], isClosed: true };
       }
     } else {
+      // 2. Check Weekly Schedule
       const dateObj = new Date(selectedDate);
       const dayOfWeek = dateObj.getDay(); 
       const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
       
       if (standardDay && standardDay.isOpen === 0) {
-        setIsClosed(true);
-        return [];
+        return { availableSlots: [], isClosed: true };
       }
     }
 
-    setIsClosed(false);
-
+    // 3. Calculate Slots
     let openTime = 9; 
     let closeTime = 18; 
 
@@ -90,10 +89,8 @@ function CalendarContent() {
     }
     
     const slots = [];
-    
     for (let hour = openTime; hour < closeTime; hour++) {
       const endHour = hour + (duration / 60);
-      
       if (endHour > closeTime) continue;
 
       const startStr = `${hour.toString().padStart(2, '0')}:00`;
@@ -109,10 +106,9 @@ function CalendarContent() {
         slots.push({ start: startStr, end: endStr });
       }
     }
-    return slots;
-  };
-
-  const availableSlots = generateSlots();
+    
+    return { availableSlots: slots, isClosed: false };
+  }, [selectedDate, dayException, weeklySchedule, existingBookings, duration]);
 
   const handleBook = async () => {
     if (!selectedDate || !selectedTime || !name || !phone) {
@@ -299,7 +295,6 @@ Please find my receipt attached. Looking forward to it!`;
           <div className="pt-6 border-t border-ink/10 flex flex-col items-center">
             <p className="text-[12px] text-muted mb-4 text-center">A £10 non-refundable deposit is required to secure your slot.</p>
             
-            {/* TERMS CHECKBOX - FIXED TO USE <a> INSTEAD OF <Link> */}
             <div className="flex items-start gap-3 w-full mb-6 px-2">
               <div className="relative flex items-center">
                 <input
