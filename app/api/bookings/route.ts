@@ -23,7 +23,6 @@ export async function GET(request: Request) {
         weeklySchedule: schedule 
       });
     } else {
-      // Fetch ALL bookings for the admin panel
       const allBookings = await db.select().from(bookings);
       return NextResponse.json(allBookings);
     }
@@ -37,6 +36,8 @@ export async function POST(request: Request) {
     const body = await request.json();
     const db = getDb();
     
+    console.log("Attempting to save booking:", body);
+
     await db.insert(bookings).values({
       id: `bkg-${Date.now()}`,
       serviceId: body.serviceId,
@@ -53,6 +54,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
+    console.error("DATABASE SAVE ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
