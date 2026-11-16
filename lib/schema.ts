@@ -21,8 +21,9 @@ export const services = sqliteTable("services", {
   category: text("category").notNull(),
   description: text("description"),
   options: text("options"), 
+  extras: text("extras"), // <--- ADDED EXTRAS HERE
   image: text("image"), 
-  duration: integer("duration").default(60),
+  duration: integer("duration").default(60), 
   inStock: integer("inStock").default(1),
 });
 
@@ -37,12 +38,12 @@ export const bookings = sqliteTable("bookings", {
   startTime: text("startTime").notNull(),
   endTime: text("endTime").notNull(),
   depositPaid: integer("depositPaid").default(1),
-  status: text("status").default("Pending"), // <--- ADDED THIS
+  status: text("status").default("Pending"), 
   createdAt: text("createdAt").notNull(),
 });
 
 export const weeklySchedule = sqliteTable("weekly_schedule", {
-  id: integer("id").primaryKey(), 
+  id: integer("id").primaryKey(),
   isOpen: integer("isOpen").default(1),
   startTime: text("startTime").default("09:00"),
   endTime: text("endTime").default("18:00"),
