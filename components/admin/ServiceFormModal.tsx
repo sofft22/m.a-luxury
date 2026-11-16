@@ -15,15 +15,19 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
   const [description, setDescription] = useState(service?.description || "");
   const [inStock, setInStock] = useState(service ? service.inStock === 1 : true);
   const [image, setImage] = useState(service?.image || "");
-  const [duration, setDuration] = useState(service?.duration?.toString() || "60");
 
-  const [options, setOptions] = useState<{ name: string; price: string }[]>(() => {
-    if (!service || !service.options) return [{ name: "", price: "" }];
+  // OPTIONS STATE (Now includes duration per option)
+  const [options, setOptions] = useState<{ name: string; price: string; duration: string }[]>(() => {
+    if (!service || !service.options) return [{ name: "", price: "", duration: "60" }];
     try {
       const parsed = JSON.parse(service.options);
-      if (Array.isArray(parsed)) return parsed.map((o: any) => ({ name: o.name || "", price: o.price?.toString() || "" }));
+      if (Array.isArray(parsed)) return parsed.map((o: any) => ({ 
+        name: o.name || "", 
+        price: o.price?.toString() || "",
+        duration: o.duration?.toString() || "60"
+      }));
     } catch (e) {}
-    return [{ name: "", price: "" }];
+    return [{ name: "", price: "", duration: "60" }];
   });
 
   // EXTRAS STATE
@@ -75,9 +79,12 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
     
     const cleanOptions = options
       .filter((o) => o.name.trim() !== "")
-      .map((o) => ({ name: o.name.trim(), price: o.price ? Number(o.price) : 0 }));
+      .map((o) => ({ 
+        name: o.name.trim(), 
+        price: o.price ? Number(o.price) : 0,
+        duration: o.duration ? Number(o.duration) : 60
+      }));
 
-    // CLEAN EXTRAS (Make sure to filter empty names)
     const cleanExtras = extras
       .filter((e) => e.name.trim() !== "")
       .map((e) => ({ 
@@ -94,7 +101,6 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
       options: cleanOptions,
       extras: cleanExtras,
       image,
-      duration: Number(duration),
       inStock,
     };
 
@@ -114,7 +120,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
     <div className="fixed inset-0 z-[120] flex bg-ink/60 backdrop-blur-sm sm:p-4 sm:items-center justify-center">
       <div className="absolute inset-0 hidden sm:block" onClick={onClose} />
       
-      <div className="relative flex flex-col bg-[#FAF7FE] shadow-2xl w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-[650px] sm:rounded-2xl overflow-y-auto">
+      <div className="relative flex flex-col bg-[#FAF7FE] shadow-2xl w-full h-full sm:h-auto sm:max-h-[90vh] sm:max-w-[700px] sm:rounded-2xl overflow-y-auto">
         
         <div className="flex items-center justify-between border-b border-ink/10 px-6 py-5 bg-[#FAF7FE] sticky top-0 z-10">
           <h2 className="text-[24px] text-ink" style={{ fontFamily: "var(--font-cormorant), serif" }}>
@@ -161,45 +167,68 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Est. Duration</label>
-              <select value={duration} onChange={e => setDuration(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
-                <option value="30">30 Minutes</option>
-                <option value="60">1 Hour</option>
-                <option value="90">1.5 Hours</option>
-                <option value="120">2 Hours</option>
-                <option value="180">3 Hours</option>
-                <option value="240">4 Hours</option>
-                <option value="300">5 Hours</option>
-                <option value="360">6 Hours</option>
-                <option value="420">7 Hours</option>
-                <option value="480">8 Hours</option>
-                <option value="540">9 Hours</option>
-                <option value="600">10 Hours</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Description</label>
-              <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Brief detail" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
-            </div>
+          <div>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Description</label>
+            <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Brief detail" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
-          {/* OPTIONS */}
+          {/* OPTIONS WITH INDIVIDUAL DURATION */}
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Options & Prices</label>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Options, Prices & Durations</label>
             <div className="flex flex-col gap-3">
               {options.map((option, i) => (
-                <div key={i} className="flex gap-2 items-center">
-                  <input value={option.name} onChange={e => { const n = [...options]; n[i].name = e.target.value; setOptions(n); }} type="text" placeholder='e.g. Small Shoulder' className="flex-1 rounded-md border border-ink/20 bg-white px-4 py-2 text-[13px] outline-none focus:border-brand-700" />
-                  <div className="relative w-[100px]">
-                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[13px] text-ink/50">£</span>
-                    <input value={option.price} onChange={e => { const n = [...options]; n[i].price = e.target.value; setOptions(n); }} type="number" placeholder="0" className="w-full rounded-md border border-ink/20 bg-white pl-7 pr-3 py-2 text-[13px] outline-none focus:border-brand-700" />
+                <div key={i} className="flex flex-col sm:flex-row gap-2 items-start sm:items-center bg-white p-3 sm:p-0 rounded-lg sm:bg-transparent border border-ink/10 sm:border-0">
+                  
+                  <input 
+                    value={option.name} 
+                    onChange={e => { const n = [...options]; n[i].name = e.target.value; setOptions(n); }} 
+                    type="text" 
+                    placeholder='Option (e.g. Small Waist)' 
+                    className="w-full sm:flex-1 rounded-md border border-ink/20 bg-white px-4 py-2 text-[13px] outline-none focus:border-brand-700" 
+                  />
+                  
+                  <div className="flex gap-2 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:w-[90px]">
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[13px] text-ink/50">£</span>
+                      <input 
+                        value={option.price} 
+                        onChange={e => { const n = [...options]; n[i].price = e.target.value; setOptions(n); }} 
+                        type="number" 
+                        placeholder="Price" 
+                        className="w-full rounded-md border border-ink/20 bg-white pl-7 pr-3 py-2 text-[13px] outline-none focus:border-brand-700" 
+                      />
+                    </div>
+                    
+                    <select 
+                      value={option.duration} 
+                      onChange={e => { const n = [...options]; n[i].duration = e.target.value; setOptions(n); }} 
+                      className="flex-1 sm:w-[140px] rounded-md border border-ink/20 bg-white px-2 py-2 text-[12px] outline-none focus:border-brand-700"
+                    >
+                      <option value="30">30 Mins</option>
+                      <option value="60">1 Hour</option>
+                      <option value="90">1.5 Hours</option>
+                      <option value="120">2 Hours</option>
+                      <option value="150">2.5 Hours</option>
+                      <option value="180">3 Hours</option>
+                      <option value="210">3.5 Hours</option>
+                      <option value="240">4 Hours</option>
+                      <option value="270">4.5 Hours</option>
+                      <option value="300">5 Hours</option>
+                      <option value="330">5.5 Hours</option>
+                      <option value="360">6 Hours</option>
+                      <option value="420">7 Hours</option>
+                      <option value="480">8 Hours</option>
+                      <option value="540">9 Hours</option>
+                      <option value="600">10 Hours</option>
+                      <option value="660">11 Hours</option>
+                      <option value="720">12 Hours</option>
+                    </select>
+
+                    <button onClick={() => setOptions(options.filter((_, idx) => idx !== i))} className="text-ink/40 hover:text-red-500 px-2 shrink-0">✕</button>
                   </div>
-                  <button onClick={() => setOptions(options.filter((_, idx) => idx !== i))} className="text-ink/40 hover:text-red-500 px-2">✕</button>
                 </div>
               ))}
-              <button onClick={() => setOptions([...options, { name: "", price: "" }])} className="text-[11px] font-bold uppercase tracking-wider text-brand-700 text-left mt-2 hover:underline">+ Add Option</button>
+              <button onClick={() => setOptions([...options, { name: "", price: "", duration: "60" }])} className="text-[11px] font-bold uppercase tracking-wider text-brand-700 text-left mt-2 hover:underline">+ Add Option</button>
             </div>
           </div>
 
