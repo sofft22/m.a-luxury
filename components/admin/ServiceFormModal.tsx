@@ -26,7 +26,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
     return [{ name: "", price: "" }];
   });
 
-  // NEW: EXTRAS STATE
+  // EXTRAS STATE
   const [extras, setExtras] = useState<{ name: string; minPrice: string; maxPrice: string }[]>(() => {
     if (!service || !service.extras) return [];
     try {
@@ -77,13 +77,13 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
       .filter((o) => o.name.trim() !== "")
       .map((o) => ({ name: o.name.trim(), price: o.price ? Number(o.price) : 0 }));
 
-    // NEW: CLEAN EXTRAS
+    // CLEAN EXTRAS (Make sure to filter empty names)
     const cleanExtras = extras
       .filter((e) => e.name.trim() !== "")
       .map((e) => ({ 
         name: e.name.trim(), 
-        minPrice: Number(e.minPrice) || 0, 
-        maxPrice: Number(e.maxPrice) || 0 
+        minPrice: e.minPrice ? Number(e.minPrice) : 0, 
+        maxPrice: e.maxPrice ? Number(e.maxPrice) : 0 
       }));
 
     const payload = {
@@ -92,7 +92,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
       category,
       description: description.trim(),
       options: cleanOptions,
-      extras: cleanExtras, // <--- ADDED
+      extras: cleanExtras,
       image,
       duration: Number(duration),
       inStock,
@@ -203,7 +203,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
             </div>
           </div>
 
-          {/* NEW: EXTRAS SECTION */}
+          {/* EXTRAS */}
           <div className="bg-white p-4 rounded-xl border border-brand-100">
             <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-brand-700">Add-ons / Extras</label>
             <p className="text-[11px] text-muted mb-4">These apply to all options above.</p>
