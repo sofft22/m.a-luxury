@@ -27,12 +27,11 @@ function CalendarContent() {
   const optionName = searchParams.get("option") || "";
   const price = searchParams.get("price") || "0";
   const duration = Number(searchParams.get("duration")) || 60;
+  const extrasParam = searchParams.get("extras") || "";
 
-  // State for banner image
   const [serviceImage, setServiceImage] = useState("/hero-1.jpg");
   const [serviceCategory, setServiceCategory] = useState("Services");
 
-  // Calendar State
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   
@@ -51,7 +50,6 @@ function CalendarContent() {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // LEGAL MODAL STATE
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalType, setLegalType] = useState<"policies" | "privacy" | null>(null);
 
@@ -61,7 +59,6 @@ function CalendarContent() {
     setLegalModalOpen(true);
   };
 
-  // FETCH BANNER IMAGE
   useEffect(() => {
     if (!serviceId) return;
     fetch("/api/services")
@@ -164,7 +161,7 @@ function CalendarContent() {
     const selectedSlot = availableSlots.find(s => s.start === selectedTime);
     
     try {
-      await fetch("/api/bookings", {
+      const res = await fetch("/api/bookings", {
         method: "POST",
         body: JSON.stringify({
           serviceId,
@@ -177,22 +174,47 @@ function CalendarContent() {
           endTime: selectedSlot?.end
         })
       });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert(`Database Error: ${errorData.error || "Unknown error"}`);
+        setSubmitting(false);
+        return;
+      }
+
       setIsSuccess(true);
-    } catch (error) {
-      alert("Failed to book. Please try again.");
+    } catch (error: any) {
+      alert(`Network Error: ${error.message}`);
     } finally {
       setSubmitting(false);
     }
   };
 
-  // CALENDAR LOGIC
-  const getDaysInMonth = (month: number, year: number) => {
-    return new Date(year, month + 1, 0).getDate();
-  };
+  const whatsappMessage = 
+`Hi M.a Luxury! 💜
 
-  const getFirstDayOfMonth = (month: number, year: number) => {
-    return new Date(year, month, 1).getDay();
-  };
+I have just paid my deposit for a new booking.
+
+*Booking Details:*
+━━━━━━━━━━━━━━━
+*Service:* ${serviceName}
+*Style:* ${optionName}
+*Date:* ${selectedDate}
+*Time:* ${selectedTime}
+*Price:* £${price}
+${extrasParam ? `*Extras:* ${extrasParam}\n` : ""}━━━━━━━━━━━━━━━
+
+*Name:* ${name}
+*Phone:* ${phone}
+
+*Deposit Paid:* £10
+
+Please find my receipt attached. Looking forward to it!`;
+
+  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
+
+  const getDaysInMonth = (month: number, year: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (month: number, year: number) => new Date(year, month, 1).getDay();
 
   const handlePrevMonth = () => {
     if (currentMonth === 0) {
@@ -215,44 +237,11 @@ function CalendarContent() {
   const generateCalendarDays = () => {
     const daysInMonth = getDaysInMonth(currentMonth, currentYear);
     const firstDay = getFirstDayOfMonth(currentMonth, currentYear);
-    
     const days = [];
-    
-    // Empty slots for days before the 1st
-    for (let i = 0; i < firstDay; i++) {
-      days.push(null);
-    }
-    
-    // Actual days
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(i);
-    }
-    
+    for (let i = 0; i < firstDay; i++) days.push(null);
+    for (let i = 1; i <= daysInMonth; i++) days.push(i);
     return days;
   };
-
-  const whatsappMessage = 
-`Hi M.a Luxury! 💜
-
-I have just paid my deposit for a new booking.
-
-*Booking Details:*
-━━━━━━━━━━━━━━━
-*Service:* ${serviceName}
-*Style:* ${optionName}
-*Date:* ${selectedDate}
-*Time:* ${selectedTime}
-*Price:* £${price}
-━━━━━━━━━━━━━━━
-
-*Name:* ${name}
-*Phone:* ${phone}
-
-*Deposit Paid:* £10
-
-Please find my receipt attached. Looking forward to it!`;
-
-  const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`;
 
   return (
     <>
@@ -317,53 +306,31 @@ Please find my receipt attached. Looking forward to it!`;
       ) : (
         <main className="min-h-screen bg-[#FAF7FE] pb-24">
           
-          {/* HERO BANNER */}
           <section className="relative h-[40vh] md:h-[50vh] flex items-center justify-center overflow-hidden pt-[80px] md:pt-[100px]">
-            <Image 
-              src={serviceImage} 
-              alt={serviceName} 
-              fill 
-              className="object-cover object-top" 
-              priority 
-            />
+            <Image src={serviceImage} alt={serviceName} fill className="object-cover object-top" priority />
             <div className="absolute inset-0 bg-black/60" />
             
             <div className="relative z-10 text-center px-6 mt-10">
-              <Link 
-                href={`/book?service=${serviceName}&id=${serviceId}`} 
-                className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white mb-4 inline-block transition-colors"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
+              <Link href={`/book?service=${serviceName}&id=${serviceId}`} className="text-[10px] font-bold uppercase tracking-widest text-white/60 hover:text-white mb-4 inline-block transition-colors" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
                 ← Back to options
               </Link>
-              
-              <p 
-                className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold mb-2"
-                style={{ fontFamily: "var(--font-montserrat), sans-serif" }}
-              >
+              <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-gold mb-2" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
                 {serviceCategory}
               </p>
-              
               <h1 className="text-[42px] md:text-[64px] text-white leading-tight mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
                 {serviceName}
               </h1>
-              
-              <p className="text-[13px] text-white/80">
-                Select your date and time below
-              </p>
+              <p className="text-[13px] text-white/80">Select your date and time below</p>
             </div>
           </section>
 
           <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
             <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
               
-              {/* FULL CALENDAR */}
               <div className="mb-10">
                 <h2 className="text-[20px] text-ink mb-6" style={{ fontFamily: 'var(--font-cormorant), serif' }}>1. Pick a Date</h2>
                 
                 <div className="bg-[#FAF7FE] rounded-2xl border border-ink/5 p-4 sm:p-6">
-                  
-                  {/* CALENDAR HEADER */}
                   <div className="flex items-center justify-between mb-6">
                     <button onClick={handlePrevMonth} className="p-2 rounded-full hover:bg-brand-100 transition-colors">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 text-ink"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
@@ -376,20 +343,15 @@ Please find my receipt attached. Looking forward to it!`;
                     </button>
                   </div>
 
-                  {/* DAY LABELS */}
                   <div className="grid grid-cols-7 gap-1 mb-2">
                     {DAYS.map(day => (
-                      <div key={day} className="text-center text-[11px] font-bold text-muted uppercase tracking-wider py-2">
-                        {day}
-                      </div>
+                      <div key={day} className="text-center text-[11px] font-bold text-muted uppercase tracking-wider py-2">{day}</div>
                     ))}
                   </div>
 
-                  {/* CALENDAR GRID */}
                   <div className="grid grid-cols-7 gap-1 sm:gap-2">
                     {generateCalendarDays().map((day, i) => {
                       if (day === null) return <div key={`empty-${i}`} />;
-                      
                       const dateStr = `${currentYear}-${(currentMonth + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
                       const isSelected = selectedDate === dateStr;
                       const isPast = new Date(dateStr) < new Date(new Date().setHours(0,0,0,0));
@@ -412,7 +374,6 @@ Please find my receipt attached. Looking forward to it!`;
                       );
                     })}
                   </div>
-
                 </div>
               </div>
 
@@ -464,17 +425,7 @@ Please find my receipt attached. Looking forward to it!`;
                       onChange={(e) => setAgreedToTerms(e.target.checked)}
                       className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-ink/30 bg-white transition-all checked:border-brand-700 checked:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-700/20 focus:ring-offset-1"
                     />
-                    <svg
-                      className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity"
-                      width="12"
-                      height="12"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="3"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
+                    <svg className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                   </div>
@@ -505,11 +456,7 @@ Please find my receipt attached. Looking forward to it!`;
         </main>
       )}
 
-      <LegalModal 
-        isOpen={legalModalOpen} 
-        onClose={() => setLegalModalOpen(false)} 
-        type={legalType} 
-      />
+      <LegalModal isOpen={legalModalOpen} onClose={() => setLegalModalOpen(false)} type={legalType} />
     </>
   );
 }
