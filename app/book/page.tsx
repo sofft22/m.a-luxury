@@ -32,8 +32,6 @@ function BookingOptionsContent() {
         
         if (found) {
           const parsedOptions = typeof found.options === 'string' ? JSON.parse(found.options || "[]") : found.options;
-          
-          // PARSE EXTRAS HERE
           const parsedExtras = typeof found.extras === 'string' ? JSON.parse(found.extras || "[]") : (found.extras || []);
 
           const cleanOptions = parsedOptions.map((o: any) => ({ ...o, duration: o.duration || 60 }));
@@ -67,7 +65,7 @@ function BookingOptionsContent() {
     if (serviceData?.extras) {
       serviceData.extras.forEach((extra: any) => {
         if (selectedExtras.includes(extra.name)) {
-          total += Number(extra.minPrice) || 0; // We add the minimum price to the total
+          total += Number(extra.minPrice) || 0;
         }
       });
     }
@@ -114,84 +112,112 @@ function BookingOptionsContent() {
       <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
           
-          {/* OPTIONS */}
-          <div className="mb-8">
-            <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-              Select Size / Length
+          {/* PREMIUM OPTIONS GRID */}
+          <div className="mb-10">
+            <h2 className="text-[22px] text-ink mb-6" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+              1. Select Size & Length
             </h2>
             
             {serviceData && serviceData.options.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                {serviceData.options.map((opt: any, i: number) => (
-                  <button
-                    key={i}
-                    onClick={() => setSelectedOption(opt)}
-                    className={`py-3 px-4 rounded-lg border text-[12px] font-bold uppercase tracking-wider transition-all flex flex-col items-center justify-center gap-1 ${
-                      selectedOption?.name === opt.name 
-                        ? "border-brand-700 bg-brand-700 text-white shadow-md" 
-                        : "border-ink/10 text-ink hover:border-brand-700 bg-white"
-                    }`}
-                  >
-                    <span>{opt.name}</span>
-                    <span className={`text-[14px] ${selectedOption?.name === opt.name ? "text-white/80" : "text-brand-700"}`}>
-                      £{opt.price}
-                    </span>
-                    <span className={`text-[10px] ${selectedOption?.name === opt.name ? "text-white/60" : "text-muted"}`}>
-                      {opt.duration >= 60 ? `${(opt.duration / 60).toFixed(1).replace('.0', '')} hrs` : `${opt.duration} mins`}
-                    </span>
-                  </button>
-                ))}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {serviceData.options.map((opt: any, i: number) => {
+                  const isSelected = selectedOption?.name === opt.name;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedOption(opt)}
+                      className={`group relative p-5 rounded-xl border-2 text-left transition-all duration-300 flex flex-col justify-center ${
+                        isSelected 
+                          ? "border-brand-700 bg-brand-700 shadow-lg shadow-brand-700/20" 
+                          : "border-ink/10 bg-[#FAF7FE] hover:border-brand-300 hover:bg-white"
+                      }`}
+                    >
+                      <div className="flex justify-between items-start mb-1">
+                        <span className={`text-[14px] font-bold uppercase tracking-wider ${isSelected ? "text-white" : "text-ink"}`}>
+                          {opt.name}
+                        </span>
+                        {isSelected && (
+                          <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-3 h-3 text-brand-700"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="flex items-baseline gap-2 mt-2">
+                        <span className={`text-[22px] leading-none ${isSelected ? "text-white" : "text-brand-700"}`} style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                          £{opt.price}
+                        </span>
+                        <span className={`text-[11px] uppercase tracking-wider ${isSelected ? "text-white/60" : "text-muted"}`}>
+                          {opt.duration >= 60 ? `${(opt.duration / 60).toFixed(1).replace('.0', '')} hrs` : `${opt.duration} mins`}
+                        </span>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-[13px] text-muted">No specific options available.</p>
             )}
           </div>
 
-          {/* EXTRAS CHECKBOXES */}
+          {/* PREMIUM EXTRAS */}
           {serviceData && serviceData.extras && serviceData.extras.length > 0 && (
-            <div className="mb-8 pt-6 border-t border-ink/10">
-              <h2 className="text-[20px] text-ink mb-4" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                Add-ons
+            <div className="mb-10 pt-8 border-t border-ink/10">
+              <h2 className="text-[22px] text-ink mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                2. Add-ons
               </h2>
+              <p className="text-[12px] text-muted mb-4">Optional extras to elevate your look.</p>
+
               <div className="flex flex-col gap-3">
-                {serviceData.extras.map((extra: any, i: number) => (
-                  <label key={i} className="flex items-center gap-3 cursor-pointer group">
-                    <div className="relative flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={selectedExtras.includes(extra.name)}
-                        onChange={() => toggleExtra(extra.name)}
-                        className="peer h-5 w-5 cursor-pointer appearance-none rounded border border-ink/30 bg-white transition-all checked:border-brand-700 checked:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-700/20 focus:ring-offset-1"
-                      />
-                      <svg className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-white opacity-0 peer-checked:opacity-100 transition-opacity" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                    <span className="text-[14px] text-ink group-hover:text-brand-700 transition-colors">
-                      {extra.name} 
-                      <span className="text-muted ml-1">
-                        (from £{extra.minPrice}{extra.maxPrice > extra.minPrice ? ` - £${extra.maxPrice}` : ""})
-                      </span>
-                    </span>
-                  </label>
-                ))}
+                {serviceData.extras.map((extra: any, i: number) => {
+                  const isChecked = selectedExtras.includes(extra.name);
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => toggleExtra(extra.name)}
+                      className={`w-full flex items-center justify-between p-4 rounded-xl border-2 transition-all duration-200 ${
+                        isChecked 
+                          ? "border-brand-700 bg-brand-50" 
+                          : "border-ink/10 bg-white hover:border-brand-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        {/* CUSTOM CHECKBOX */}
+                        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                          isChecked ? "border-brand-700 bg-brand-700" : "border-ink/30 bg-white"
+                        }`}>
+                          {isChecked && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-4 h-4 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                        </div>
+                        
+                        <div className="text-left">
+                          <p className={`text-[14px] font-bold ${isChecked ? "text-brand-900" : "text-ink"}`}>{extra.name}</p>
+                          <p className="text-[11px] text-muted mt-0.5">
+                            From £{extra.minPrice}{extra.maxPrice > extra.minPrice ? ` - £${extra.maxPrice}` : ""}
+                          </p>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           )}
 
-          {/* TOTAL */}
-          <div className="pt-6 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
+          {/* TOTAL & CONTINUE */}
+          <div className="pt-8 border-t border-ink/10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div>
               <p className="text-[11px] font-bold uppercase tracking-widest text-muted mb-1">Estimated Total</p>
-              <p className="text-[32px] text-brand-700" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                £{calculateTotal()}
-              </p>
+              <div className="flex items-baseline gap-2">
+                <p className="text-[40px] text-brand-700 leading-none" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                  £{calculateTotal()}
+                </p>
+              </div>
             </div>
             
             <button 
               onClick={handleContinue}
               disabled={!selectedOption}
-              className="w-full md:w-auto rounded-full bg-brand-700 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 disabled:opacity-50"
+              className="w-full md:w-auto rounded-full bg-brand-700 px-10 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white shadow-lg shadow-brand-700/30 transition-all hover:bg-brand-900 hover:-translate-y-0.5 disabled:opacity-50"
             >
               Continue to Date & Time →
             </button>
