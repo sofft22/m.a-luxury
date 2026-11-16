@@ -27,7 +27,8 @@ export async function POST(request: Request) {
       category: body.category,
       description: body.description || "",
       options: JSON.stringify(body.options || []),
-      image: body.image || "", // <--- SAVES IMAGE
+      extras: JSON.stringify(body.extras || []), 
+      image: body.image || "",
       inStock: body.inStock ? 1 : 0,
     });
 
@@ -51,7 +52,8 @@ export async function PUT(request: Request) {
         category: body.category,
         description: body.description || "",
         options: JSON.stringify(body.options || []),
-        image: body.image || "", // <--- UPDATES IMAGE
+        extras: JSON.stringify(body.extras || []), 
+        image: body.image || "",
         inStock: body.inStock ? 1 : 0,
       })
       .where(eq(services.id, body.id));
