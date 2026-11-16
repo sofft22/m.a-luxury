@@ -16,7 +16,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
   const [inStock, setInStock] = useState(service ? service.inStock === 1 : true);
   const [image, setImage] = useState(service?.image || "");
 
-  // OPTIONS STATE (Now includes duration per option)
+  // OPTIONS STATE
   const [options, setOptions] = useState<{ name: string; price: string; duration: string }[]>(() => {
     if (!service || !service.options) return [{ name: "", price: "", duration: "60" }];
     try {
@@ -172,7 +172,7 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
             <input value={description} onChange={e => setDescription(e.target.value)} type="text" placeholder="Brief detail" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
-          {/* OPTIONS WITH INDIVIDUAL DURATION */}
+          {/* OPTIONS */}
           <div>
             <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Options, Prices & Durations</label>
             <div className="flex flex-col gap-3">
