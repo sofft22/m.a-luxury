@@ -12,7 +12,6 @@ export default function AdminAvailabilityPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
-  // Exception Form State
   const [exDate, setExDate] = useState("");
   const [exIsOpen, setExIsOpen] = useState(false);
   const [exStart, setExStart] = useState("09:00");
@@ -115,7 +114,9 @@ export default function AdminAvailabilityPage() {
                 <div className="flex items-center gap-2">
                   <input type="time" value={day.startTime} onChange={(e) => handleWeeklyChange(day.id, "startTime", e.target.value)} className="rounded-md border border-ink/20 bg-[#FAF7FE] px-3 py-1.5 text-[13px] outline-none focus:border-brand-700" />
                   <span className="text-[13px] text-muted">to</span>
+                  {/* ALLOW NEXT DAY END TIME */}
                   <input type="time" value={day.endTime} onChange={(e) => handleWeeklyChange(day.id, "endTime", e.target.value)} className="rounded-md border border-ink/20 bg-[#FAF7FE] px-3 py-1.5 text-[13px] outline-none focus:border-brand-700" />
+                  <span className="text-[11px] text-muted ml-1">(Next day if past midnight)</span>
                 </div>
               ) : (
                 <span className="text-[13px] text-muted italic">Closed</span>
