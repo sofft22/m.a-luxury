@@ -111,8 +111,9 @@ function CalendarContent() {
       }
     }
 
+    // Default 24 hours open if no schedule is found so we don't block long services
     let openTime = 9; 
-    let closeTime = 18; 
+    let closeTime = 21; 
 
     const dateObj = new Date(selectedDate);
     const dayOfWeek = dateObj.getDay();
@@ -126,15 +127,25 @@ function CalendarContent() {
       closeTime = parseInt(standardDay.endTime.split(":")[0]);
     }
     
+    // If the end time is past midnight, it means they work 24 hours
+    if (closeTime < openTime) closeTime += 24;
+    
+    // If a service takes 24 hours, they can only start at the open time
+    const is24HourService = duration >= 1440;
+
     const slots = [];
     
     for (let hour = openTime; hour < closeTime; hour++) {
+      if (is24HourService && hour > openTime) break; // Only show the start time for 24hr services
+
       const endHour = hour + (duration / 60);
       
-      if (endHour > closeTime) continue;
+      // If service runs past closing time, skip it (unless it's a 24hr service)
+      if (!is24HourService && endHour > closeTime) continue;
 
-      const startStr = `${hour.toString().padStart(2, '0')}:00`;
-      const endH = Math.floor(endHour);
+      const startStr = `${(hour % 24).toString().padStart(2, '0')}:00`;
+      
+      const endH = Math.floor(endHour) % 24;
       const endM = (endHour % 1) !== 0 ? "30" : "00";
       const endStr = `${endH.toString().padStart(2, '0')}:${endM}`;
 
