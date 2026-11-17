@@ -84,6 +84,16 @@ function BookingOptionsContent() {
     );
   };
 
+  // Helper to format time cleanly (24 hours, 4 hrs, 30 mins)
+  const formatTime = (mins: number) => {
+    if (mins === 1440) return "24 Hours";
+    if (mins >= 60) {
+      const hrs = mins / 60;
+      return `${hrs % 1 === 0 ? hrs : hrs.toFixed(1)} Hrs`;
+    }
+    return `${mins} Mins`;
+  };
+
   if (loading) {
     return <div className="min-h-screen bg-[#FAF7FE] flex justify-center pt-32"><div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>;
   }
@@ -112,44 +122,46 @@ function BookingOptionsContent() {
       <div className="mx-auto max-w-3xl px-5 md:px-8 -mt-10 md:-mt-16 relative z-20">
         <div className="bg-white p-6 md:p-10 rounded-3xl border border-brand-100 shadow-xl shadow-brand-900/10">
           
-          {/* PREMIUM OPTIONS GRID */}
+          {/* PREMIUM OPTIONS LIST */}
           <div className="mb-10">
-            <h2 className="text-[22px] text-ink mb-6" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+            <h2 className="text-[22px] text-ink mb-2" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
               1. Select Size & Length
             </h2>
+            <p className="text-[12px] text-muted mb-6">Choose the style that fits your desired look.</p>
             
             {serviceData && serviceData.options.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="flex flex-col gap-3">
                 {serviceData.options.map((opt: any, i: number) => {
                   const isSelected = selectedOption?.name === opt.name;
                   return (
                     <button
                       key={i}
                       onClick={() => setSelectedOption(opt)}
-                      className={`group relative p-5 rounded-xl border-2 text-left transition-all duration-300 flex flex-col justify-center ${
+                      className={`group relative w-full p-5 rounded-xl border transition-all duration-300 flex items-center justify-between ${
                         isSelected 
-                          ? "border-brand-700 bg-brand-700 shadow-lg shadow-brand-700/20" 
-                          : "border-ink/10 bg-[#FAF7FE] hover:border-brand-300 hover:bg-white"
+                          ? "border-brand-700 bg-brand-50 shadow-sm" 
+                          : "border-ink/10 bg-white hover:border-brand-300"
                       }`}
                     >
-                      <div className="flex justify-between items-start mb-1">
-                        <span className={`text-[14px] font-bold uppercase tracking-wider ${isSelected ? "text-white" : "text-ink"}`}>
+                      <div className="flex flex-col items-start text-left">
+                        <span className={`text-[15px] font-bold uppercase tracking-wider ${isSelected ? "text-brand-900" : "text-ink"}`}>
                           {opt.name}
                         </span>
-                        {isSelected && (
-                          <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-3 h-3 text-brand-700"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
-                          </div>
-                        )}
+                        <span className={`text-[12px] uppercase tracking-wider mt-1 ${isSelected ? "text-brand-700/70" : "text-muted"}`}>
+                          {formatTime(opt.duration)}
+                        </span>
                       </div>
                       
-                      <div className="flex items-baseline gap-2 mt-2">
-                        <span className={`text-[22px] leading-none ${isSelected ? "text-white" : "text-brand-700"}`} style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                      <div className="flex items-center gap-4">
+                        <span className={`text-[20px] ${isSelected ? "text-brand-700" : "text-ink"}`} style={{ fontFamily: 'var(--font-cormorant), serif' }}>
                           £{opt.price}
                         </span>
-                        <span className={`text-[11px] uppercase tracking-wider ${isSelected ? "text-white/60" : "text-muted"}`}>
-                          {opt.duration >= 60 ? `${(opt.duration / 60).toFixed(1).replace('.0', '')} hrs` : `${opt.duration} mins`}
-                        </span>
+                        {/* CUSTOM RADIO CIRCLE */}
+                        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                          isSelected ? "border-brand-700 bg-brand-700" : "border-ink/20 bg-white"
+                        }`}>
+                          {isSelected && <div className="h-2.5 w-2.5 rounded-full bg-white" />}
+                        </div>
                       </div>
                     </button>
                   );
@@ -168,7 +180,7 @@ function BookingOptionsContent() {
               </h2>
               <p className="text-[12px] text-muted mb-4">Optional extras to elevate your look.</p>
 
-              <div className="flex flex-col gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {serviceData.extras.map((extra: any, i: number) => {
                   const isChecked = selectedExtras.includes(extra.name);
                   return (
@@ -181,16 +193,15 @@ function BookingOptionsContent() {
                           : "border-ink/10 bg-white hover:border-brand-300"
                       }`}
                     >
-                      <div className="flex items-center gap-4">
-                        {/* CUSTOM CHECKBOX */}
-                        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+                      <div className="flex items-center gap-3">
+                        <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
                           isChecked ? "border-brand-700 bg-brand-700" : "border-ink/30 bg-white"
                         }`}>
-                          {isChecked && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-4 h-4 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                          {isChecked && <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="w-3.5 h-3.5 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                         </div>
                         
                         <div className="text-left">
-                          <p className={`text-[14px] font-bold ${isChecked ? "text-brand-900" : "text-ink"}`}>{extra.name}</p>
+                          <p className={`text-[13px] font-bold ${isChecked ? "text-brand-900" : "text-ink"}`}>{extra.name}</p>
                           <p className="text-[11px] text-muted mt-0.5">
                             From £{extra.minPrice}{extra.maxPrice > extra.minPrice ? ` - £${extra.maxPrice}` : ""}
                           </p>
