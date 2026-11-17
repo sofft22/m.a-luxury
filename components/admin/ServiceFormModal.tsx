@@ -222,6 +222,18 @@ export function ServiceFormModal({ service, onClose, onSave }: Props) {
                       <option value="600">10 Hours</option>
                       <option value="660">11 Hours</option>
                       <option value="720">12 Hours</option>
+                      <option value="780">13 Hours</option>
+                      <option value="840">14 Hours</option>
+                      <option value="900">15 Hours</option>
+                      <option value="960">16 Hours</option>
+                      <option value="1020">17 Hours</option>
+                      <option value="1080">18 Hours</option>
+                      <option value="1140">19 Hours</option>
+                      <option value="1200">20 Hours</option>
+                      <option value="1260">21 Hours</option>
+                      <option value="1320">22 Hours</option>
+                      <option value="1380">23 Hours</option>
+                      <option value="1440">24 Hours</option>
                     </select>
 
                     <button onClick={() => setOptions(options.filter((_, idx) => idx !== i))} className="text-ink/40 hover:text-red-500 px-2 shrink-0">✕</button>
