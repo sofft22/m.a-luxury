@@ -10,8 +10,13 @@ export const metadata: Metadata = {
   description: "Premium hair extensions, braids, locs, and luxury beauty services. Book your appointment today for flawless styles tailored to your crown.",
   
   metadataBase: new URL('https://maluxury.co.uk'),
-  
-  // This tells Next.js where your favicon is
+
+  // GOOGLE SEARCH CONSOLE VERIFICATION
+  verification: {
+    google: "sjPHA5MH7OCR9z2a7pYEJh48W4EYHe917m2LfV3KL4w",
+  },
+
+  // Favicon
   icons: {
     icon: '/favicon.ico', 
   },
@@ -25,7 +30,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-image.jpg', // Make sure this matches your exact filename
+        url: '/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'M.A Luxury Logo',
@@ -33,7 +38,6 @@ export const metadata: Metadata = {
     ],
   },
   
-  // NEW: This ensures your image shows up when shared on Twitter/X, WhatsApp, and iMessage
   twitter: {
     card: "summary_large_image",
     title: "M.A Luxury | Premium Hair & Beauty",
