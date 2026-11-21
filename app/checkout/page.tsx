@@ -11,16 +11,16 @@ import { LegalModal } from "@/components/LegalModal";
 const WHATSAPP_NUMBER = "447393157901";
 
 export default function CheckoutPage() {
-  const { cart, cartTotal, clearCart } = useCart();
+  // SAFE FALLBACK: Prevents the build from crashing if CartProvider isn't loaded yet
+  const cartContext = useCart();
+  const { cart, cartTotal, clearCart } = cartContext || { cart: [], cartTotal: 0, clearCart: () => {} };
   
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState("");
   
-  // Save the total amount and items before clearing the cart
   const [finalTotal, setFinalTotal] = useState(0);
   const [finalCartItems, setFinalCartItems] = useState<any[]>([]);
   
-  // Form State
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
@@ -30,7 +30,6 @@ export default function CheckoutPage() {
   const [saveDetails, setSaveDetails] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
 
-  // Legal Modal State
   const [legalModalOpen, setLegalModalOpen] = useState(false);
   const [legalType, setLegalType] = useState<"policies" | "privacy" | null>(null);
 
@@ -53,7 +52,6 @@ export default function CheckoutPage() {
     }
   }, []);
 
-  // --- Calculate Total Weight Safely ---
   const totalWeight = cart.reduce((total: number, item: any) => {
     let itemWeight = Number(item.weight) || 0;
     
@@ -76,7 +74,6 @@ export default function CheckoutPage() {
     return total + (itemWeight * item.qty);
   }, 0);
 
-  // --- Calculate Shipping based on Weight ---
   let shipping = 0;
   if (totalWeight > 0) {
     if (totalWeight <= 2) {
@@ -88,7 +85,6 @@ export default function CheckoutPage() {
     }
   }
 
-  // --- Calculate Total (No Processing Fee) ---
   const total = cartTotal + shipping;
   
   const canSubmit = Boolean(firstName.trim() && lastName.trim() && phone.trim() && address.trim() && city.trim() && agreedToTerms);
@@ -105,7 +101,6 @@ export default function CheckoutPage() {
     const newOrderId = `MA-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(newOrderId);
     
-    // Save the current cart and total before clearing
     setFinalTotal(total);
     setFinalCartItems([...cart]);
 
@@ -207,7 +202,6 @@ Please find my receipt attached for the total amount.`;
 
         <div className="mx-auto w-full max-w-[800px] px-6 -mt-10 md:-mt-16 pb-24 relative z-10">
           
-          {/* ORDER SUMMARY */}
           <div className="mb-8 rounded-2xl border border-ink/10 bg-white p-6 md:p-8 shadow-xl shadow-brand-900/5">
             <h2 className="mb-6 text-[12px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Your Order</h2>
             
@@ -229,7 +223,6 @@ Please find my receipt attached for the total amount.`;
               })}
             </div>
 
-            {/* TOTALS */}
             <div className="flex flex-col gap-2 pt-4">
               <div className="flex justify-between text-[13px] text-muted"><span>Subtotal</span><span>£{cartTotal.toLocaleString()}</span></div>
               <div className="flex justify-between text-[13px] text-muted">
@@ -244,7 +237,6 @@ Please find my receipt attached for the total amount.`;
             </div>
           </div>
 
-          {/* CONTACT DETAILS */}
           <div className="mb-8">
             <h2 className="mb-4 text-[12px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Contact</h2>
             <div className="flex flex-col gap-3">
@@ -253,7 +245,6 @@ Please find my receipt attached for the total amount.`;
             </div>
           </div>
 
-          {/* DELIVERY ADDRESS */}
           <div className="mb-8">
             <h2 className="mb-4 text-[12px] font-bold uppercase tracking-[0.15em] text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Delivery Address</h2>
             <div className="grid grid-cols-2 gap-3 mb-4">
@@ -264,7 +255,6 @@ Please find my receipt attached for the total amount.`;
             </div>
           </div>
 
-          {/* SAVE DETAILS TOGGLE */}
           <div className="mb-6 flex items-center justify-between bg-white p-5 rounded-xl border border-ink/10">
             <div>
               <p className="text-[13px] text-ink font-bold" style={{ fontFamily: "var(--font-inter), sans-serif" }}>Save my details for next time</p>
@@ -275,7 +265,6 @@ Please find my receipt attached for the total amount.`;
             </button>
           </div>
 
-          {/* TERMS CHECKBOX */}
           <div className="flex items-start gap-3 w-full mb-8 px-2">
             <div className="relative flex items-center">
               <input
@@ -312,7 +301,6 @@ Please find my receipt attached for the total amount.`;
             </label>
           </div>
 
-          {/* PLACE ORDER BUTTON */}
           <button 
             onClick={handlePlaceOrder} 
             disabled={!canSubmit} 
