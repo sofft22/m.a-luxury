@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import { ProductModal } from "@/components/ProductModal";
 import { ProductCard } from "@/components/ProductCard";
 
-// UPDATED CATEGORIES
 const CATEGORIES = [
   { id: "all", label: "All Extensions" },
   { id: "bonestraight", label: "Bonestraight" },
@@ -28,17 +27,13 @@ function ShopContent() {
   const [isCatOpen, setIsCatOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
-  // Fetch real data from D1
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // ADDED CACHE HERE: Next.js will remember the API response for 1 hour
-        const res = await fetch("/api/products", { 
-          next: { revalidate: 3600 } 
-        });
+        // CHANGED: Added ?images=false to prevent infinite loading on Cloudflare Workers
+        const res = await fetch("/api/products?images=false");
         const data = await res.json();
         
-        // Parse the sizes JSON string coming from the database
         const parsedData = data.map((p: any) => ({
           ...p,
           sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes || "[]") : p.sizes
@@ -69,7 +64,6 @@ function ShopContent() {
   return (
     <div className="min-h-screen bg-[#FAF7FE] text-ink flex flex-col">
       
-      {/* HEADER SECTION */}
       <section className="bg-ink pt-[120px] pb-10 px-6 md:pt-[160px] md:pb-16 md:px-12 border-b border-brand-100 relative z-20">
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -98,7 +92,6 @@ function ShopContent() {
         </div>
       </section>
 
-      {/* PRODUCT GRID */}
       <section className="mx-auto w-full max-w-7xl flex-1 px-4 py-12 md:px-8 md:py-20">
         {loading ? (
           <div className="flex justify-center py-20"><div className="h-6 w-6 animate-spin rounded-full border-2 border-brand-200 border-t-brand-700" /></div>
