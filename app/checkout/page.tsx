@@ -14,6 +14,10 @@ export default function CheckoutPage() {
   const [isSuccess, setIsSuccess] = useState(false);
   const [orderId, setOrderId] = useState("");
   
+  // Save the total amount and items before clearing the cart
+  const [finalTotal, setFinalTotal] = useState(0);
+  const [finalCartItems, setFinalCartItems] = useState<any[]>([]);
+  
   // Form State
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -99,20 +103,25 @@ export default function CheckoutPage() {
     const newOrderId = `MA-${Math.floor(1000 + Math.random() * 9000)}`;
     setOrderId(newOrderId);
     
+    // Save the current cart and total before clearing
+    setFinalTotal(total);
+    setFinalCartItems([...cart]);
+
     clearCart();
     setIsSuccess(true); 
   };
 
+  // FIXED: M.A Luxury capitalization here
   const whatsappMessage = 
-`Hi M.a Luxury! 💜
+`Hi M.A Luxury! 💜
 
 I have just placed an order on the website.
 
 *Order Details:*
 ━━━━━━━━━━━━━━━
 *Order ID:* ${orderId}
-*Items:* ${cart.map(i => `${i.qty}x ${i.title} (${i.size})`).join(', ')}
-*Total:* £${total.toFixed(2)}
+*Items:* ${finalCartItems.map(i => `${i.qty}x ${i.title} (${i.size})`).join(', ')}
+*Total:* £${finalTotal.toFixed(2)}
 ━━━━━━━━━━━━━━━
 
 *Name:* ${firstName} ${lastName}
@@ -142,7 +151,8 @@ Please find my receipt attached for the total amount.`;
 
             <div className="bg-[#FAF7FE] border border-brand-100 rounded-2xl p-6 text-left mb-8">
               <h2 className="text-[12px] font-bold uppercase tracking-[0.15em] text-brand-700 mb-4" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Payment Details</h2>
-              <p className="text-[13px] text-ink mb-4">Please send the total <strong>£{total.toFixed(2)}</strong> to:</p>
+              {/* FIXED: Using finalTotal instead of total */}
+              <p className="text-[13px] text-ink mb-4">Please send the total <strong>£{finalTotal.toFixed(2)}</strong> to:</p>
               
               <div className="flex flex-col gap-2 text-[14px]">
                 <div className="flex justify-between border-b border-ink/10 pb-2">
