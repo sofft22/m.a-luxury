@@ -9,7 +9,21 @@ export const dynamic = "force-dynamic";
 export async function GET() {
   try {
     const db = getDb();
-    const allProducts = await db.select().from(products);
+    
+    // OPTIMIZATION: Only select the columns we need for the admin list and shop.
+    // We exclude `image` and `images` so we don't download megabytes of base64 data.
+    const allProducts = await db.select({
+      id: products.id,
+      title: products.title,
+      price: products.price,
+      weight: products.weight,
+      description: products.description,
+      category: products.category,
+      inStock: products.inStock,
+      featured: products.featured,
+      sizes: products.sizes,
+    }).from(products);
+
     return NextResponse.json(allProducts);
   } catch (error: any) {
     return NextResponse.json([]); 
@@ -17,6 +31,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // ... keep your exact same POST logic
   try {
     const body = await request.json();
     const db = getDb();
@@ -46,6 +61,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
+  // ... keep your exact same PUT logic
   try {
     const body = await request.json();
     const db = getDb();
@@ -76,6 +92,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  // ... keep your exact same DELETE logic
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("id");
