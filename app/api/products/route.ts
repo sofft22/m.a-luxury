@@ -12,8 +12,7 @@ export async function GET() {
     const allProducts = await db.select().from(products);
     return NextResponse.json(allProducts);
   } catch (error: any) {
-    console.error("GET PRODUCTS ERROR:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json([]); 
   }
 }
 
@@ -26,11 +25,12 @@ export async function POST(request: Request) {
       id: `p-${Date.now()}`,
       title: body.title,
       price: body.price,
+      weight: Number(body.weight) || 0, 
       description: body.description || "",
       category: body.category,
       image: body.image,
-      images: JSON.stringify(body.images || []),
-      sizes: JSON.stringify(body.sizes || []),
+      images: typeof body.images === 'string' ? body.images : JSON.stringify(body.images || []),
+      sizes: typeof body.sizes === 'string' ? body.sizes : JSON.stringify(body.sizes || []),
       inStock: body.inStock ? 1 : 0,
       featured: body.featured ? 1 : 0,
     });
@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("POST PRODUCT ERROR:", error.message);
+    console.error("POST PRODUCT ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -54,11 +54,12 @@ export async function PUT(request: Request) {
       .set({
         title: body.title,
         price: body.price,
+        weight: Number(body.weight) || 0,
         description: body.description || "",
         category: body.category,
         image: body.image,
-        images: JSON.stringify(body.images || []),
-        sizes: JSON.stringify(body.sizes || []),
+        images: typeof body.images === 'string' ? body.images : JSON.stringify(body.images || []),
+        sizes: typeof body.sizes === 'string' ? body.sizes : JSON.stringify(body.sizes || []),
         inStock: body.inStock ? 1 : 0,
         featured: body.featured ? 1 : 0,
       })
@@ -69,7 +70,7 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("PUT PRODUCT ERROR:", error.message);
+    console.error("PUT PRODUCT ERROR:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -88,7 +89,6 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error("DELETE PRODUCT ERROR:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
