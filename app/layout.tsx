@@ -21,23 +21,23 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <main className="flex-1 w-full lg:pl-[260px] pb-[100px] lg:pb-0">
+      {/* Added lg:pl-[260px] to push content past the fixed sidebar */}
+      <div className="flex-1 w-full lg:pl-[260px] flex flex-col min-h-screen">
         
-        {/* MOBILE PREMIUM HEADER */}
-        <header className="lg:hidden sticky top-0 left-0 right-0 z-40 flex h-[70px] items-center justify-center bg-[#FAF7FE]/80 backdrop-blur-md border-b border-ink/5">
+        {/* STICKY PREMIUM HEADER (Works on Mobile & Desktop) */}
+        <header className="sticky top-0 z-40 flex h-[70px] items-center justify-center lg:justify-start lg:px-10 bg-[#FAF7FE]/80 backdrop-blur-md border-b border-ink/5">
           <span className="text-[22px] font-semibold uppercase tracking-[0.2em] text-brand-700" style={{ fontFamily: "var(--font-cormorant), serif" }}>
             M.A LUXURY
           </span>
         </header>
 
         {/* Page Content */}
-        <div className="min-h-screen">
+        <main className="flex-1 pb-[100px] lg:pb-0">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
 
       {/* MOBILE FLOATING GLASSMORPHISM NAV */}
-      {/* Lowered to bottom-4, narrower max-width, and stronger blur */}
       <div className="lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-[320px] px-4">
         <nav className="flex w-full items-center justify-around rounded-full border border-white/60 bg-white/40 px-2 py-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
           
