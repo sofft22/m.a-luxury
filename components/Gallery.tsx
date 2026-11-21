@@ -5,7 +5,8 @@ import Link from "next/link";
 
 // USING EXACTLY YOUR 8 IMAGES FROM THE PUBLIC FOLDER
 const GALLERY_IMAGES = [
-  { src: "/Lashes.jpg", title: "Braids", size: "tall", fit: "object-cover object-top" }, // Added object-top here to show lashes
+  // Changed to object-contain and added a background color
+  { src: "/Lashes.jpg", title: "Braids", size: "tall", fit: "object-contain bg-[#FAF7FE]" }, 
   { src: "/hero-1.jpg", title: "Signature Knotless", size: "square", fit: "object-cover" },
   { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall", fit: "object-cover" },
   { src: "/hero-2.jpg", title: "Soft Curls", size: "square", fit: "object-cover" },
