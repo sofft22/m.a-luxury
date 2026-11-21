@@ -5,8 +5,8 @@ import Link from "next/link";
 
 // USING EXACTLY YOUR 8 IMAGES FROM THE PUBLIC FOLDER
 const GALLERY_IMAGES = [
-  // Changed to object-contain and added a background color
-  { src: "/Lashes.jpg", title: "Braids", size: "tall", fit: "object-contain bg-[#FAF7FE]" }, 
+  // We use object-cover to fill the box, scale-150 to zoom in, and object-left to focus on the left eye.
+  { src: "/Lashes.jpg", title: "Braids", size: "tall", fit: "object-cover object-left scale-150" }, 
   { src: "/hero-1.jpg", title: "Signature Knotless", size: "square", fit: "object-cover" },
   { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall", fit: "object-cover" },
   { src: "/hero-2.jpg", title: "Soft Curls", size: "square", fit: "object-cover" },
@@ -66,8 +66,8 @@ export function Gallery() {
                   alt={img.title}
                   fill
                   unoptimized={true}
-                  // Changed this line to use the dynamic 'fit' property
-                  className={`${img.fit} transition-transform duration-700 ease-out group-hover:scale-105`}
+                  // The zoom will look smooth on hover without conflicting with the initial scale
+                  className={`${img.fit} transition-transform duration-700 ease-out group-hover:scale-[1.6]`}
                 />
                 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col items-center justify-center">
