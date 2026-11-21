@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ProductCard } from "./ProductCard";
 
@@ -8,39 +5,41 @@ interface Props {
   onProductClick: (product: any) => void;
 }
 
-export function FeaturedProducts({ onProductClick }: Props) {
-  const [featuredItems, setFeaturedItems] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+// 1. THIS IS THE SERVER COMPONENT (Fetches & Caches Data)
+export async function FeaturedProducts({ onProductClick }: Props) {
+  // Fetch directly on the server. Caches for 1 hour.
+  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://maluxury.co.uk'}/api/products`, {
+    next: { revalidate: 3600 } 
+  });
+  
+  if (!res.ok) return null;
 
-  useEffect(() => {
-    const fetchFeatured = async () => {
-      try {
-        const res = await fetch("/api/products");
-        const data = await res.json();
-        
-        // Filter only items marked as "featured" and format them
-        const featured = data
-          .filter((p: any) => p.featured === 1)
-          .slice(0, 4)
-          .map((p: any) => ({
-            ...p,
-            sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes || "[]") : p.sizes
-          }));
+  const data = await res.json();
 
-        setFeaturedItems(featured);
-      } catch (error) {
-        console.error("Failed to load featured products", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const featuredItems = data
+    .filter((p: any) => p.featured === 1)
+    .slice(0, 4)
+    .map((p: any) => ({
+      ...p,
+      sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes || "[]") : p.sizes
+    }));
 
-    fetchFeatured();
-  }, []);
+  if (featuredItems.length === 0) return null;
 
-  if (loading) return null; 
-  if (featuredItems.length === 0) return null; // Don't show section if no featured products
+  // We pass the fetched data to the Client Component
+  return (
+    <ClientFeaturedGrid 
+      initialItems={featuredItems} 
+      onProductClick={onProductClick} 
+    />
+  );
+}
 
+// 2. THIS IS THE CLIENT COMPONENT (Renders UI & Handles Clicks)
+// Note: The "use client" directive must be at the very top of this component block.
+"use client";
+
+export function ClientFeaturedGrid({ initialItems, onProductClick }: { initialItems: any[], onProductClick: (p: any) => void }) {
   return (
     <section className="w-full bg-[#FAF7FE] py-20 px-4 md:py-28 md:px-6">
       <div className="mx-auto max-w-[1400px]">
@@ -68,7 +67,7 @@ export function FeaturedProducts({ onProductClick }: Props) {
 
         {/* GRID */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10 md:gap-x-6 lg:gap-y-14">
-          {featuredItems.map((item, idx) => (
+          {initialItems.map((item, idx) => (
             <div 
               key={item.id} 
               className="rounded-xl overflow-hidden group cursor-pointer" 
