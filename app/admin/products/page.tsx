@@ -74,15 +74,16 @@ export default function AdminProductsPage() {
 
   const outOfStockCount = products.filter((p) => !p.inStock).length;
 
+  // UPDATED: Your exact new categories
   const CATEGORIES = [
     { id: "all", label: "All" },
     { id: "bonestraight", label: "Bonestraight" },
     { id: "french-curls", label: "French Curls" },
-    { id: "kinky", label: "Kinky" },
-    { id: "passion-twist", label: "Passion Twist" },
+    { id: "italian-curls", label: "Italian Curls" },
+    { id: "deep-wave", label: "Deep Wave" },
+    { id: "remy-curls", label: "Remy Curls" },
     { id: "expression", label: "Expression" },
-    { id: "crochet", label: "Crochet" },
-    { id: "locs", label: "Locs" },
+    { id: "locs", label: "Locs Extensions" },
   ];
 
   return (
