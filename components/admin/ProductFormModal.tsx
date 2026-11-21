@@ -15,11 +15,12 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
   const [weight, setWeight] = useState(product?.weight?.toString() || "");
   const [description, setDescription] = useState(product?.description || "");
   
+  // UPDATED CATEGORIES
   const [category, setCategory] = useState(product?.category || "bonestraight");
+  
   const [inStock, setInStock] = useState(product ? product.inStock === 1 : true);
   const [featured, setFeatured] = useState(product ? product.featured === 1 : true);
   
-  // Sizes with Weight
   const [sizes, setSizes] = useState<{ size: string; price: string; weight: string }[]>(() => {
     if (!product || !product.sizes) return [{ size: "", price: "", weight: "" }];
     
@@ -159,7 +160,7 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
           
           {/* IMAGES */}
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Product Images (First is Main)</label>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Product Images (First is Main)</label>
             <div className="flex flex-wrap gap-3">
               {images.map((img, i) => (
                 <div key={i} className={`relative h-24 w-24 shrink-0 overflow-hidden rounded-md bg-brand-100 border-2 transition-all ${i === 0 ? "border-brand-700" : "border-transparent"}`}>
@@ -179,42 +180,43 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Title</label>
-            <input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="e.g. Bonestraight" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" style={{ fontFamily: "var(--font-inter), sans-serif" }} />
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Title</label>
+            <input value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="e.g. Bonestraight" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Category</label>
-            <select value={category} onChange={e => setCategory(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Category</label>
+            {/* UPDATED CATEGORY DROPDOWN */}
+            <select value={category} onChange={e => setCategory(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
               <option value="bonestraight">Bonestraight</option>
               <option value="french-curls">French Curls</option>
-              <option value="kinky">Kinky</option>
-              <option value="passion-twist">Passion Twist</option>
+              <option value="italian-curls">Italian Curls</option>
+              <option value="deep-wave">Deep Wave</option>
+              <option value="remy-curls">Remy Curls</option>
               <option value="expression">Expression</option>
-              <option value="crochet">Crochet</option>
               <option value="locs">Locs Extensions</option>
             </select>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Base Price (£)</label>
-              <input value={price} onChange={e => setPrice(e.target.value)} type="number" placeholder="45.00" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" style={{ fontFamily: "var(--font-inter), sans-serif" }} />
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Base Price (£)</label>
+              <input value={price} onChange={e => setPrice(e.target.value)} type="number" placeholder="45.00" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
             </div>
             <div>
-              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Base Weight (kg)</label>
-              <input value={weight} onChange={e => setWeight(e.target.value)} type="number" step="0.01" placeholder="0.2" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" style={{ fontFamily: "var(--font-inter), sans-serif" }} />
+              <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Base Weight (kg)</label>
+              <input value={weight} onChange={e => setWeight(e.target.value)} type="number" step="0.01" placeholder="0.2" className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
             </div>
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="100% Virgin hair..." className="w-full resize-none rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" style={{ fontFamily: "var(--font-inter), sans-serif" }} />
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Description</label>
+            <textarea value={description} onChange={e => setDescription(e.target.value)} rows={3} placeholder="100% Virgin hair..." className="w-full resize-none rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700" />
           </div>
 
           {/* SIZES / LENGTHS */}
           <div>
-            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Lengths, Prices & Weights</label>
+            <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Lengths, Prices & Weights</label>
             <div className="flex flex-col gap-3">
               {sizes.map((option, i) => (
                 <div key={i} className="flex flex-col sm:flex-row gap-2 items-start sm:items-center bg-white p-3 sm:p-0 rounded-lg sm:bg-transparent border border-ink/10 sm:border-0">
@@ -225,7 +227,6 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
                     type="text" 
                     placeholder='Length (e.g. 16")' 
                     className="w-full sm:flex-1 rounded-md border border-ink/20 bg-white px-4 py-2 text-[13px] outline-none focus:border-brand-700" 
-                    style={{ fontFamily: "var(--font-inter), sans-serif" }} 
                   />
                   
                   <div className="flex gap-2 w-full sm:w-auto">
@@ -237,7 +238,6 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
                         type="number" 
                         placeholder="Price" 
                         className="w-full rounded-md border border-ink/20 bg-white pl-7 pr-3 py-2 text-[13px] outline-none focus:border-brand-700" 
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }} 
                       />
                     </div>
                     
@@ -249,7 +249,6 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
                         step="0.01"
                         placeholder="Weight (kg)" 
                         className="w-full rounded-md border border-ink/20 bg-white px-3 py-2 text-[13px] outline-none focus:border-brand-700" 
-                        style={{ fontFamily: "var(--font-inter), sans-serif" }} 
                       />
                     </div>
 
@@ -257,13 +256,13 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
                   </div>
                 </div>
               ))}
-              <button onClick={() => setSizes([...sizes, { size: "", price: "", weight: "" }])} className="text-[11px] font-bold uppercase tracking-wider text-brand-700 text-left mt-2 hover:underline" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>+ Add Length</button>
+              <button onClick={() => setSizes([...sizes, { size: "", price: "", weight: "" }])} className="text-[11px] font-bold uppercase tracking-wider text-brand-700 text-left mt-2 hover:underline">+ Add Length</button>
             </div>
           </div>
 
           <div className="flex items-center justify-between border-y border-ink/10 py-4">
             <div>
-              <p className="text-[14px] font-semibold text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>In Stock</p>
+              <p className="text-[14px] font-semibold text-ink">In Stock</p>
             </div>
             <button onClick={() => setInStock(!inStock)} className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${inStock ? "bg-brand-700" : "bg-ink/20"}`}>
               <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${inStock ? "translate-x-[22px]" : "translate-x-0.5"}`} />
@@ -272,7 +271,7 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
 
           <div className="flex items-center justify-between pb-4">
             <div>
-              <p className="text-[14px] font-semibold text-ink" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Show on Homepage</p>
+              <p className="text-[14px] font-semibold text-ink">Show on Homepage</p>
             </div>
             <button onClick={() => setFeatured(!featured)} className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${featured ? "bg-brand-700" : "bg-ink/20"}`}>
               <span className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${featured ? "translate-x-[22px]" : "translate-x-0.5"}`} />
@@ -282,7 +281,7 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
         </div>
 
         <div className="p-6 pb-8 sm:pb-6 bg-white border-t border-ink/10 shrink-0">
-          <button onClick={handleSave} disabled={saving || uploading} className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-brand-900 disabled:opacity-50" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>
+          <button onClick={handleSave} disabled={saving || uploading} className="w-full rounded-full bg-brand-700 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all hover:bg-brand-900 disabled:opacity-50">
             {saving ? "Saving..." : product ? "Save Changes" : "Create Product"}
           </button>
         </div>
