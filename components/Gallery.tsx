@@ -5,7 +5,7 @@ import Link from "next/link";
 
 // USING EXACTLY YOUR 8 IMAGES FROM THE PUBLIC FOLDER
 const GALLERY_IMAGES = [
-  { src: "/braids-category.jpg", title: "Braids", size: "tall" },
+  { src: "/lashes.jpg", title: "Braids", size: "tall" },
   { src: "/hero-1.jpg", title: "Signature Knotless", size: "square" },
   { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall" },
   { src: "/hero-2.jpg", title: "Soft Curls", size: "square" },
