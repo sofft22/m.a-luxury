@@ -32,7 +32,10 @@ function ShopContent() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch("/api/products");
+        // ADDED CACHE HERE: Next.js will remember the API response for 1 hour
+        const res = await fetch("/api/products", { 
+          next: { revalidate: 3600 } 
+        });
         const data = await res.json();
         
         // Parse the sizes JSON string coming from the database
@@ -117,7 +120,7 @@ function ShopContent() {
 
       <div className="w-full border-t border-brand-100 py-8 mt-auto">
         <p className="text-center text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-muted" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-          © {new Date().getFullYear()} M.a Luxury. All rights reserved.
+          © {new Date().getFullYear()} M.A Luxury. All rights reserved.
         </p>
       </div>
 
