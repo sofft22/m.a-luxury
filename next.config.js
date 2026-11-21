@@ -1,7 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    unoptimized: true, // Required for Cloudflare
+    // Forces Cloudflare to serve the original image instantly 
+    // instead of trying to resize it on the fly (which causes slow loading).
+    unoptimized: true, 
   },
   async headers() {
     return [
