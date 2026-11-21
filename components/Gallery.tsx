@@ -3,50 +3,18 @@
 import Image from "next/image";
 import Link from "next/link";
 
+// Change these filenames to match your actual images in the public folder
 const GALLERY_IMAGES = [
-  {
-    src: "/hero-1.jpg",
-    title: "Signature Knotless",
-    size: "tall",
-  },
-  {
-    src: "/hero-2.jpg",
-    title: "Soft Boho Curls",
-    size: "square",
-  },
-  {
-    src: "/hero-3.jpg",
-    title: "Neat Locs",
-    size: "tall",
-  },
-  {
-    src: "/hero-4.jpg",
-    title: "Passion Twists",
-    size: "square",
-  },
-  {
-    src: "/hero-2.jpg",
-    title: "Custom Installs",
-    size: "square",
-  },
-  {
-    src: "/hero-1.jpg",
-    title: "Feed-in Braids",
-    size: "tall",
-  },
-  {
-    src: "/hero-4.jpg",
-    title: "Marley Twists",
-    size: "square",
-  },
-  {
-    src: "/hero-3.jpg",
-    title: "Bridal Styling",
-    size: "tall",
-  }
+  { src: "/gallery-1.jpg", title: "Knotless Braids", size: "tall" },
+  { src: "/gallery-2.jpg", title: "Boho Curls", size: "square" },
+  { src: "/gallery-3.jpg", title: "Neat Locs", size: "tall" },
+  { src: "/gallery-4.jpg", title: "Passion Twists", size: "square" },
+  { src: "/gallery-5.jpg", title: "Custom Installs", size: "square" },
+  { src: "/gallery-6.jpg", title: "Feed-in Braids", size: "tall" },
+  { src: "/gallery-7.jpg", title: "Marley Twists", size: "square" },
+  { src: "/gallery-8.jpg", title: "Bridal Styling", size: "tall" }
 ];
 
-// YOUR TIKTOK LINK
 const TIKTOK_URL = "https://www.tiktok.com/@m.aluxury1";
 
 export function Gallery() {
@@ -82,13 +50,11 @@ export function Gallery() {
           {GALLERY_IMAGES.map((img, idx) => (
             <Link
               key={idx}
-              // CHANGED: Now opens TikTok instead of /book
               href={TIKTOK_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="group relative block w-full overflow-hidden rounded-lg break-inside-avoid"
             >
-              {/* Image Container with varying aspect ratios */}
               <div 
                 className={`relative w-full ${
                   img.size === "tall" ? "aspect-[3/4]" : "aspect-square"
@@ -101,7 +67,6 @@ export function Gallery() {
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 
-                {/* Hover Overlay (Desktop) */}
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col items-center justify-center">
                   <span 
                     className="text-white text-[20px] italic translate-y-4 group-hover:translate-y-0 transition-transform duration-300 mb-3"
