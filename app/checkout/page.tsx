@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = "force-dynamic";
+
 import { useState, useEffect } from "react";
 import { useCart } from "@/app/CartContext";
 import Image from "next/image";
@@ -111,7 +113,6 @@ export default function CheckoutPage() {
     setIsSuccess(true); 
   };
 
-  // FIXED: M.A Luxury capitalization here
   const whatsappMessage = 
 `Hi M.A Luxury! 💜
 
@@ -151,7 +152,6 @@ Please find my receipt attached for the total amount.`;
 
             <div className="bg-[#FAF7FE] border border-brand-100 rounded-2xl p-6 text-left mb-8">
               <h2 className="text-[12px] font-bold uppercase tracking-[0.15em] text-brand-700 mb-4" style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>Payment Details</h2>
-              {/* FIXED: Using finalTotal instead of total */}
               <p className="text-[13px] text-ink mb-4">Please send the total <strong>£{finalTotal.toFixed(2)}</strong> to:</p>
               
               <div className="flex flex-col gap-2 text-[14px]">
