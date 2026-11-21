@@ -7,12 +7,15 @@ import { CartDrawer } from "@/components/CartDrawer";
 
 export const metadata: Metadata = {
   title: "M.A Luxury | Premium Hair & Beauty Services",
-  
-  // FIXED: Shortened to under 160 characters so Google doesn't cut it off
   description: "Premium hair extensions, braids, locs, and luxury beauty services. Book your appointment today for flawless styles tailored to your crown.",
   
   metadataBase: new URL('https://maluxury.co.uk'),
   
+  // This tells Next.js where your favicon is
+  icons: {
+    icon: '/favicon.ico', 
+  },
+
   openGraph: {
     title: "M.A Luxury | Premium Hair & Beauty",
     description: "Elevate your look with our expert braiding, locs, and beauty services. Book your appointment online.",
@@ -22,13 +25,20 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        // Make sure you have an 'og-image.jpg' in your public folder that represents your brand
-        url: '/og-image.jpg', 
+        url: '/og-image.jpg', // Make sure this matches your exact filename
         width: 1200,
         height: 630,
         alt: 'M.A Luxury Logo',
       },
     ],
+  },
+  
+  // NEW: This ensures your image shows up when shared on Twitter/X, WhatsApp, and iMessage
+  twitter: {
+    card: "summary_large_image",
+    title: "M.A Luxury | Premium Hair & Beauty",
+    description: "Elevate your look with our expert braiding, locs, and beauty services. Book your appointment online.",
+    images: ['/og-image.jpg'],
   },
 };
 
