@@ -6,27 +6,27 @@ import { CartProvider } from "./CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
 
 export const metadata: Metadata = {
-  title: "Mocktopia Treats | Banana Bread & Mocktails in Plymouth",
+  title: "M.A Luxury | Premium Hair & Beauty Services",
   
   // FIXED: Shortened to under 160 characters so Google doesn't cut it off
-  description: "Freshly baked banana bread, puff puffs & mocktails. Delivered in Plymouth & across the UK. Build your own custom box today!",
+  description: "Premium hair extensions, braids, locs, and luxury beauty services. Book your appointment today for flawless styles tailored to your crown.",
   
-  metadataBase: new URL('https://mocktopiatreats.com'),
+  metadataBase: new URL('https://maluxury.co.uk'),
   
   openGraph: {
-    title: "Mocktopia Treats | Sips & Treats",
-    description: "Mix and match your favorite treats. Available in boxes of 6 or 8. Delivered in Plymouth.",
-    url: 'https://mocktopiatreats.com',
-    siteName: 'Mocktopia Treats',
+    title: "M.A Luxury | Premium Hair & Beauty",
+    description: "Elevate your look with our expert braiding, locs, and beauty services. Book your appointment online.",
+    url: 'https://maluxury.co.uk',
+    siteName: 'M.A Luxury',
     locale: 'en_GB',
     type: 'website',
     images: [
       {
-        // FIXED: Changed to .jpg since you saved it as a JPG
+        // Make sure you have an 'og-image.jpg' in your public folder that represents your brand
         url: '/og-image.jpg', 
         width: 1200,
         height: 630,
-        alt: 'Mocktopia Treats Logo',
+        alt: 'M.A Luxury Logo',
       },
     ],
   },
