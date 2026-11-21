@@ -9,13 +9,13 @@ export const dynamic = "force-dynamic";
 export async function GET(request: Request) {
   try {
     const db = getDb();
-    
-    // Check if the request is coming from the Admin panel
     const { searchParams } = new URL(request.url);
+    
     const isAdmin = searchParams.get("admin") === "true";
+    const noImages = searchParams.get("images") === "false";
 
-    if (isAdmin) {
-      // FAST FETCH FOR ADMIN (No heavy images)
+    // 1. FAST FETCH (No images) for Admin AND Shop Page
+    if (isAdmin || noImages) {
       const allProducts = await db.select({
         id: products.id,
         title: products.title,
@@ -28,17 +28,18 @@ export async function GET(request: Request) {
         sizes: products.sizes,
       }).from(products);
       return NextResponse.json(allProducts);
-    } else {
-      // FULL FETCH FOR PUBLIC SHOP (Includes images)
-      const allProducts = await db.select().from(products);
-      return NextResponse.json(allProducts);
     }
+
+    // 2. FULL FETCH (With images) for the Homepage/Modals if needed
+    const allProducts = await db.select().from(products);
+    return NextResponse.json(allProducts);
 
   } catch (error: any) {
     return NextResponse.json([]); 
   }
 }
 
+// ... keep your POST, PUT, DELETE exactly the same below ...
 export async function POST(request: Request) {
   try {
     const body = await request.json();
