@@ -5,15 +5,15 @@ import { useSearchParams } from "next/navigation";
 import { ProductModal } from "@/components/ProductModal";
 import { ProductCard } from "@/components/ProductCard";
 
-// YOUR NEW CATEGORIES
+// UPDATED CATEGORIES
 const CATEGORIES = [
   { id: "all", label: "All Extensions" },
   { id: "bonestraight", label: "Bonestraight" },
   { id: "french-curls", label: "French Curls" },
-  { id: "kinky", label: "Kinky" },
-  { id: "passion-twist", label: "Passion Twist" },
+  { id: "italian-curls", label: "Italian Curls" },
+  { id: "deep-wave", label: "Deep Wave" },
+  { id: "remy-curls", label: "Remy Curls" },
   { id: "expression", label: "Expression" },
-  { id: "crochet", label: "Crochet" },
   { id: "locs", label: "Locs Extensions" },
 ];
 
