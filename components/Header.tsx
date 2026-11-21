@@ -86,7 +86,7 @@ export function Header() {
   const textClass = overHero ? "text-white" : "text-ink";
   const logoClass = overHero ? "text-white" : "text-brand-700";
 
-  // CLEANED UP NAV - ONLY ACTIVE ROUTES
+  // UPDATED SHOP DROPDOWN
   const NAV = [
     { 
       label: "Shop", 
@@ -94,12 +94,11 @@ export function Header() {
       dropdown: [
         { label: "Bonestraight", href: "/shop?category=bonestraight" },
         { label: "French Curls", href: "/shop?category=french-curls" },
-        { label: "Kinky", href: "/shop?category=kinky" },
-        { label: "Passion Twist", href: "/shop?category=passion-twist" },
+        { label: "Italian Curls", href: "/shop?category=italian-curls" },
+        { label: "Deep Wave", href: "/shop?category=deep-wave" },
+        { label: "Remy Curls", href: "/shop?category=remy-curls" },
         { label: "Expression", href: "/shop?category=expression" },
-        { label: "Crochet", href: "/shop?category=crochet" },
-        { label: "Sew-in", href: "/shop?category=sew-in" },
-        { label: "Locs", href: "/shop?category=locs" },
+        { label: "Locs Extensions", href: "/shop?category=locs" },
       ]
     },
     {
