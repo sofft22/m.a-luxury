@@ -10,7 +10,8 @@ import { Footer } from "@/components/Footer";
 // 1. Fetch and cache the featured products on the server
 async function getFeaturedProducts() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://maluxury.co.uk'}/api/products`, {
+    // CHANGED: Added ?admin=true so it skips the massive base64 images and avoids the 27MB cache error
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'https://maluxury.co.uk'}/api/products?admin=true`, {
       next: { revalidate: 3600 } // Caches the data for 1 hour
     });
     
