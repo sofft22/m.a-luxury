@@ -15,7 +15,6 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
   const [weight, setWeight] = useState(product?.weight?.toString() || "");
   const [description, setDescription] = useState(product?.description || "");
   
-  // UPDATED CATEGORIES
   const [category, setCategory] = useState(product?.category || "bonestraight");
   
   const [inStock, setInStock] = useState(product ? product.inStock === 1 : true);
@@ -111,6 +110,7 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
 
     setSaving(true);
     
+    // Clean sizes and ensure weight is a number
     const cleanSizes = sizes
       .filter((s) => s.size.trim() !== "")
       .map((s) => ({
@@ -123,14 +123,14 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
       id: product?.id,
       title: title.trim(),
       price: Number(price),
-      weight: weight ? Number(weight) : 0,
+      weight: Number(weight) || 0,
       description: description.trim(),
       category,
       inStock,
       featured,
       image: images[0], 
       images: images,   
-      sizes: cleanSizes,
+      sizes: cleanSizes, // Send as a clean array
     };
 
     const method = product ? "PUT" : "POST";
@@ -186,7 +186,6 @@ export function ProductFormModal({ product, onClose, onSave }: Props) {
 
           <div>
             <label className="mb-2 block text-[10px] font-bold uppercase tracking-[0.15em] text-ink/60">Category</label>
-            {/* UPDATED CATEGORY DROPDOWN */}
             <select value={category} onChange={e => setCategory(e.target.value)} className="w-full rounded-md border border-ink/20 bg-white px-4 py-3 text-[14px] text-ink outline-none focus:border-brand-700">
               <option value="bonestraight">Bonestraight</option>
               <option value="french-curls">French Curls</option>
