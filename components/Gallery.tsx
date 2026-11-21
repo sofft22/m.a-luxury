@@ -5,14 +5,14 @@ import Link from "next/link";
 
 // USING EXACTLY YOUR 8 IMAGES FROM THE PUBLIC FOLDER
 const GALLERY_IMAGES = [
-  { src: "/Lashes.jpg", title: "Braids", size: "tall" },
-  { src: "/hero-1.jpg", title: "Signature Knotless", size: "square" },
-  { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall" },
-  { src: "/hero-2.jpg", title: "Soft Curls", size: "square" },
-  { src: "/installs-category.jpg", title: "Installs & Styling", size: "square" },
-  { src: "/hero-3.jpg", title: "Neat Styling", size: "tall" },
-  { src: "/beauty-category.jpg", title: "Beauty & Piercing", size: "square" },
-  { src: "/hero-4.jpg", title: "Soft Glam", size: "tall" }
+  { src: "/Lashes.jpg", title: "Braids", size: "tall", fit: "object-cover object-top" }, // Added object-top here to show lashes
+  { src: "/hero-1.jpg", title: "Signature Knotless", size: "square", fit: "object-cover" },
+  { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall", fit: "object-cover" },
+  { src: "/hero-2.jpg", title: "Soft Curls", size: "square", fit: "object-cover" },
+  { src: "/installs-category.jpg", title: "Installs & Styling", size: "square", fit: "object-cover" },
+  { src: "/hero-3.jpg", title: "Neat Styling", size: "tall", fit: "object-cover" },
+  { src: "/beauty-category.jpg", title: "Beauty & Piercing", size: "square", fit: "object-cover" },
+  { src: "/hero-4.jpg", title: "Soft Glam", size: "tall", fit: "object-cover" }
 ];
 
 const TIKTOK_URL = "https://www.tiktok.com/@m.aluxury1";
@@ -65,7 +65,8 @@ export function Gallery() {
                   alt={img.title}
                   fill
                   unoptimized={true}
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  // Changed this line to use the dynamic 'fit' property
+                  className={`${img.fit} transition-transform duration-700 ease-out group-hover:scale-105`}
                 />
                 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:flex flex-col items-center justify-center">
