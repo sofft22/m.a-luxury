@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { ProductModal } from "./ProductModal";
-import { BoxBuilderModal } from "./BoxBuilderModal"; // IMPORT
+import { BoxBuilderModal } from "./BoxBuilderModal"; 
 
 function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
   const searchParams = useSearchParams();
@@ -31,11 +31,11 @@ function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
   return null;
 }
 
-export function HomeClient() {
+// NEW: Accept featuredProducts as a prop from the server page
+export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[] }) {
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [allProducts, setAllProducts] = useState<any[]>([]);
   
-  // BOX BUILDER STATE
   const [boxConfig, setBoxConfig] = useState<any>(null);
   const [isBoxModalOpen, setIsBoxModalOpen] = useState(false);
 
@@ -49,7 +49,6 @@ export function HomeClient() {
       localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
     });
 
-    // Load Box Builder Config
     fetch("/api/settings").then(res => res.json()).then(data => {
       if (data && data.boxBuilderConfig) {
         try {
@@ -68,9 +67,11 @@ export function HomeClient() {
         <ProductDeepLink onSelect={setSelectedProduct} />
       </Suspense>
 
-            <FeaturedProducts 
-  onProductClick={(product) => setSelectedProduct(product)} 
-/>
+      {/* NEW: Pass the pre-fetched items to the component */}
+      <FeaturedProducts 
+        initialItems={featuredProducts}
+        onProductClick={(product) => setSelectedProduct(product)} 
+      />
       
       {selectedProduct && (
         <ProductModal 
