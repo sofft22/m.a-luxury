@@ -3,16 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
-// Change these filenames to match your actual images in the public folder
+// USING EXACTLY YOUR 8 IMAGES FROM THE PUBLIC FOLDER
 const GALLERY_IMAGES = [
-  { src: "/gallery-1.jpg", title: "Knotless Braids", size: "tall" },
-  { src: "/gallery-2.jpg", title: "Boho Curls", size: "square" },
-  { src: "/gallery-3.jpg", title: "Neat Locs", size: "tall" },
-  { src: "/gallery-4.jpg", title: "Passion Twists", size: "square" },
-  { src: "/gallery-5.jpg", title: "Custom Installs", size: "square" },
-  { src: "/gallery-6.jpg", title: "Feed-in Braids", size: "tall" },
-  { src: "/gallery-7.jpg", title: "Marley Twists", size: "square" },
-  { src: "/gallery-8.jpg", title: "Bridal Styling", size: "tall" }
+  { src: "/braids-category.jpg", title: "Braids", size: "tall" },
+  { src: "/hero-1.jpg", title: "Signature Knotless", size: "square" },
+  { src: "/locs-category.jpg", title: "Locs & Maintenance", size: "tall" },
+  { src: "/hero-2.jpg", title: "Soft Curls", size: "square" },
+  { src: "/installs-category.jpg", title: "Installs & Styling", size: "square" },
+  { src: "/hero-3.jpg", title: "Neat Styling", size: "tall" },
+  { src: "/beauty-category.jpg", title: "Beauty & Piercing", size: "square" },
+  { src: "/hero-4.jpg", title: "Soft Glam", size: "tall" }
 ];
 
 const TIKTOK_URL = "https://www.tiktok.com/@m.aluxury1";
@@ -64,6 +64,7 @@ export function Gallery() {
                   src={img.src}
                   alt={img.title}
                   fill
+                  unoptimized={true}
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 />
                 
