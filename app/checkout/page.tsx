@@ -1,6 +1,7 @@
+"use client";
+
 import dynamic from "next/dynamic";
 
-// This tells Next.js to ONLY load this component in the browser (client-side)
 const CheckoutContent = dynamic(() => import("./CheckoutContent"), { 
   ssr: false,
   loading: () => (
