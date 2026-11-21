@@ -18,6 +18,16 @@ const CATEGORY_NAMES: Record<string, string> = {
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 const DAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
+// Helper function to convert 24h to 12h format with AM/PM
+const convertTo12Hour = (time24: string) => {
+  const [hourStr, minuteStr] = time24.split(':');
+  let hour = parseInt(hourStr, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12;
+  hour = hour ? hour : 12; // the hour '0' should be '12'
+  return `${hour.toString().padStart(2, '0')}:${minuteStr} ${ampm}`;
+};
+
 function CalendarContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -97,11 +107,13 @@ function CalendarContent() {
   const { availableSlots, isClosed } = useMemo(() => {
     if (!selectedDate) return { availableSlots: [], isClosed: false };
 
+    // 1. Check Exception (Holiday)
     if (dayException) {
       if (dayException.isOpen === 0) {
         return { availableSlots: [], isClosed: true };
       }
     } else {
+      // 2. Check standard weekly schedule
       const dateObj = new Date(selectedDate);
       const dayOfWeek = dateObj.getDay(); 
       const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
@@ -111,40 +123,38 @@ function CalendarContent() {
       }
     }
 
-    // FORCE 24 HOURS (00:00 to 23:00)
-    let openTime = 0; 
-    let closeTime = 24; 
+    // Default hours (9 AM to 6 PM) if nothing is set in admin
+    let openTime = 9; 
+    let closeTime = 18; 
 
-    const dateObj = new Date(selectedDate);
-    const dayOfWeek = dateObj.getDay();
-    const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
-
-    // If they manually set hours, respect them, otherwise default to 24h
+    // If she manually set custom hours for a specific day, respect them
     if (dayException && dayException.isOpen === 1) {
       openTime = parseInt(dayException.startTime.split(":")[0]);
       closeTime = parseInt(dayException.endTime.split(":")[0]);
-    } else if (standardDay) {
-      openTime = parseInt(standardDay.startTime.split(":")[0]);
-      closeTime = parseInt(standardDay.endTime.split(":")[0]);
+    } else {
+      // Otherwise use her standard weekly schedule
+      const dateObj = new Date(selectedDate);
+      const dayOfWeek = dateObj.getDay();
+      const standardDay = weeklySchedule.find(d => d.id === dayOfWeek);
+      if (standardDay && standardDay.startTime && standardDay.endTime) {
+        openTime = parseInt(standardDay.startTime.split(":")[0]);
+        closeTime = parseInt(standardDay.endTime.split(":")[0]);
+      }
     }
     
-    // If the end time is past midnight, it means they work 24 hours
+    // If the end time is past midnight, adjust
     if (closeTime < openTime) closeTime += 24;
     
-    // If a service takes 24 hours, they can only start at the open time
     const is24HourService = duration >= 1440;
-
     const slots = [];
     
     for (let hour = openTime; hour < closeTime; hour++) {
       if (is24HourService && hour > openTime) break; 
 
       const endHour = hour + (duration / 60);
-      
       if (!is24HourService && endHour > closeTime) continue;
 
       const startStr = `${(hour % 24).toString().padStart(2, '0')}:00`;
-      
       const endH = Math.floor(endHour) % 24;
       const endM = (endHour % 1) !== 0 ? "30" : "00";
       const endStr = `${endH.toString().padStart(2, '0')}:${endM}`;
@@ -181,7 +191,7 @@ function CalendarContent() {
           phone,
           email,
           date: selectedDate,
-          startTime: selectedTime,
+          startTime: selectedTime, // Still sending 24h format to DB
           endTime: selectedSlot?.end
         })
       });
@@ -211,7 +221,7 @@ I have just paid my deposit for a new booking.
 *Service:* ${serviceName}
 *Style:* ${optionName}
 *Date:* ${selectedDate}
-*Time:* ${selectedTime}
+*Time:* ${convertTo12Hour(selectedTime)}
 *Price:* £${price}
 ${extrasParam ? `*Extras:* ${extrasParam}\n` : ""}━━━━━━━━━━━━━━━
 
@@ -401,11 +411,11 @@ Please find my receipt attached. Looking forward to it!`;
                         <button 
                           key={i}
                           onClick={() => setSelectedTime(slot.start)}
-                          className={`py-3 rounded-md border text-[12px] transition-colors ${
+                          className={`py-3 rounded-md border text-[12px] font-medium transition-colors ${
                             selectedTime === slot.start ? "border-brand-700 bg-brand-700 text-white" : "border-ink/10 text-ink hover:border-brand-700 bg-[#FAF7FE]"
                           }`}
                         >
-                          {slot.start}
+                          {convertTo12Hour(slot.start)}
                         </button>
                       ))}
                     </div>
