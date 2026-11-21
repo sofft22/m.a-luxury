@@ -21,7 +21,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* MAIN CONTENT AREA */}
-      {/* Added lg:pl-[260px] to push content past the fixed sidebar */}
       <div className="flex-1 w-full lg:pl-[260px] flex flex-col min-h-screen">
         
         {/* STICKY PREMIUM HEADER (Works on Mobile & Desktop) */}
@@ -32,13 +31,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 pb-[100px] lg:pb-0">
+        <main className="flex-1 pb-[120px] lg:pb-0">
           {children}
         </main>
       </div>
 
       {/* MOBILE FLOATING GLASSMORPHISM NAV */}
-      <div className="lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-[320px] px-4">
+      {/* Positioned lower at bottom-6 */}
+      <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-[320px] px-4">
         <nav className="flex w-full items-center justify-around rounded-full border border-white/60 bg-white/40 px-2 py-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
           
           <Link href="/admin/products" className={`flex flex-col items-center justify-center gap-1 p-2.5 rounded-full transition-all duration-300 ${pathname.includes("products") ? "bg-brand-700 text-white shadow-md" : "text-ink/60 hover:text-brand-700"}`}>
