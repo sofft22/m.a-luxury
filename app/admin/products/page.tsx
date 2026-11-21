@@ -25,7 +25,8 @@ export default function AdminProductsPage() {
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/products");
+      // ADDED: ?admin=true to skip heavy images for the admin list
+      const res = await fetch("/api/products?admin=true");
       const data = await res.json();
       setProducts(data);
     } catch (error) {
