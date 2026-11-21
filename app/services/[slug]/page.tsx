@@ -9,7 +9,7 @@ const CATEGORY_INFO: Record<string, { title: string, dbCategory: string, image: 
   "braids": { title: "Braids & Twists", dbCategory: "braids", image: "/hero-1.jpg" },
   "locs-twists": { title: "Locs & Maintenance", dbCategory: "locs", image: "/hero-2.jpg" },
   "installs": { title: "Installs & Styling", dbCategory: "installs", image: "/hero-3.jpg" },
-  "beauty": { title: "Beauty", dbCategory: "beauty", image: "/hero-4.jpg" },
+  "beauty": { title: "Beauty & Piercing", dbCategory: "beauty", image: "/hero-4.jpg" },
 };
 
 export default function ServiceCategoryPage() {
@@ -79,61 +79,49 @@ export default function ServiceCategoryPage() {
             {slug === "locs-twists" && (
               <Link 
                 href="/services/consultation"
-                className="group flex flex-row items-center gap-4 sm:gap-6 p-4 md:p-8 bg-white rounded-2xl border-2 border-brand-200 shadow-lg shadow-brand-700/5 hover:border-brand-700 hover:shadow-md transition-all mb-6 relative overflow-hidden"
+                className="group flex flex-row items-center gap-6 p-6 md:p-8 bg-white rounded-2xl border-2 border-brand-200 shadow-lg shadow-brand-700/5 hover:border-brand-700 hover:shadow-md transition-all mb-4 relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 bg-brand-700 text-white text-[9px] font-bold uppercase tracking-widest px-4 py-1.5 rounded-bl-lg z-10">
                   New Clients
                 </div>
                 
-                <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg bg-brand-50">
-                  <Image src="/hero-1.jpg" alt="Consultation" fill className="object-cover" />
-                </div>
-
                 <div className="flex-1 w-full">
-                  <div className="flex items-center justify-between mb-1">
+                  <div className="flex items-center justify-between mb-2">
                     <h3 className="text-[24px] md:text-[28px] text-brand-700 group-hover:text-brand-900 transition-colors" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
                       New Client Loc Consultation
                     </h3>
                   </div>
-                  <p className="text-[13px] text-muted max-w-xl line-clamp-2 md:line-clamp-none" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                  <p className="text-[13px] text-muted max-w-xl" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
                     Professional guidance on choosing the right loc style and starting method for your hair.
                   </p>
-                  <p className="text-[12px] font-bold text-brand-700 mt-2 uppercase tracking-wider">
+                  <p className="text-[12px] font-bold text-brand-700 mt-3 uppercase tracking-wider">
                     £20 • 30 Mins
                   </p>
                 </div>
               </Link>
             )}
 
-            {/* REGULAR SERVICES FROM DATABASE */}
+            {/* REGULAR SERVICES FROM DATABASE (NO IMAGES) */}
             {services.map((service, idx) => (
               <Link 
                 key={idx}
                 href={`/book?service=${encodeURIComponent(service.title)}&id=${service.id}`}
-                className="group flex flex-row items-center gap-4 sm:gap-6 p-4 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
+                className="group flex flex-col p-6 md:p-8 bg-white rounded-2xl border border-brand-100 shadow-sm hover:border-brand-700 hover:shadow-md transition-all"
               >
-                {service.image && (
-                  <div className="relative h-20 w-20 md:h-24 md:w-24 shrink-0 overflow-hidden rounded-lg bg-brand-50">
-                    <Image src={service.image} alt={service.title} fill className="object-cover" />
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-[24px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
+                    {service.title}
+                  </h3>
+                  <div className="h-8 w-8 shrink-0 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2">
+                    →
                   </div>
-                )}
-
-                <div className="flex-1 w-full">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-[22px] md:text-[28px] text-ink group-hover:text-brand-700 transition-colors" style={{ fontFamily: 'var(--font-cormorant), serif' }}>
-                      {service.title}
-                    </h3>
-                    <div className="h-8 w-8 shrink-0 rounded-full bg-brand-50 flex items-center justify-center text-brand-700 opacity-0 group-hover:opacity-100 transition-all transform group-hover:-translate-x-2 hidden md:flex">
-                      →
-                    </div>
-                  </div>
-                  
-                  {service.description && (
-                    <p className="text-[12px] md:text-[13px] text-muted max-w-xl line-clamp-2 md:line-clamp-none" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
-                      {service.description}
-                    </p>
-                  )}
                 </div>
+                
+                {service.description && (
+                  <p className="text-[13px] text-muted max-w-xl" style={{ fontFamily: 'var(--font-inter), sans-serif' }}>
+                    {service.description}
+                  </p>
+                )}
               </Link>
             ))}
           </div>
