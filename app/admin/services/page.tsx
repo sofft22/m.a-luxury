@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { ServiceFormModal } from "@/components/admin/ServiceFormModal";
 
 export default function AdminServicesPage() {
@@ -78,7 +77,7 @@ export default function AdminServicesPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-brand-100 overflow-hidden">
           <ul className="flex flex-col">
             {services.map((s) => {
-              // Parse options to get price
+              // Parse options to get lowest price
               let minPrice = 0;
               try {
                 const parsed = typeof s.options === 'string' ? JSON.parse(s.options) : s.options;
@@ -91,35 +90,23 @@ export default function AdminServicesPage() {
                 <li 
                   key={s.id} 
                   onClick={() => { setEditingService(s); setIsModalOpen(true); }} 
-                  className="group flex items-center justify-between border-b border-ink/5 last:border-0 py-4 hover:bg-brand-50/30 px-6 cursor-pointer transition-colors"
+                  className="group flex items-center justify-between border-b border-ink/5 last:border-0 py-5 hover:bg-brand-50/30 px-6 cursor-pointer transition-colors"
                 >
-                  <div className="flex items-center gap-5">
-                    {/* THUMBNAIL */}
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-brand-100 border border-ink/5">
-                      {s.image ? (
-                        <Image src={s.image} alt={s.title} fill className="object-cover" />
-                      ) : (
-                        <div className="flex h-full w-full items-center justify-center text-ink/20">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1} className="h-6 w-6"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* DETAILS */}
-                    <div>
-                      <p className="text-[20px] text-ink font-medium" style={{ fontFamily: "var(--font-cormorant), serif" }}>
-                        {s.title}
-                      </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[9px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 px-2 py-0.5 rounded">
-                          {s.category}
+                  
+                  {/* DETAILS (No Image) */}
+                  <div>
+                    <p className="text-[20px] text-ink font-medium" style={{ fontFamily: "var(--font-cormorant), serif" }}>
+                      {s.title}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-[9px] font-bold uppercase tracking-wider bg-brand-50 text-brand-700 px-2 py-0.5 rounded">
+                        {s.category}
+                      </span>
+                      {!s.inStock && (
+                        <span className="text-[9px] font-bold uppercase tracking-wider bg-red-50 text-red-600 px-2 py-0.5 rounded">
+                          Hidden
                         </span>
-                        {!s.inStock && (
-                          <span className="text-[9px] font-bold uppercase tracking-wider bg-red-50 text-red-600 px-2 py-0.5 rounded">
-                            Hidden
-                          </span>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
 
