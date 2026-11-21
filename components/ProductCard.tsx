@@ -29,7 +29,6 @@ export function ProductCard({ product, priority }: Props) {
   return (
     <div className="group flex flex-col cursor-pointer w-full">
       
-      {/* IMAGE CONTAINER */}
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-lg bg-brand-100">
         {!imgLoaded && (
           <div className="absolute inset-0 animate-pulse bg-brand-100" />
@@ -40,6 +39,7 @@ export function ProductCard({ product, priority }: Props) {
           alt={formattedTitle}
           fill
           priority={priority}
+          unoptimized={true} // <--- LOADS INSTANTLY
           onLoad={() => setImgLoaded(true)}
           className={`object-cover transition-transform duration-700 ease-out group-hover:scale-105 ${
             imgLoaded ? "opacity-100" : "opacity-0"
@@ -55,10 +55,7 @@ export function ProductCard({ product, priority }: Props) {
         )}
       </div>
 
-      {/* TEXT CONTAINER */}
       <div className="mt-3 flex flex-col">
-        
-        {/* Product Title */}
         <h3 
           className="text-[18px] md:text-[20px] font-medium truncate leading-tight tracking-wide text-ink"
           style={{ fontFamily: 'var(--font-cormorant), serif' }}
@@ -66,7 +63,6 @@ export function ProductCard({ product, priority }: Props) {
           {formattedTitle}
         </h3>
         
-        {/* Price Row - Clean and aligned */}
         <div className="flex items-baseline gap-1.5 mt-0.5">
           <span 
             className="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-700/60"
@@ -81,7 +77,6 @@ export function ProductCard({ product, priority }: Props) {
             £{numericPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
           </p>
         </div>
-        
       </div>
 
     </div>
