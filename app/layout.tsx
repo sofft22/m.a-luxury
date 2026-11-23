@@ -1,4 +1,7 @@
-import type { Metadata } from "next";
+"use client"; // 👈 Added this to allow using usePathname
+
+import { Metadata } from "next";
+import { usePathname } from "next/navigation";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -6,35 +9,13 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { CartProvider } from "./CartContext";
 import { CartDrawer } from "@/components/CartDrawer";
 
-export const metadata: Metadata = {
-  title: "M.A Luxury | Premium Hair & Beauty Services",
-  description: "Premium hair extensions, braids, locs, and luxury beauty services. Book your appointment today for flawless styles tailored to your crown.",
-  
-  metadataBase: new URL('https://maluxury.co.uk'),
-  verification: {
-    google: "sjPHA5MH7OCR9z2a7pYEJh48W4EYHe917m2LfV3KL4w",
-  },
-  icons: {
-    icon: '/favicon.ico', 
-  },
-  openGraph: {
-    title: "M.A Luxury | Premium Hair & Beauty",
-    description: "Elevate your look with our expert braiding, locs, and beauty services. Book your appointment online.",
-    url: 'https://maluxury.co.uk',
-    siteName: 'M.A Luxury',
-    locale: 'en_GB',
-    type: 'website',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: 'M.A Luxury Logo' }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "M.A Luxury | Premium Hair & Beauty",
-    description: "Elevate your look with our expert braiding, locs, and beauty services. Book your appointment online.",
-    images: ['/og-image.jpg'],
-  },
-};
+// Note: If you use "use client", you technically can't export metadata from the same file in Next.js App Router. 
+// If you need SEO, you should keep this file as a Server Component and just use the separate wrapper I gave you earlier. 
+// But if you strictly want it all in one file, this is how.
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname(); // 👈 Gets the current route
+
   return (
     <html lang="en" suppressHydrationWarning className="light">
       <body>
@@ -43,7 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <CartDrawer />
             {children}
-            <Footer />
+            
+            {/* 👈 Only render the Footer if we are on the exact homepage */}
+            {pathname === "/" && <Footer />}
+            
           </CartProvider>
         </ThemeProvider>
       </body>
