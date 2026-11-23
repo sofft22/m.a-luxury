@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     const isAdmin = searchParams.get("admin") === "true";
     const noImages = searchParams.get("images") === "false";
 
-    // 1. FAST FETCH (No images) for Admin AND Shop Page
+    // 1. FAST FETCH (No heavy image arrays) for Admin AND Shop Page
     if (isAdmin || noImages) {
       const allProducts = await db.select({
         id: products.id,
@@ -26,11 +26,12 @@ export async function GET(request: Request) {
         inStock: products.inStock,
         featured: products.featured,
         sizes: products.sizes,
+        image: products.image, // 👈 Added the main image back in
       }).from(products);
       return NextResponse.json(allProducts);
     }
 
-    // 2. FULL FETCH (With images) for the Homepage/Modals if needed
+    // 2. FULL FETCH (With all images) for the Homepage/Modals if needed
     const allProducts = await db.select().from(products);
     return NextResponse.json(allProducts);
 
