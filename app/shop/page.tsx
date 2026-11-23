@@ -30,7 +30,7 @@ function ShopContent() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // CHANGED: Added ?images=false to prevent infinite loading on Cloudflare Workers
+        // We keep ?images=false to load the page instantly
         const res = await fetch("/api/products?images=false");
         const data = await res.json();
         
