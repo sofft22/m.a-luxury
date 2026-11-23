@@ -37,7 +37,6 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
 
       {/* MOBILE FLOATING GLASSMORPHISM NAV */}
-      {/* Positioned lower at bottom-6 */}
       <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-full max-w-[320px] px-4">
         <nav className="flex w-full items-center justify-around rounded-full border border-white/60 bg-white/40 px-2 py-1.5 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl">
           
