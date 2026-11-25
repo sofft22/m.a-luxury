@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { ProductModal } from "./ProductModal";
-import { BoxBuilderModal } from "./BoxBuilderModal";
+import { BoxBuilderModal } from "./BoxBuilderModal"; 
 
 function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
   const searchParams = useSearchParams();
@@ -12,29 +12,7 @@ function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
 
   useEffect(() => {
     if (!productId) return;
-    
-    // Safely try to read from cache
-    try {
-      const cached = localStorage.getItem("mocktopia_products_cache");
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        const found = parsed.find((p: any) => p.id === productId);
-        if (found) {
-          onSelect(found);
-          return;
-        }
-      }
-    } catch (e) {
-      console.warn("Local storage read failed", e);
-    }
-
-    // Fetch if not in cache
     fetch("/api/products").then(res => res.json()).then(data => {
-      try {
-        localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
-      } catch (e) {
-        console.warn("Local storage write failed, quota exceeded likely", e);
-      }
       const found = data.find((p: any) => p.id === productId);
       if (found) onSelect(found);
     });
@@ -44,31 +22,27 @@ function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
 }
 
 export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[] }) {
-  console.log("[HomeClient] received featuredProducts:", featuredProducts.length);
-
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [clientFeatured, setClientFeatured] = useState<any[]>(featuredProducts);
   const [boxConfig, setBoxConfig] = useState<any>(null);
   const [isBoxModalOpen, setIsBoxModalOpen] = useState(false);
 
   useEffect(() => {
-    // Safely try to read from cache
-    try {
-      const cached = localStorage.getItem("mocktopia_products_cache");
-      if (cached) {
-        setAllProducts(JSON.parse(cached)); 
-      }
-    } catch (e) {
-      console.warn("Local storage read failed", e);
-    }
-
-    // Fetch fresh products
     fetch("/api/products").then(res => res.json()).then(data => {
       setAllProducts(data);
-      try {
-        localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
-      } catch (e) {
-        console.warn("Local storage write failed, quota exceeded likely", e);
+
+      // IF SERVER PASSED 0 ITEMS, FETCH THEM HERE
+      if (clientFeatured.length === 0 && Array.isArray(data)) {
+        console.log("Client fetching featured products...");
+        const featured = data
+          .filter((p: any) => p.featured === 1 || p.featured === true || p.featured === "1")
+          .slice(0, 4)
+          .map((p: any) => ({
+            ...p,
+            sizes: typeof p.sizes === 'string' ? JSON.parse(p.sizes || "[]") : p.sizes
+          }));
+        setClientFeatured(featured);
       }
     });
 
@@ -82,7 +56,7 @@ export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[]
         } catch (e) {}
       }
     });
-  }, []);
+  }, [clientFeatured.length]);
 
   return (
     <>
@@ -90,23 +64,23 @@ export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[]
         <ProductDeepLink onSelect={setSelectedProduct} />
       </Suspense>
 
-      <FeaturedProducts
-        initialItems={featuredProducts}
-        onProductClick={(product) => setSelectedProduct(product)}
+      <FeaturedProducts 
+        initialItems={clientFeatured}
+        onProductClick={(product) => setSelectedProduct(product)} 
       />
-
+      
       {selectedProduct && (
-        <ProductModal
-          product={selectedProduct}
-          onClose={() => setSelectedProduct(null)}
-          allProducts={allProducts}
+        <ProductModal 
+          product={selectedProduct} 
+          onClose={() => setSelectedProduct(null)} 
+          allProducts={allProducts} 
         />
       )}
 
       {isBoxModalOpen && boxConfig && (
-        <BoxBuilderModal
-          config={boxConfig}
-          onClose={() => setIsBoxModalOpen(false)}
+        <BoxBuilderModal 
+          config={boxConfig} 
+          onClose={() => setIsBoxModalOpen(false)} 
         />
       )}
     </>
