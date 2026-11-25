@@ -12,17 +12,29 @@ function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
 
   useEffect(() => {
     if (!productId) return;
-    const cached = localStorage.getItem("mocktopia_products_cache");
-    if (cached) {
-      try {
+    
+    // Safely try to read from cache
+    try {
+      const cached = localStorage.getItem("mocktopia_products_cache");
+      if (cached) {
         const parsed = JSON.parse(cached);
         const found = parsed.find((p: any) => p.id === productId);
-        if (found) onSelect(found);
-        return;
-      } catch (e) {}
+        if (found) {
+          onSelect(found);
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Local storage read failed", e);
     }
+
+    // Fetch if not in cache
     fetch("/api/products").then(res => res.json()).then(data => {
-      localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
+      try {
+        localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
+      } catch (e) {
+        console.warn("Local storage write failed, quota exceeded likely", e);
+      }
       const found = data.find((p: any) => p.id === productId);
       if (found) onSelect(found);
     });
@@ -40,13 +52,24 @@ export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[]
   const [isBoxModalOpen, setIsBoxModalOpen] = useState(false);
 
   useEffect(() => {
-    const cached = localStorage.getItem("mocktopia_products_cache");
-    if (cached) {
-      try { setAllProducts(JSON.parse(cached)); } catch (e) {}
+    // Safely try to read from cache
+    try {
+      const cached = localStorage.getItem("mocktopia_products_cache");
+      if (cached) {
+        setAllProducts(JSON.parse(cached)); 
+      }
+    } catch (e) {
+      console.warn("Local storage read failed", e);
     }
+
+    // Fetch fresh products
     fetch("/api/products").then(res => res.json()).then(data => {
       setAllProducts(data);
-      localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
+      try {
+        localStorage.setItem("mocktopia_products_cache", JSON.stringify(data));
+      } catch (e) {
+        console.warn("Local storage write failed, quota exceeded likely", e);
+      }
     });
 
     fetch("/api/settings").then(res => res.json()).then(data => {
