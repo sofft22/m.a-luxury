@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { FeaturedProducts } from "./FeaturedProducts";
 import { ProductModal } from "./ProductModal";
-import { BoxBuilderModal } from "./BoxBuilderModal"; 
+import { BoxBuilderModal } from "./BoxBuilderModal";
 
 function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
   const searchParams = useSearchParams();
@@ -31,11 +31,11 @@ function ProductDeepLink({ onSelect }: { onSelect: (p: any) => void }) {
   return null;
 }
 
-// NEW: Accept featuredProducts as a prop from the server page
 export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[] }) {
+  console.log("[HomeClient] received featuredProducts:", featuredProducts.length);
+
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
   const [allProducts, setAllProducts] = useState<any[]>([]);
-  
   const [boxConfig, setBoxConfig] = useState<any>(null);
   const [isBoxModalOpen, setIsBoxModalOpen] = useState(false);
 
@@ -67,24 +67,23 @@ export function HomeClient({ featuredProducts = [] }: { featuredProducts?: any[]
         <ProductDeepLink onSelect={setSelectedProduct} />
       </Suspense>
 
-      {/* NEW: Pass the pre-fetched items to the component */}
-      <FeaturedProducts 
+      <FeaturedProducts
         initialItems={featuredProducts}
-        onProductClick={(product) => setSelectedProduct(product)} 
+        onProductClick={(product) => setSelectedProduct(product)}
       />
-      
+
       {selectedProduct && (
-        <ProductModal 
-          product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
-          allProducts={allProducts} 
+        <ProductModal
+          product={selectedProduct}
+          onClose={() => setSelectedProduct(null)}
+          allProducts={allProducts}
         />
       )}
 
       {isBoxModalOpen && boxConfig && (
-        <BoxBuilderModal 
-          config={boxConfig} 
-          onClose={() => setIsBoxModalOpen(false)} 
+        <BoxBuilderModal
+          config={boxConfig}
+          onClose={() => setIsBoxModalOpen(false)}
         />
       )}
     </>
